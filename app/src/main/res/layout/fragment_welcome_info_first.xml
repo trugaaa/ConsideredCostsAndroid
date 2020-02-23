@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
+    android:id="@+id/welcomeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg1">
@@ -25,10 +24,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/welcome1Title" />
+        android:text="@string/welcome1Title" />
 
     <ImageView
         android:id="@+id/imageView"
+        android:contentDescription="@string/welcomeImageDescription"
         android:layout_width="185dp"
         android:layout_height="173dp"
         android:layout_marginStart="70dp"
@@ -37,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
-        tools:srcCompat="@drawable/ic_wallet" />
+        android:src="@drawable/ic_wallet" />
 
     <TextView
         android:id="@+id/imageViewText"
@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:text="@string/welcome1Text" />
+        android:text="@string/welcome1Text" />
 
     <View
         android:id="@+id/divider"
@@ -67,6 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewText" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
