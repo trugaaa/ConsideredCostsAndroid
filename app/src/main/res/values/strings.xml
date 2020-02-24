@@ -1,3 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ConsideredCostsAndroidAPP</string>
+    <string name="app_name">Considered Costs</string>
+    <!-- Welcome informational screens -->
+    <string name="welcomeImageDescription">"Welcome image"</string>
+    <string name="welcome1Title">GET AN OVERVIEW</string>
+    <string name="welcome1Text">OF INCOMES AND OUTGOES</string>
+
+    <string name="welcome2Title">SET FINANCIAL GOALS</string>
+    <string name="welcome2Text">AND ACHIEVE THEM</string>
+
+    <string name="welcome3Title">TAKE CARE</string>
+    <string name="welcome3Text">OF YOUR PROFIT</string>
+
+    <string name="skipLinkText">SKIP</string>
+    <string name="nextLinkText">NEXT</string>
+    <string name="doneLinkText">DONE</string>
+    <string name="startLinkText">START</string>
+
+
+    <!-- SignUp screen -->
+
+    <!-- SignIn screen -->
+
 </resources>
