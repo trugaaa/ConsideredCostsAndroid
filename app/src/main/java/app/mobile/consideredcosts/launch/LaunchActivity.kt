@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.viewpager.widget.ViewPager
 import app.mobile.consideredcosts.R
+import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.sign.SignActivity
 import app.mobile.consideredcosts.welcome.WelcomeSliderAdapter
 import app.mobile.consideredcosts.welcome.WelcomeSliderFragment
+
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_welcome_slider.*
 
@@ -18,6 +20,8 @@ class LaunchActivity : AppCompatActivity(),PagerListener {
     val welcomeSliderAdapter by lazy { WelcomeSliderAdapter(supportFragmentManager) }
 
     var welcomeScreensSeen: Boolean = false
+
+    private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
 
     private val welcomeSliderFragmentOne = WelcomeSliderFragment.newInstanse(
         R.string.welcome1Title,
@@ -40,6 +44,8 @@ class LaunchActivity : AppCompatActivity(),PagerListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(sharedPreferencesManager.isFirstOpened()) openSignActivity()
+
         setContentView(R.layout.activity_main)
 
         welcomeSliderAdapter.list.add(welcomeSliderFragmentOne)
@@ -66,6 +72,7 @@ class LaunchActivity : AppCompatActivity(),PagerListener {
                 when {
                     position == welcomeSliderAdapter.list.size - 1 -> {
                         welcomeScreensSeen = true
+                        sharedPreferencesManager.onLaunch(true)
 
                         welcomeSliderAdapter.getItem(position).btn_next.setOnClickListener()
                         {
