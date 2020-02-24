@@ -1,4 +1,4 @@
-package app.mobile.consideredcosts
+package app.mobile.consideredcosts.launch
 
 import android.content.Intent
 import android.graphics.Color
@@ -6,21 +6,37 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.viewpager.widget.ViewPager
-import app.mobile.consideredcosts.Sign.SignActivity
-import app.mobile.consideredcosts.Welcome.WelcomeSliderAdapter
-import app.mobile.consideredcosts.Welcome.WelcomeSliderFragment
+import app.mobile.consideredcosts.R
+import app.mobile.consideredcosts.sign.SignActivity
+import app.mobile.consideredcosts.welcome.WelcomeSliderAdapter
+import app.mobile.consideredcosts.welcome.WelcomeSliderFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_welcome_slider.*
 
-class MainActivity : AppCompatActivity() {
+class LaunchActivity : AppCompatActivity(),PagerListener {
 
     val welcomeSliderAdapter by lazy { WelcomeSliderAdapter(supportFragmentManager) }
 
-    var welcomeScreensSeen:Boolean = false
+    var welcomeScreensSeen: Boolean = false
 
-    private val welcomeSliderFragmentOne   = WelcomeSliderFragment.newInstanse(R.string.welcome1Title, R.drawable.ic_wallet, R.string.welcome1Text, R.drawable.bg1 )
-    private val welcomeSliderFragmentTwo   = WelcomeSliderFragment.newInstanse(R.string.welcome2Title, R.drawable.ic_save, R.string.welcome2Text, R.drawable.bg3 )
-    private val welcomeSliderFragmentThree = WelcomeSliderFragment.newInstanse(R.string.welcome3Title, R.drawable.ic_briefcase, R.string.welcome3Text, R.drawable.bg5 )
+    private val welcomeSliderFragmentOne = WelcomeSliderFragment.newInstanse(
+        R.string.welcome1Title,
+        R.drawable.ic_wallet,
+        R.string.welcome1Text,
+        R.drawable.bg1
+    )
+    private val welcomeSliderFragmentTwo = WelcomeSliderFragment.newInstanse(
+        R.string.welcome2Title,
+        R.drawable.ic_save,
+        R.string.welcome2Text,
+        R.drawable.bg3
+    )
+    private val welcomeSliderFragmentThree = WelcomeSliderFragment.newInstanse(
+        R.string.welcome3Title,
+        R.drawable.ic_briefcase,
+        R.string.welcome3Text,
+        R.drawable.bg5
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         welcomeViewPager.adapter = welcomeSliderAdapter
 
-        welcomeViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener
-        {
+        welcomeViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 
             }
@@ -48,43 +63,39 @@ class MainActivity : AppCompatActivity() {
 
             override fun onPageSelected(position: Int) {
 
-               when(position) {
-                   welcomeSliderAdapter.list.size - 1 -> {
-                       welcomeScreensSeen = true
+                when {
+                    position == welcomeSliderAdapter.list.size - 1 -> {
+                        welcomeScreensSeen = true
 
-                       welcomeSliderAdapter.getItem(position).btn_next.setOnClickListener()
-                       {
-                           openSignInFragment()
-                       }
-                   }
-                   else->
-                   {
+                        welcomeSliderAdapter.getItem(position).btn_next.setOnClickListener()
+                        {
+                            openSignActivity()
+                        }
+                    }
+                    welcomeScreensSeen -> {
+                        welcomeSliderAdapter.getItem(position).btn_next.setOnClickListener()
+                        {
+                            openSignActivity()
+                        }
+                    }
+                    else -> {
+                        welcomeSliderAdapter.getItem(position)
+                            .btn_next.setText(R.string.nextLinkText)
+                    }
+                }
 
-                       if (welcomeScreensSeen) {
-                           welcomeSliderAdapter.getItem(position).btn_next.setOnClickListener()
-                           {
-                               openSignInFragment()
-                           }
-                       } else {
-                           welcomeSliderAdapter.getItem(position)
-                               .btn_next.setText(R.string.nextLinkText)
-                       }
-
-                   }
-               }
-
-                when(welcomeViewPager.currentItem){
-                    0->{
+                when (welcomeViewPager.currentItem) {
+                    0 -> {
                         welcomeSliderAdapter.getItem(position).indicator1.setTextColor(Color.WHITE)
                         welcomeSliderAdapter.getItem(position).indicator2.setTextColor(Color.GRAY)
                         welcomeSliderAdapter.getItem(position).indicator3.setTextColor(Color.GRAY)
                     }
-                    1->{
+                    1 -> {
                         welcomeSliderAdapter.getItem(position).indicator1.setTextColor(Color.GRAY)
                         welcomeSliderAdapter.getItem(position).indicator2.setTextColor(Color.WHITE)
                         welcomeSliderAdapter.getItem(position).indicator3.setTextColor(Color.GRAY)
                     }
-                    2->{
+                    2 -> {
                         welcomeSliderAdapter.getItem(position).indicator1.setTextColor(Color.GRAY)
                         welcomeSliderAdapter.getItem(position).indicator2.setTextColor(Color.GRAY)
                         welcomeSliderAdapter.getItem(position).indicator3.setTextColor(Color.WHITE)
@@ -93,8 +104,7 @@ class MainActivity : AppCompatActivity() {
 
                 //Listener for SKIP button
 
-                if(welcomeScreensSeen)
-                {
+                if (welcomeScreensSeen) {
                     welcomeSliderAdapter.getItem(position).btn_skip.visibility = View.GONE
                     welcomeSliderAdapter.getItem(position).btn_next.setText(R.string.startLinkText)
 
@@ -105,13 +115,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun openNextFragment()
-    {
+   override fun openNextFragment() {
         welcomeViewPager.currentItem++
     }
 
-    fun openSignInFragment()
-    {
+    override fun openSignActivity() {
         startActivity(Intent(this, SignActivity::class.java))
         finish()
     }

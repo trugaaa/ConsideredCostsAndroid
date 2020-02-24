@@ -1,17 +1,16 @@
-package app.mobile.consideredcosts.Welcome
+package app.mobile.consideredcosts.welcome
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import app.mobile.consideredcosts.MainActivity
 import app.mobile.consideredcosts.R
+import app.mobile.consideredcosts.launch.PagerListener
 import kotlinx.android.synthetic.main.fragment_welcome_slider.*
 import kotlinx.android.synthetic.main.fragment_welcome_slider.view.*
 
 class WelcomeSliderFragment : Fragment() {
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,12 +27,12 @@ class WelcomeSliderFragment : Fragment() {
 
         btn_skip.setOnClickListener()
         {
-            (activity as MainActivity).openSignInFragment()
+            (activity as? PagerListener)?.openSignActivity()
         }
 
         btn_next.setOnClickListener()
         {
-            (activity as MainActivity).openNextFragment()
+            (activity as? PagerListener)?.openNextFragment()
         }
     }
 
@@ -49,7 +48,7 @@ class WelcomeSliderFragment : Fragment() {
                     putInt(RES_TITLE, resTitle)
                     putInt(RES_IMAGE, resImage)
                     putInt(RES_TEXT, resText)
-                    putInt(RES_BACKGROUND,resBackground)
+                    putInt(RES_BACKGROUND, resBackground)
                 }
             }
         }
