@@ -9,7 +9,7 @@ object RetrofitClient {
     private const val BASE_URL = "https://ccostsproject.azurewebsites.net/api"
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor{
-            chain ->
+                chain ->
             val original = chain.request()
 
             val requestBuilder = original.newBuilder().addHeader("Authorization","").method(original.method(),original.body())
