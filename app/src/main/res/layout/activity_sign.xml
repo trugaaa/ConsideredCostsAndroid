@@ -1,9 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:background="@drawable/bg"
     tools:context=".sign.SignActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/imageSignLogo"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/considered_costs_logo"
+        app:srcCompat="@drawable/logo_sign" />
+
+
+    <RelativeLayout
+        android:id="@+id/signTextBlock"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageSignLogo"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/usernameLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:ems="10"
+            android:labelFor="@id/usernameField"
+            android:text="@string/username"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/usernameField"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/usernameLabel"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/sign_rounded_edit_texts"
+            android:bottomLeftRadius="133dp"
+            android:textSize="14sp"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/emailLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/usernameField"
+            android:layout_margin="4dp"
+            android:ems="10"
+            android:labelFor="@id/emailField"
+            android:text="@string/email"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/emailField"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/emailLabel"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            android:background="@drawable/sign_rounded_edit_texts"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/passwordLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/emailField"
+            android:layout_margin="4dp"
+            android:ems="10"
+            android:labelFor="@id/passwordField"
+            android:text="@string/password"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/passwordField"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_below="@id/passwordLabel"
+            android:layout_centerHorizontal="true"
+            android:textSize="14sp"
+            android:background="@drawable/sign_rounded_edit_texts"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/confPassLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/passwordField"
+            android:layout_margin="4dp"
+            android:ems="10"
+            android:labelFor="@id/confPassField"
+            android:text="@string/confPassword"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/confPassField"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="14sp"
+            android:layout_below="@id/confPassLabel"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/sign_rounded_edit_texts"
+            android:inputType="textPassword" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttonSignBlock"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signTextBlock"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp">
+
+        <Button
+            android:id="@+id/signButton"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_white_buttons"
+            android:textColor="@color/colorTextBlue"
+            android:textSize="14sp"
+            android:text="@string/signUpButtonText" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/signButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp">
+
+            <TextView
+                android:id="@+id/bottomSignText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signAlreadyHave"
+                android:textColor="@color/colorHintBlue"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/bottomSignLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:text="@string/signInButtonText"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

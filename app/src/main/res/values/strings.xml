@@ -19,7 +19,21 @@
 
 
     <!-- SignUp screen -->
-
+    <string name="signAlreadyHave">Already have an account?</string>
+    <string name="signUpButtonText">Sign Up</string>
     <!-- SignIn screen -->
+    <string name="username">Username</string>
+    <string name="plsUsername">Please enter your username</string>
+    <string name="email">Email</string>
+    <string name="plsEmail">Please enter your email</string>
+    <string name="password">Password</string>
+    <string name="plsPassword">Please enter your password</string>
+    <string name="confPassword">Confirm password</string>
+    <string name="plsConfPassword">Please confirm your password</string>
+    
+    <string name="signInButtonText">Sign In</string>
+    <string name="signDontHaveAccount">Don`t have an account?</string>
+    <string name="considered_costs_logo">Considered Costs logo</string>
+    <!-- Generic errors -->
 
 </resources>

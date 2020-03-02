@@ -2,9 +2,13 @@
 <resources>
     <color name="colorPrimary">#eeeeee</color>
     <color name="colorPrimaryDark">#393e46</color>
-    <color name="colorAccent">#b83b5e</color>
+    <color name="colorAccent">@color/colorPrimaryText</color>
+    <color name="error">#b83b5e</color>
     <color name="colorPrimaryText">#ffffff</color>
     <color name="colorDarkText">#222831</color>
     <color name="colorPrimaryShadow">#000</color>
     <color name="colorTransparent">#00000000</color>
+    <color name="colorSignTextField">#4dffffff</color>
+    <color name="colorTextBlue">#43a7ff</color>
+    <color name="colorHintBlue">#bfdef9</color>
 </resources>
