@@ -1,0 +1,198 @@
+Index: app/src/main/java/app/mobile/consideredcosts/http/models/response/LoginResponse.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/http/models/response/LoginResponse.kt	(date 1583176091673)
++++ app/src/main/java/app/mobile/consideredcosts/http/models/response/LoginResponse.kt	(date 1583176091673)
+@@ -0,0 +1,7 @@
++package app.mobile.consideredcosts.http.models.response
++
++import app.mobile.consideredcosts.http.BaseResponse
++
++class LoginRequestResponse:BaseResponse<LoginResponse>()
++
++data class LoginResponse(val access_token:String,val username:String)
+\ No newline at end of file
+Index: app/src/main/java/app/mobile/consideredcosts/sign/SignActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package app.mobile.consideredcosts.sign\r\n\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport android.view.View\r\nimport app.mobile.consideredcosts.R\r\nimport kotlinx.android.synthetic.main.activity_sign.*\r\n\r\nclass SignActivity : AppCompatActivity() {\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_sign)\r\n\r\n        emailField.visibility = View.INVISIBLE\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/sign/SignActivity.kt	(revision ec0eaaf7f9a641f13d283c718f8d992c4be210c1)
++++ app/src/main/java/app/mobile/consideredcosts/sign/SignActivity.kt	(date 1583177454162)
+@@ -2,9 +2,17 @@
+ 
+ import androidx.appcompat.app.AppCompatActivity
+ import android.os.Bundle
++import android.provider.Settings
+ import android.view.View
++import android.widget.Toast
+ import app.mobile.consideredcosts.R
++import app.mobile.consideredcosts.http.RetrofitClient
++import app.mobile.consideredcosts.http.models.request.LoginRequest
+ import kotlinx.android.synthetic.main.activity_sign.*
++import kotlinx.coroutines.Dispatchers
++import kotlinx.coroutines.GlobalScope
++import kotlinx.coroutines.launch
++import kotlinx.coroutines.withContext
+ 
+ class SignActivity : AppCompatActivity() {
+ 
+@@ -12,6 +20,19 @@
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_sign)
+ 
+-        emailField.visibility = View.INVISIBLE
++        GlobalScope.launch {
++            withContext(Dispatchers.IO) {
++                val response = RetrofitClient.api.login(LoginRequest("Admin", "Admin"))
++                when{
++                    response.isSuccessful -> {
++                        withContext(Dispatchers.Main)
++                        {
++                            signButton.text = response.body()!!.data!!.username
++                        }
++                    }
++                }
++            }
++        }
++
+     }
+ }
+Index: app/src/main/java/app/mobile/consideredcosts/http/BaseResponse.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/http/BaseResponse.kt	(date 1583175846413)
++++ app/src/main/java/app/mobile/consideredcosts/http/BaseResponse.kt	(date 1583175846413)
+@@ -0,0 +1,23 @@
++package app.mobile.consideredcosts.http
++
++import com.google.gson.annotations.SerializedName
++
++open class BaseResponse<out T>(
++    @SerializedName("data")
++    val data: T? = null,
++    @SerializedName("messages")
++    val messages: List<ErrorResponse>? = null)
++{
++    val message: String?
++        get() {
++            return messages?.firstOrNull()?.text
++        }
++
++    fun isMessageExists() = messages != null && messages.isNotEmpty()
++}
++
++data class ErrorResponse(
++    val type: String?,
++    val text: String?,
++    val field: String?
++)
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\n\r\napply plugin: 'kotlin-android'\r\n\r\napply plugin: 'kotlin-android-extensions'\r\n\r\nandroid {\r\n    compileSdkVersion 29\r\n    buildToolsVersion \"29.0.2\"\r\n    defaultConfig {\r\n        applicationId \"app.mobile.consideredcosts\"\r\n        minSdkVersion 21\r\n        targetSdkVersion 29\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'\r\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n    implementation \"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version\"\r\n    implementation 'androidx.appcompat:appcompat:1.0.2'\r\n    implementation 'androidx.core:core-ktx:1.0.2'\r\n    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test:runner:1.1.1'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'\r\n\r\n    implementation 'com.squareup.retrofit2:retrofit:2.5.0'\r\n    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision ec0eaaf7f9a641f13d283c718f8d992c4be210c1)
++++ app/build.gradle	(date 1583176785693)
+@@ -24,6 +24,9 @@
+ }
+ 
+ dependencies {
++    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3"
++    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3"
++
+     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
+     implementation fileTree(dir: 'libs', include: ['*.jar'])
+     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+Index: app/src/main/java/app/mobile/consideredcosts/http/Api.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package app.mobile.consideredcosts.http\r\n\r\ninterface Api {\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/http/Api.kt	(revision ec0eaaf7f9a641f13d283c718f8d992c4be210c1)
++++ app/src/main/java/app/mobile/consideredcosts/http/Api.kt	(date 1583177600490)
+@@ -1,5 +1,13 @@
+ package app.mobile.consideredcosts.http
+ 
++import app.mobile.consideredcosts.http.models.request.LoginRequest
++import app.mobile.consideredcosts.http.models.response.LoginRequestResponse
++import retrofit2.Response
++import retrofit2.http.Body
++import retrofit2.http.POST
++
+ interface Api {
++@POST("accounts/login")
++suspend fun login(@Body loginParameters : LoginRequest): Response <LoginRequestResponse>
+ 
+ }
+\ No newline at end of file
+Index: app/src/main/java/app/mobile/consideredcosts/http/RetrofitClient.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package app.mobile.consideredcosts.http\r\n\r\nimport okhttp3.OkHttpClient\r\nimport retrofit2.Retrofit\r\nimport retrofit2.converter.gson.GsonConverterFactory\r\n\r\nobject RetrofitClient {\r\n\r\n    private const val BASE_URL = \"https://ccostsproject.azurewebsites.net/api\"\r\n    private val okHttpClient = OkHttpClient.Builder()\r\n        .addInterceptor{\r\n                chain ->\r\n            val original = chain.request()\r\n\r\n            val requestBuilder = original.newBuilder().addHeader(\"Authorization\",\"\").method(original.method(),original.body())\r\n\r\n            val request = requestBuilder.build()\r\n            chain.proceed(request)\r\n        }.build()\r\n\r\n    val instance : Api by lazy {\r\n        val retrofit = Retrofit.Builder()\r\n            .baseUrl(BASE_URL)\r\n            .addConverterFactory(GsonConverterFactory.create())\r\n            .client(okHttpClient)\r\n            .build()\r\n\r\n        retrofit.create(Api::class.java)\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/http/RetrofitClient.kt	(revision ec0eaaf7f9a641f13d283c718f8d992c4be210c1)
++++ app/src/main/java/app/mobile/consideredcosts/http/RetrofitClient.kt	(date 1583177256149)
+@@ -1,30 +1,19 @@
+ package app.mobile.consideredcosts.http
+ 
+-import okhttp3.OkHttpClient
+ import retrofit2.Retrofit
+ import retrofit2.converter.gson.GsonConverterFactory
+ 
+-object RetrofitClient {
++object RetrofitClient{
+ 
+-    private const val BASE_URL = "https://ccostsproject.azurewebsites.net/api"
+-    private val okHttpClient = OkHttpClient.Builder()
+-        .addInterceptor{
+-                chain ->
+-            val original = chain.request()
+-
+-            val requestBuilder = original.newBuilder().addHeader("Authorization","").method(original.method(),original.body())
++    private const val BASE_URL = "https://ccostsproject.azurewebsites.net/api/"
++    var api: Api
+ 
+-            val request = requestBuilder.build()
+-            chain.proceed(request)
+-        }.build()
+-
+-    val instance : Api by lazy {
++    init {
+         val retrofit = Retrofit.Builder()
+             .baseUrl(BASE_URL)
+             .addConverterFactory(GsonConverterFactory.create())
+-            .client(okHttpClient)
+             .build()
+-
+-        retrofit.create(Api::class.java)
++        api = retrofit.create(Api::class.java)
+     }
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/app/mobile/consideredcosts/http/models/request/LoginRequest.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/http/models/request/LoginRequest.kt	(date 1583175711906)
++++ app/src/main/java/app/mobile/consideredcosts/http/models/request/LoginRequest.kt	(date 1583175711906)
+@@ -0,0 +1,3 @@
++package app.mobile.consideredcosts.http.models.request
++
++data class LoginRequest(val username:String, val password:String)
+\ No newline at end of file
