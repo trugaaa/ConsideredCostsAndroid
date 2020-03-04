@@ -1,0 +1,828 @@
+Index: app/src/main/java/app/mobile/consideredcosts/sign/SignActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package app.mobile.consideredcosts.sign\r\n\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport android.provider.Settings\r\nimport android.view.View\r\nimport android.widget.Toast\r\nimport app.mobile.consideredcosts.R\r\nimport app.mobile.consideredcosts.http.RetrofitClient\r\nimport app.mobile.consideredcosts.http.models.request.LoginRequest\r\nimport kotlinx.android.synthetic.main.activity_sign.*\r\nimport kotlinx.coroutines.Dispatchers\r\nimport kotlinx.coroutines.GlobalScope\r\nimport kotlinx.coroutines.launch\r\nimport kotlinx.coroutines.withContext\r\n\r\nclass SignActivity : AppCompatActivity() {\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_sign)\r\n\r\n        GlobalScope.launch {\r\n            withContext(Dispatchers.IO) {\r\n                val response = RetrofitClient.api.login(LoginRequest(\"Admin\", \"Admin\"))\r\n                when{\r\n                    response.isSuccessful -> {\r\n                        withContext(Dispatchers.Main)\r\n                        {\r\n                            signButton.text = response.body()!!.data!!.username\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/sign/SignActivity.kt	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/src/main/java/app/mobile/consideredcosts/sign/SignActivity.kt	(date 1583353070928)
+@@ -1,13 +1,12 @@
+ package app.mobile.consideredcosts.sign
+ 
+-import androidx.appcompat.app.AppCompatActivity
+ import android.os.Bundle
+-import android.provider.Settings
+ import android.view.View
+ import android.widget.Toast
++import androidx.appcompat.app.AppCompatActivity
+ import app.mobile.consideredcosts.R
++import app.mobile.consideredcosts.data.SharedPreferencesManager
+ import app.mobile.consideredcosts.http.RetrofitClient
+-import app.mobile.consideredcosts.http.models.request.LoginRequest
+ import kotlinx.android.synthetic.main.activity_sign.*
+ import kotlinx.coroutines.Dispatchers
+ import kotlinx.coroutines.GlobalScope
+@@ -16,23 +15,108 @@
+ 
+ class SignActivity : AppCompatActivity() {
+ 
++    private var state = SignOption.LOGIN
++    private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
++
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_sign)
++        screenState(state)
++
++    }
++
++    private fun screenState(state: SignOption) {
++        when (state) {
++            SignOption.LOGIN -> {
++                emailLabel.visibility = View.GONE
++                emailField.visibility = View.GONE
++                confPassLabel.visibility = View.GONE
++                confPassField.visibility = View.GONE
++                signButton.text = resources.getText(R.string.signInButtonText)
++
++                bottomSignLink.setOnClickListener {
++                    screenState(SignOption.REGISTRATION)
++                }
++
++                signButton.setOnClickListener {
++                    login(usernameField.text.toString(), passwordField.text.toString())
++                }
++            }
++
++            SignOption.REGISTRATION -> {
++                emailLabel.visibility = View.VISIBLE
++                emailField.visibility = View.VISIBLE
++                confPassLabel.visibility = View.VISIBLE
++                confPassField.visibility = View.VISIBLE
++                signButton.text = resources.getText(R.string.signUpButtonText)
++
++                bottomSignLink.setOnClickListener {
++                    screenState(SignOption.LOGIN)
++                }
++
++                signButton.setOnClickListener {
++
++                }
++            }
++        }
++    }
++
++    private fun registration(
++        username: String,
++        email: String,
++        password: String,
++        confirmPass: String
++    ) {
++
++    }
++
++    private fun login(username: String, password: String) {
++        if (username.length < 3) {
++        //todo
++        }
++        if (password.length < 3) {
++
++        }
+ 
+         GlobalScope.launch {
+             withContext(Dispatchers.IO) {
+-                val response = RetrofitClient.api.login(LoginRequest("Admin", "Admin"))
+-                when{
+-                    response.isSuccessful -> {
+-                        withContext(Dispatchers.Main)
+-                        {
+-                            signButton.text = response.body()!!.data!!.username
++                launch {
++                    val response = RetrofitClient.get(username, password)
++                    when (response.code()) {
++                        200 -> {
++                            withContext(Dispatchers.Main) {
++                                    Toast.makeText(
++                                        this@SignActivity,
++                                        response.body()!!.data!!.username,
++                                        Toast.LENGTH_SHORT
++                                    ).show()
++                            }
+                         }
+-                    }
+-                }
+-            }
+-        }
++                        401 -> {
++                            withContext(Dispatchers.Main) {
++                                Toast.makeText(
++                                    this@SignActivity,
++                                    response.body()!!.message,
++                                    Toast.LENGTH_SHORT
++                                )
++                                    .show()
++                            }
++                        }
++                        else -> {
++                            withContext(Dispatchers.Main) {
++                                Toast.makeText(this@SignActivity, "Else Pedik", Toast.LENGTH_SHORT)
++                                    .show()
++                            }
++                        }
++                    }
+ 
++                }
++            }
++        }
+     }
+ }
++
++enum class SignOption {
++    LOGIN,
++    REGISTRATION
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_sign.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:layout_centerHorizontal=\"true\"\r\n    android:layout_centerVertical=\"true\"\r\n    android:background=\"@drawable/bg\"\r\n    tools:context=\".sign.SignActivity\">\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imageSignLogo\"\r\n        android:layout_width=\"140dp\"\r\n        android:layout_height=\"140dp\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:contentDescription=\"@string/considered_costs_logo\"\r\n        app:srcCompat=\"@drawable/logo_sign\" />\r\n\r\n\r\n    <RelativeLayout\r\n        android:id=\"@+id/signTextBlock\"\r\n        android:layout_width=\"242dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_below=\"@id/imageSignLogo\"\r\n        android:layout_centerHorizontal=\"true\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/usernameLabel\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_margin=\"4dp\"\r\n            android:ems=\"10\"\r\n            android:labelFor=\"@id/usernameField\"\r\n            android:text=\"@string/username\"\r\n            android:textColor=\"@color/colorPrimary\"\r\n            android:textSize=\"12sp\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/usernameField\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"40dp\"\r\n            android:layout_below=\"@id/usernameLabel\"\r\n            android:layout_centerHorizontal=\"true\"\r\n            android:textColor=\"@color/colorPrimary\"\r\n            android:background=\"@drawable/sign_rounded_edit_texts\"\r\n            android:bottomLeftRadius=\"133dp\"\r\n            android:textSize=\"14sp\"\r\n            android:inputType=\"text\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/emailLabel\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_below=\"@id/usernameField\"\r\n            android:layout_margin=\"4dp\"\r\n            android:ems=\"10\"\r\n            android:labelFor=\"@id/emailField\"\r\n            android:text=\"@string/email\"\r\n            android:textColor=\"@color/colorPrimary\"\r\n            android:textSize=\"12sp\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/emailField\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"40dp\"\r\n            android:layout_below=\"@id/emailLabel\"\r\n            android:layout_centerHorizontal=\"true\"\r\n            android:textColor=\"@color/colorPrimary\"\r\n            android:textSize=\"14sp\"\r\n            android:background=\"@drawable/sign_rounded_edit_texts\"\r\n            android:inputType=\"textEmailAddress\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/passwordLabel\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_below=\"@id/emailField\"\r\n            android:layout_margin=\"4dp\"\r\n            android:ems=\"10\"\r\n            android:labelFor=\"@id/passwordField\"\r\n            android:text=\"@string/password\"\r\n            android:textColor=\"@color/colorPrimary\"\r\n            android:textSize=\"12sp\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/passwordField\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"40dp\"\r\n            android:textColor=\"@color/colorPrimary\"\r\n            android:layout_below=\"@id/passwordLabel\"\r\n            android:layout_centerHorizontal=\"true\"\r\n            android:textSize=\"14sp\"\r\n            android:background=\"@drawable/sign_rounded_edit_texts\"\r\n            android:inputType=\"textPassword\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/confPassLabel\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_below=\"@id/passwordField\"\r\n            android:layout_margin=\"4dp\"\r\n            android:ems=\"10\"\r\n            android:labelFor=\"@id/confPassField\"\r\n            android:text=\"@string/confPassword\"\r\n            android:textColor=\"@color/colorPrimary\"\r\n            android:textSize=\"12sp\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/confPassField\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"40dp\"\r\n            android:textSize=\"14sp\"\r\n            android:layout_below=\"@id/confPassLabel\"\r\n            android:layout_centerHorizontal=\"true\"\r\n            android:textColor=\"@color/colorPrimary\"\r\n            android:background=\"@drawable/sign_rounded_edit_texts\"\r\n            android:inputType=\"textPassword\" />\r\n\r\n    </RelativeLayout>\r\n\r\n    <RelativeLayout\r\n        android:id=\"@+id/buttonSignBlock\"\r\n        android:layout_width=\"240dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_below=\"@id/signTextBlock\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:layout_marginTop=\"30dp\">\r\n\r\n        <Button\r\n            android:id=\"@+id/signButton\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"40dp\"\r\n            android:background=\"@drawable/rounded_white_buttons\"\r\n            android:textColor=\"@color/colorTextBlue\"\r\n            android:textSize=\"14sp\"\r\n            android:text=\"@string/signUpButtonText\" />\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_below=\"@id/signButton\"\r\n            android:layout_centerHorizontal=\"true\"\r\n            android:layout_marginTop=\"32dp\">\r\n\r\n            <TextView\r\n                android:id=\"@+id/bottomSignText\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"@string/signAlreadyHave\"\r\n                android:textColor=\"@color/colorHintBlue\"\r\n                android:textSize=\"12sp\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/bottomSignLink\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"3dp\"\r\n                android:text=\"@string/signInButtonText\"\r\n                android:textColor=\"@color/colorPrimaryText\"\r\n                android:textSize=\"12sp\"\r\n                android:textStyle=\"bold\" />\r\n        </LinearLayout>\r\n    </RelativeLayout>\r\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_sign.xml	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/src/main/res/layout/activity_sign.xml	(date 1583352077574)
+@@ -1,5 +1,4 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+@@ -11,155 +10,200 @@
+ 
+     <ImageView
+         android:id="@+id/imageSignLogo"
+-        android:layout_width="140dp"
+-        android:layout_height="140dp"
+-        android:layout_centerHorizontal="true"
++        android:layout_width="200dp"
++        android:layout_height="200dp"
++        android:layout_marginTop="50dp"
++        android:layout_marginBottom="20dp"
+         android:contentDescription="@string/considered_costs_logo"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent"
++        app:layout_constraintBottom_toTopOf="@id/usernameLabel"
+         app:srcCompat="@drawable/logo_sign" />
+ 
+-
+-    <RelativeLayout
+-        android:id="@+id/signTextBlock"
+-        android:layout_width="242dp"
+-        android:layout_height="wrap_content"
+-        android:layout_below="@id/imageSignLogo"
+-        android:layout_centerHorizontal="true">
+-
+-        <TextView
+-            android:id="@+id/usernameLabel"
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:layout_margin="4dp"
+-            android:ems="10"
+-            android:labelFor="@id/usernameField"
+-            android:text="@string/username"
+-            android:textColor="@color/colorPrimary"
+-            android:textSize="12sp" />
++    <TextView
++        android:id="@+id/usernameLabel"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++
++        android:layout_marginStart="42dp"
++        android:layout_marginTop="8dp"
++        android:layout_marginEnd="42dp"
++        android:ems="10"
++        android:labelFor="@id/usernameField"
++        android:text="@string/username"
++        android:textColor="@color/colorPrimary"
++        android:textSize="12sp"
++        app:layout_constraintBottom_toTopOf="@id/usernameField"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/imageSignLogo" />
+ 
+-        <EditText
+-            android:id="@+id/usernameField"
+-            android:layout_width="match_parent"
+-            android:layout_height="40dp"
+-            android:layout_below="@id/usernameLabel"
+-            android:layout_centerHorizontal="true"
+-            android:textColor="@color/colorPrimary"
+-            android:background="@drawable/sign_rounded_edit_texts"
+-            android:bottomLeftRadius="133dp"
+-            android:textSize="14sp"
+-            android:inputType="text" />
++    <EditText
++        android:id="@+id/usernameField"
++        android:layout_width="0dp"
++        android:imeOptions="actionDone"
++        android:layout_height="40dp"
++        android:layout_below="@id/usernameLabel"
++        android:layout_centerHorizontal="true"
++        android:background="@drawable/sign_rounded_edit_texts"
++        android:bottomLeftRadius="133dp"
++        android:inputType="text"
++        android:textColor="@color/colorPrimary"
++        android:textSize="14sp"
++        app:layout_constraintBottom_toTopOf="@id/emailLabel"
++        app:layout_constraintEnd_toEndOf="@+id/usernameLabel"
++        app:layout_constraintStart_toStartOf="@+id/usernameLabel"
++        app:layout_constraintTop_toBottomOf="@+id/usernameLabel" />
+ 
+-        <TextView
+-            android:id="@+id/emailLabel"
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:layout_below="@id/usernameField"
+-            android:layout_margin="4dp"
+-            android:ems="10"
+-            android:labelFor="@id/emailField"
+-            android:text="@string/email"
+-            android:textColor="@color/colorPrimary"
+-            android:textSize="12sp" />
++    <TextView
++        android:id="@+id/emailLabel"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_below="@id/usernameField"
++        android:layout_marginTop="12dp"
++        android:ems="10"
++        android:labelFor="@id/emailField"
++        android:text="@string/email"
++        android:textColor="@color/colorPrimary"
++        android:textSize="12sp"
++        app:layout_constraintBottom_toTopOf="@id/emailField"
++        app:layout_constraintEnd_toEndOf="@+id/usernameField"
++        app:layout_constraintStart_toStartOf="@+id/usernameField"
++        app:layout_constraintTop_toBottomOf="@+id/usernameField" />
+ 
+-        <EditText
+-            android:id="@+id/emailField"
+-            android:layout_width="match_parent"
+-            android:layout_height="40dp"
+-            android:layout_below="@id/emailLabel"
+-            android:layout_centerHorizontal="true"
+-            android:textColor="@color/colorPrimary"
+-            android:textSize="14sp"
+-            android:background="@drawable/sign_rounded_edit_texts"
+-            android:inputType="textEmailAddress" />
++    <EditText
++        android:id="@+id/emailField"
++        android:layout_width="0dp"
++        android:layout_height="40dp"
++        android:imeOptions="actionDone"
++        android:layout_below="@id/emailLabel"
++        android:layout_centerHorizontal="true"
++        android:background="@drawable/sign_rounded_edit_texts"
++        android:inputType="textEmailAddress"
++        android:textColor="@color/colorPrimary"
++        android:textSize="14sp"
++        app:layout_constraintBottom_toTopOf="@id/passwordLabel"
++        app:layout_constraintEnd_toEndOf="@+id/emailLabel"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="@+id/emailLabel"
++        app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
+ 
+-        <TextView
+-            android:id="@+id/passwordLabel"
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:layout_below="@id/emailField"
+-            android:layout_margin="4dp"
+-            android:ems="10"
+-            android:labelFor="@id/passwordField"
+-            android:text="@string/password"
+-            android:textColor="@color/colorPrimary"
+-            android:textSize="12sp" />
++    <TextView
++        android:id="@+id/passwordLabel"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_below="@id/emailField"
++        android:layout_marginTop="8dp"
++        android:ems="10"
++        android:labelFor="@id/passwordField"
++        android:text="@string/password"
++        android:textColor="@color/colorPrimary"
++        android:textSize="12sp"
++        android:layout_marginEnd="42dp"
++        android:layout_marginStart="42dp"
++        app:layout_constraintBottom_toTopOf="@id/passwordField"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/emailField" />
+ 
+-        <EditText
+-            android:id="@+id/passwordField"
+-            android:layout_width="match_parent"
+-            android:layout_height="40dp"
+-            android:textColor="@color/colorPrimary"
+-            android:layout_below="@id/passwordLabel"
+-            android:layout_centerHorizontal="true"
+-            android:textSize="14sp"
+-            android:background="@drawable/sign_rounded_edit_texts"
+-            android:inputType="textPassword" />
++    <EditText
++        android:id="@+id/passwordField"
++        android:layout_width="0dp"
++        android:layout_height="40dp"
++        android:layout_below="@id/passwordLabel"
++        android:layout_centerHorizontal="true"
++        android:background="@drawable/sign_rounded_edit_texts"
++        android:inputType="textPassword"
++        android:textColor="@color/colorPrimary"
++        android:imeOptions="actionDone"
++        android:textSize="14sp"
++        android:layout_marginEnd="42dp"
++        android:layout_marginStart="42dp"
++        app:layout_constraintBottom_toTopOf="@id/confPassLabel"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/passwordLabel" />
+ 
+-        <TextView
+-            android:id="@+id/confPassLabel"
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:layout_below="@id/passwordField"
+-            android:layout_margin="4dp"
+-            android:ems="10"
+-            android:labelFor="@id/confPassField"
+-            android:text="@string/confPassword"
+-            android:textColor="@color/colorPrimary"
+-            android:textSize="12sp" />
++    <TextView
++        android:id="@+id/confPassLabel"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_below="@id/passwordField"
++        android:layout_marginTop="8dp"
++        android:ems="10"
++        android:labelFor="@id/confPassField"
++        android:text="@string/confPassword"
++        android:textColor="@color/colorPrimary"
++        android:textSize="12sp"
++        android:layout_marginEnd="42dp"
++        android:layout_marginStart="42dp"
++        app:layout_constraintBottom_toTopOf="@id/confPassField"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+ 
+-        <EditText
+-            android:id="@+id/confPassField"
+-            android:layout_width="match_parent"
+-            android:layout_height="40dp"
+-            android:textSize="14sp"
+-            android:layout_below="@id/confPassLabel"
+-            android:layout_centerHorizontal="true"
+-            android:textColor="@color/colorPrimary"
+-            android:background="@drawable/sign_rounded_edit_texts"
+-            android:inputType="textPassword" />
+-
+-    </RelativeLayout>
+-
+-    <RelativeLayout
+-        android:id="@+id/buttonSignBlock"
+-        android:layout_width="240dp"
+-        android:layout_height="wrap_content"
+-        android:layout_below="@id/signTextBlock"
+-        android:layout_centerHorizontal="true"
+-        android:layout_marginTop="30dp">
++    <EditText
++        android:id="@+id/confPassField"
++        android:layout_width="0dp"
++        android:layout_height="40dp"
++        android:layout_below="@id/confPassLabel"
++        android:layout_centerHorizontal="true"
++        android:imeOptions="actionDone"
++        android:background="@drawable/sign_rounded_edit_texts"
++        android:inputType="textPassword"
++        android:textColor="@color/colorPrimary"
++        android:textSize="14sp"
++        android:layout_marginEnd="42dp"
++        android:layout_marginStart="42dp"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@id/confPassLabel"
++        tools:layout_editor_absoluteY="467dp" />
+ 
+-        <Button
+-            android:id="@+id/signButton"
+-            android:layout_width="match_parent"
+-            android:layout_height="40dp"
+-            android:background="@drawable/rounded_white_buttons"
+-            android:textColor="@color/colorTextBlue"
+-            android:textSize="14sp"
+-            android:text="@string/signUpButtonText" />
++    <Button
++        android:id="@+id/signButton"
++        android:layout_width="0dp"
++        android:layout_height="40dp"
++        android:layout_marginEnd="42dp"
++        android:layout_marginStart="42dp"
++        android:layout_marginBottom="60dp"
++        android:background="@drawable/rounded_white_buttons"
++        android:text="@string/signUpButtonText"
++        android:textColor="@color/colorTextBlue"
++        android:textSize="14sp"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintVertical_bias="0.502" />
+ 
+-        <LinearLayout
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_below="@id/signButton"
+-            android:layout_centerHorizontal="true"
+-            android:layout_marginTop="32dp">
++    <LinearLayout
++        android:id="@+id/container"
++        android:layout_width="wrap_content"
++        android:layout_height="42dp"
++        android:layout_below="@id/signButton"
++        android:layout_centerHorizontal="true"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/signButton">
+ 
+-            <TextView
+-                android:id="@+id/bottomSignText"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:text="@string/signAlreadyHave"
+-                android:textColor="@color/colorHintBlue"
+-                android:textSize="12sp" />
++        <TextView
++            android:id="@+id/bottomSignText"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="@string/signAlreadyHave"
++            android:textColor="@color/colorHintBlue"
++            android:textSize="12sp" />
+ 
+-            <TextView
+-                android:id="@+id/bottomSignLink"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:layout_marginStart="3dp"
+-                android:text="@string/signInButtonText"
+-                android:textColor="@color/colorPrimaryText"
+-                android:textSize="12sp"
+-                android:textStyle="bold" />
+-        </LinearLayout>
+-    </RelativeLayout>
+-</RelativeLayout>
+\ No newline at end of file
++        <TextView
++            android:id="@+id/bottomSignLink"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginStart="3dp"
++            android:text="@string/signInButtonText"
++            android:textColor="@color/colorPrimaryText"
++            android:textSize="12sp"
++            android:textStyle="bold" />
++    </LinearLayout>
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/java/app/mobile/consideredcosts/http/BaseResponse.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package app.mobile.consideredcosts.http\r\n\r\nimport com.google.gson.annotations.SerializedName\r\n\r\nopen class BaseResponse<out T>(\r\n    @SerializedName(\"data\")\r\n    val data: T? = null,\r\n    @SerializedName(\"messages\")\r\n    val messages: List<ErrorResponse>? = null)\r\n{\r\n    val message: String?\r\n        get() {\r\n            return messages?.firstOrNull()?.text\r\n        }\r\n\r\n    fun isMessageExists() = messages != null && messages.isNotEmpty()\r\n}\r\n\r\ndata class ErrorResponse(\r\n    val type: String?,\r\n    val text: String?,\r\n    val field: String?\r\n)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/http/BaseResponse.kt	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/src/main/java/app/mobile/consideredcosts/http/BaseResponse.kt	(date 1583352500530)
+@@ -10,7 +10,7 @@
+ {
+     val message: String?
+         get() {
+-            return messages?.firstOrNull()?.text
++            return messages!!.first().text
+         }
+ 
+     fun isMessageExists() = messages != null && messages.isNotEmpty()
+Index: app/src/main/java/app/mobile/consideredcosts/data/SharedPreferencesManager.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package app.mobile.consideredcosts.data\r\n\r\nimport android.content.Context\r\nimport android.content.SharedPreferences\r\n\r\nclass SharedPreferencesManager(context: Context) {\r\n    private val sharedPreferences: SharedPreferences by lazy {\r\n        context.getSharedPreferences(\"Vasya\", Context.MODE_PRIVATE)\r\n    }\r\n\r\n    var firstLaunch: Boolean? = null\r\n\r\n    fun onLaunch(firstLaunch: Boolean) {\r\n        sharedPreferences.edit().putBoolean(FIRST_OPEN, firstLaunch).apply()\r\n    }\r\n\r\n    fun isFirstOpened(): Boolean = sharedPreferences.getBoolean(FIRST_OPEN, false)\r\n\r\n    companion object {\r\n        private const val FIRST_OPEN = \"FIRST_OPEN\"\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/data/SharedPreferencesManager.kt	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/src/main/java/app/mobile/consideredcosts/data/SharedPreferencesManager.kt	(date 1583350916532)
+@@ -5,10 +5,8 @@
+ 
+ class SharedPreferencesManager(context: Context) {
+     private val sharedPreferences: SharedPreferences by lazy {
+-        context.getSharedPreferences("Vasya", Context.MODE_PRIVATE)
++        context.getSharedPreferences("", Context.MODE_PRIVATE)
+     }
+-
+-    var firstLaunch: Boolean? = null
+ 
+     fun onLaunch(firstLaunch: Boolean) {
+         sharedPreferences.edit().putBoolean(FIRST_OPEN, firstLaunch).apply()
+@@ -16,7 +14,31 @@
+ 
+     fun isFirstOpened(): Boolean = sharedPreferences.getBoolean(FIRST_OPEN, false)
+ 
++    fun setToken(token:String)
++    {
++            sharedPreferences.edit().putString(TOKEN,token).apply()
++    }
++
++    fun getToken(): String? = sharedPreferences.getString(TOKEN,"No token")
++
++    fun setUsername(username:String)
++    {
++        sharedPreferences.edit().putString(USERNAME,username).apply()
++    }
++
++    fun getUsername(): String? = sharedPreferences.getString(USERNAME,"No username")
++
++    fun setPassword(password:String)
++    {
++        sharedPreferences.edit().putString(PASSWORD,password).apply()
++    }
++
++    fun getPassword(): String? = sharedPreferences.getString(PASSWORD,"No password")
++
+     companion object {
+         private const val FIRST_OPEN = "FIRST_OPEN"
++        private const val TOKEN = "TOKEN"
++        private const val USERNAME = "USERNAME"
++        private const val PASSWORD = "PASSWORD"
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/app/mobile/consideredcosts/http/RetrofitClient.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package app.mobile.consideredcosts.http\r\n\r\nimport okhttp3.OkHttpClient\r\nimport okhttp3.logging.HttpLoggingInterceptor\r\nimport retrofit2.Retrofit\r\nimport retrofit2.converter.gson.GsonConverterFactory\r\n\r\nobject RetrofitClient{\r\n\r\n    private const val BASE_URL = \"https://ccostsproject.azurewebsites.net/api/\"\r\n    var api: Api\r\n\r\n    init {\r\n        val retrofit = Retrofit.Builder()\r\n            .baseUrl(BASE_URL)\r\n            .addConverterFactory(GsonConverterFactory.create())\r\n            .client(OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {\r\n                level = HttpLoggingInterceptor.Level.BODY\r\n            }).build()).build()\r\n\r\n        api = retrofit.create(Api::class.java)\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/http/RetrofitClient.kt	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/src/main/java/app/mobile/consideredcosts/http/RetrofitClient.kt	(date 1583351651962)
+@@ -1,24 +1,29 @@
+ package app.mobile.consideredcosts.http
+ 
++import app.mobile.consideredcosts.http.models.request.LoginRequest
+ import okhttp3.OkHttpClient
+ import okhttp3.logging.HttpLoggingInterceptor
+ import retrofit2.Retrofit
+ import retrofit2.converter.gson.GsonConverterFactory
+ 
+-object RetrofitClient{
++object RetrofitClient {
+ 
+     private const val BASE_URL = "https://ccostsproject.azurewebsites.net/api/"
+-    var api: Api
++    private val api: Api
+ 
+     init {
+-        val retrofit = Retrofit.Builder()
++        api = Retrofit.Builder()
+             .baseUrl(BASE_URL)
+-            .addConverterFactory(GsonConverterFactory.create())
+-            .client(OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
+-                level = HttpLoggingInterceptor.Level.BODY
+-            }).build()).build()
+-
+-        api = retrofit.create(Api::class.java)
++            .addConverterFactory(GsonConverterFactory.create()).client(
++                OkHttpClient.Builder().addInterceptor(
++                    HttpLoggingInterceptor().apply {
++                        level = HttpLoggingInterceptor.Level.BODY
++                    }).build()
++            )
++            .build()
++            .create(Api::class.java)
+     }
+ 
++    suspend fun get(login: String, password: String) = api.login(LoginRequest(login, password))
++
+ }
+\ No newline at end of file
+Index: .idea/shelf/Retrodit_implementation.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><changelist name=\"Retrodit_implementation\" date=\"1583177793367\" recycled=\"false\">\r\n  <option name=\"PATH\" value=\"$PROJECT_DIR$/.idea/shelf/Retrodit_implementation/shelved.patch\" />\r\n  <option name=\"DESCRIPTION\" value=\"Retrodit implementation\" />\r\n</changelist>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/shelf/Retrodit_implementation.xml	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ .idea/shelf/Retrodit_implementation.xml	(date 1583346030825)
+Index: app/src/main/java/app/mobile/consideredcosts/main/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/main/MainActivity.kt	(date 1583351265719)
++++ app/src/main/java/app/mobile/consideredcosts/main/MainActivity.kt	(date 1583351265719)
+@@ -0,0 +1,13 @@
++package app.mobile.consideredcosts.main
++
++import androidx.appcompat.app.AppCompatActivity
++import android.os.Bundle
++import app.mobile.consideredcosts.R
++
++class MainActivity : AppCompatActivity() {
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        setContentView(R.layout.activity_main2)
++    }
++}
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_7\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ .idea/misc.xml	(date 1583347253259)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: app/src/main/res/layout/activity_main2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main2.xml	(date 1583351265657)
++++ app/src/main/res/layout/activity_main2.xml	(date 1583351265657)
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".main.MainActivity">
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n    <string name=\"app_name\">Considered Costs</string>\r\n    <!-- Welcome informational screens -->\r\n    <string name=\"welcomeImageDescription\">\"Welcome image\"</string>\r\n    <string name=\"welcome1Title\">GET AN OVERVIEW</string>\r\n    <string name=\"welcome1Text\">OF INCOMES AND OUTGOES</string>\r\n\r\n    <string name=\"welcome2Title\">SET FINANCIAL GOALS</string>\r\n    <string name=\"welcome2Text\">AND ACHIEVE THEM</string>\r\n\r\n    <string name=\"welcome3Title\">TAKE CARE</string>\r\n    <string name=\"welcome3Text\">OF YOUR PROFIT</string>\r\n\r\n    <string name=\"skipLinkText\">SKIP</string>\r\n    <string name=\"nextLinkText\">NEXT</string>\r\n    <string name=\"doneLinkText\">DONE</string>\r\n    <string name=\"startLinkText\">START</string>\r\n\r\n\r\n    <!-- SignUp screen -->\r\n    <string name=\"signAlreadyHave\">Already have an account?</string>\r\n    <string name=\"signUpButtonText\">Sign Up</string>\r\n    <!-- SignIn screen -->\r\n    <string name=\"username\">Username</string>\r\n    <string name=\"plsUsername\">Please enter your username</string>\r\n    <string name=\"email\">Email</string>\r\n    <string name=\"plsEmail\">Please enter your email</string>\r\n    <string name=\"password\">Password</string>\r\n    <string name=\"plsPassword\">Please enter your password</string>\r\n    <string name=\"confPassword\">Confirm password</string>\r\n    <string name=\"plsConfPassword\">Please confirm your password</string>\r\n    \r\n    <string name=\"signInButtonText\">Sign In</string>\r\n    <string name=\"signDontHaveAccount\">Don`t have an account?</string>\r\n    <string name=\"considered_costs_logo\">Considered Costs logo</string>\r\n    <!-- Generic errors -->\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/src/main/res/values/strings.xml	(date 1583351240863)
+@@ -30,7 +30,7 @@
+     <string name="plsPassword">Please enter your password</string>
+     <string name="confPassword">Confirm password</string>
+     <string name="plsConfPassword">Please confirm your password</string>
+-    
++
+     <string name="signInButtonText">Sign In</string>
+     <string name="signDontHaveAccount">Don`t have an account?</string>
+     <string name="considered_costs_logo">Considered Costs logo</string>
+Index: app/src/main/java/app/mobile/consideredcosts/launch/LaunchActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package app.mobile.consideredcosts.launch\r\n\r\nimport android.content.Intent\r\nimport android.graphics.Color\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport android.view.View\r\nimport androidx.viewpager.widget.ViewPager\r\nimport app.mobile.consideredcosts.R\r\nimport app.mobile.consideredcosts.data.SharedPreferencesManager\r\nimport app.mobile.consideredcosts.sign.SignActivity\r\nimport app.mobile.consideredcosts.welcome.WelcomeSliderAdapter\r\nimport app.mobile.consideredcosts.welcome.WelcomeSliderFragment\r\n\r\nimport kotlinx.android.synthetic.main.activity_main.*\r\nimport kotlinx.android.synthetic.main.fragment_welcome_slider.*\r\n\r\nclass LaunchActivity : AppCompatActivity(),PagerListener {\r\n\r\n    val welcomeSliderAdapter by lazy { WelcomeSliderAdapter(supportFragmentManager) }\r\n\r\n    var welcomeScreensSeen: Boolean = false\r\n\r\n    private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }\r\n\r\n    private val welcomeSliderFragmentOne = WelcomeSliderFragment.newInstanse(\r\n        R.string.welcome1Title,\r\n        R.drawable.ic_wallet,\r\n        R.string.welcome1Text,\r\n        R.drawable.bg1\r\n    )\r\n    private val welcomeSliderFragmentTwo = WelcomeSliderFragment.newInstanse(\r\n        R.string.welcome2Title,\r\n        R.drawable.ic_save,\r\n        R.string.welcome2Text,\r\n        R.drawable.bg3\r\n    )\r\n    private val welcomeSliderFragmentThree = WelcomeSliderFragment.newInstanse(\r\n        R.string.welcome3Title,\r\n        R.drawable.ic_briefcase,\r\n        R.string.welcome3Text,\r\n        R.drawable.bg5\r\n    )\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        if(sharedPreferencesManager.isFirstOpened()) openSignActivity()\r\n\r\n        setContentView(R.layout.activity_main)\r\n\r\n        welcomeSliderAdapter.list.add(welcomeSliderFragmentOne)\r\n        welcomeSliderAdapter.list.add(welcomeSliderFragmentTwo)\r\n        welcomeSliderAdapter.list.add(welcomeSliderFragmentThree)\r\n\r\n        welcomeViewPager.adapter = welcomeSliderAdapter\r\n\r\n        welcomeViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {\r\n            override fun onPageScrollStateChanged(state: Int) {\r\n\r\n            }\r\n\r\n            override fun onPageScrolled(\r\n                position: Int,\r\n                positionOffset: Float,\r\n                positionOffsetPixels: Int\r\n            ) {\r\n\r\n            }\r\n\r\n            override fun onPageSelected(position: Int) {\r\n\r\n                when {\r\n                    position == welcomeSliderAdapter.list.size - 1 -> {\r\n                        welcomeScreensSeen = true\r\n                        sharedPreferencesManager.onLaunch(true)\r\n\r\n                        welcomeSliderAdapter.getItem(position).btn_next.setOnClickListener()\r\n                        {\r\n                            openSignActivity()\r\n                        }\r\n                    }\r\n                    welcomeScreensSeen -> {\r\n                        welcomeSliderAdapter.getItem(position).btn_next.setOnClickListener()\r\n                        {\r\n                            openSignActivity()\r\n                        }\r\n                    }\r\n                    else -> {\r\n                        welcomeSliderAdapter.getItem(position)\r\n                            .btn_next.setText(R.string.nextLinkText)\r\n                    }\r\n                }\r\n\r\n                when (welcomeViewPager.currentItem) {\r\n                    0 -> {\r\n                        welcomeSliderAdapter.getItem(position).indicator1.setTextColor(Color.WHITE)\r\n                        welcomeSliderAdapter.getItem(position).indicator2.setTextColor(Color.GRAY)\r\n                        welcomeSliderAdapter.getItem(position).indicator3.setTextColor(Color.GRAY)\r\n                    }\r\n                    1 -> {\r\n                        welcomeSliderAdapter.getItem(position).indicator1.setTextColor(Color.GRAY)\r\n                        welcomeSliderAdapter.getItem(position).indicator2.setTextColor(Color.WHITE)\r\n                        welcomeSliderAdapter.getItem(position).indicator3.setTextColor(Color.GRAY)\r\n                    }\r\n                    2 -> {\r\n                        welcomeSliderAdapter.getItem(position).indicator1.setTextColor(Color.GRAY)\r\n                        welcomeSliderAdapter.getItem(position).indicator2.setTextColor(Color.GRAY)\r\n                        welcomeSliderAdapter.getItem(position).indicator3.setTextColor(Color.WHITE)\r\n                    }\r\n                }\r\n\r\n                //Listener for SKIP button\r\n\r\n                if (welcomeScreensSeen) {\r\n                    welcomeSliderAdapter.getItem(position).btn_skip.visibility = View.GONE\r\n                    welcomeSliderAdapter.getItem(position).btn_next.setText(R.string.startLinkText)\r\n\r\n                }\r\n\r\n            }\r\n        })\r\n\r\n    }\r\n\r\n   override fun openNextFragment() {\r\n        welcomeViewPager.currentItem++\r\n    }\r\n\r\n    override fun openSignActivity() {\r\n        startActivity(Intent(this, SignActivity::class.java))\r\n        finish()\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/app/mobile/consideredcosts/launch/LaunchActivity.kt	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/src/main/java/app/mobile/consideredcosts/launch/LaunchActivity.kt	(date 1583351651834)
+@@ -12,7 +12,7 @@
+ import app.mobile.consideredcosts.welcome.WelcomeSliderAdapter
+ import app.mobile.consideredcosts.welcome.WelcomeSliderFragment
+ 
+-import kotlinx.android.synthetic.main.activity_main.*
++import kotlinx.android.synthetic.main.activity_welcome.*
+ import kotlinx.android.synthetic.main.fragment_welcome_slider.*
+ 
+ class LaunchActivity : AppCompatActivity(),PagerListener {
+@@ -46,7 +46,7 @@
+         super.onCreate(savedInstanceState)
+         if(sharedPreferencesManager.isFirstOpened()) openSignActivity()
+ 
+-        setContentView(R.layout.activity_main)
++        setContentView(R.layout.activity_welcome)
+ 
+         welcomeSliderAdapter.list.add(welcomeSliderFragmentOne)
+         welcomeSliderAdapter.list.add(welcomeSliderFragmentTwo)
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\n\r\napply plugin: 'kotlin-android'\r\n\r\napply plugin: 'kotlin-android-extensions'\r\n\r\nandroid {\r\n    compileSdkVersion 29\r\n    buildToolsVersion \"29.0.2\"\r\n    defaultConfig {\r\n        applicationId \"app.mobile.consideredcosts\"\r\n        minSdkVersion 21\r\n        targetSdkVersion 29\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    api \"com.squareup.okhttp3:logging-interceptor:3.13.1\"\r\n    api \"org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3\"\r\n    api \"org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3\"\r\n\r\n    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'\r\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n    implementation \"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version\"\r\n    implementation 'androidx.appcompat:appcompat:1.0.2'\r\n    implementation 'androidx.core:core-ktx:1.0.2'\r\n    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test:runner:1.1.1'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'\r\n\r\n    implementation 'com.squareup.retrofit2:retrofit:2.5.0'\r\n    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/build.gradle	(date 1583351240433)
+@@ -15,6 +15,12 @@
+         versionName "1.0"
+         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+     }
++
++    compileOptions {
++        sourceCompatibility JavaVersion.VERSION_1_8
++        targetCompatibility JavaVersion.VERSION_1_8
++    }
++
+     buildTypes {
+         release {
+             minifyEnabled false
+@@ -29,7 +35,6 @@
+     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3"
+ 
+     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
+-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+     implementation 'androidx.appcompat:appcompat:1.0.2'
+     implementation 'androidx.core:core-ktx:1.0.2'
+@@ -39,8 +44,8 @@
+     androidTestImplementation 'androidx.test:runner:1.1.1'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+ 
+-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
++    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
++    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+ 
+ 
+ }
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"app.mobile.consideredcosts\">\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/AppTheme\">\r\n        <activity android:name=\".sign.SignActivity\"\r\n            android:screenOrientation=\"portrait\" ></activity>\r\n\r\n        <activity android:name=\".launch.LaunchActivity\"\r\n            android:screenOrientation=\"portrait\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/src/main/AndroidManifest.xml	(date 1583351265523)
+@@ -2,6 +2,8 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     package="app.mobile.consideredcosts">
+ 
++    <uses-permission android:name="android.permission.INTERNET" />
++
+     <application
+         android:allowBackup="true"
+         android:icon="@mipmap/ic_launcher"
+@@ -9,10 +11,12 @@
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+         android:theme="@style/AppTheme">
+-        <activity android:name=".sign.SignActivity"
+-            android:screenOrientation="portrait" ></activity>
+-
+-        <activity android:name=".launch.LaunchActivity"
++        <activity android:name=".main.MainActivity"></activity>
++        <activity
++            android:name=".sign.SignActivity"
++            android:screenOrientation="portrait" />
++        <activity
++            android:name=".launch.LaunchActivity"
+             android:screenOrientation="portrait">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+Index: .idea/kotlinc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/kotlinc.xml	(date 1583181651077)
++++ .idea/kotlinc.xml	(date 1583181651077)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Kotlin2JvmCompilerArguments">
++    <option name="jvmTarget" value="1.8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_main.xml
+===================================================================
+--- app/src/main/res/layout/activity_main.xml	(revision 91e1d3eccd4e969ee0eec0e4bb16167f8f08017c)
++++ app/src/main/res/layout/activity_welcome.xml	(date 1582572313801)
