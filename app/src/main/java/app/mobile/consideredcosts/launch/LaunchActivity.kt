@@ -12,7 +12,7 @@ import app.mobile.consideredcosts.sign.SignActivity
 import app.mobile.consideredcosts.welcome.WelcomeSliderAdapter
 import app.mobile.consideredcosts.welcome.WelcomeSliderFragment
 
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_welcome.*
 import kotlinx.android.synthetic.main.fragment_welcome_slider.*
 
 class LaunchActivity : AppCompatActivity(),PagerListener {
@@ -46,7 +46,7 @@ class LaunchActivity : AppCompatActivity(),PagerListener {
         super.onCreate(savedInstanceState)
         if(sharedPreferencesManager.isFirstOpened()) openSignActivity()
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_welcome)
 
         welcomeSliderAdapter.list.add(welcomeSliderFragmentOne)
         welcomeSliderAdapter.list.add(welcomeSliderFragmentTwo)

@@ -30,7 +30,7 @@
     <string name="plsPassword">Please enter your password</string>
     <string name="confPassword">Confirm password</string>
     <string name="plsConfPassword">Please confirm your password</string>
-    
+
     <string name="signInButtonText">Sign In</string>
     <string name="signDontHaveAccount">Don`t have an account?</string>
     <string name="considered_costs_logo">Considered Costs logo</string>
