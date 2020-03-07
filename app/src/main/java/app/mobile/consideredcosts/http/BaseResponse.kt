@@ -10,7 +10,7 @@ open class BaseResponse<out T>(
 {
     val message: String?
         get() {
-            return messages?.firstOrNull()?.text
+            return messages!!.first().text
         }
 
     fun isMessageExists() = messages != null && messages.isNotEmpty()
