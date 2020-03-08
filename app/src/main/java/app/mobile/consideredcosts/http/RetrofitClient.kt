@@ -1,6 +1,7 @@
 package app.mobile.consideredcosts.http
 
-import app.mobile.consideredcosts.http.models.request.LoginRequest
+import app.mobile.consideredcosts.http.models.LoginRequest
+import app.mobile.consideredcosts.http.models.RegistrationRequest
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -24,6 +25,8 @@ object RetrofitClient {
             .create(Api::class.java)
     }
 
-    suspend fun get(login: String, password: String) = api.login(LoginRequest(login, password))
+    suspend fun login(login: String, password: String) = api.login(LoginRequest(login, password))
+    suspend fun registration(username: String,email:String, password: String) = api.registration(
+        RegistrationRequest(username, email, password))
 
 }

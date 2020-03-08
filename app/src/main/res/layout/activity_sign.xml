@@ -1,4 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,204 +6,226 @@
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
     android:background="@drawable/bg"
+    android:orientation="vertical"
+    android:weightSum="1"
     tools:context=".sign.SignActivity">
 
-    <ImageView
-        android:id="@+id/imageSignLogo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="20dp"
-        android:contentDescription="@string/considered_costs_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/usernameLabel"
-        app:srcCompat="@drawable/logo_sign" />
-
-    <TextView
-        android:id="@+id/usernameLabel"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content">
 
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="42dp"
-        android:ems="10"
-        android:labelFor="@id/usernameField"
-        android:text="@string/username"
-        android:textColor="@color/colorPrimary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@id/usernameField"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageSignLogo" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/usernameField"
-        android:layout_width="0dp"
-        android:imeOptions="actionDone"
-        android:layout_height="40dp"
-        android:layout_below="@id/usernameLabel"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/sign_rounded_edit_texts"
-        android:bottomLeftRadius="133dp"
-        android:inputType="text"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@id/emailLabel"
-        app:layout_constraintEnd_toEndOf="@+id/usernameLabel"
-        app:layout_constraintStart_toStartOf="@+id/usernameLabel"
-        app:layout_constraintTop_toBottomOf="@+id/usernameLabel" />
+            <ImageView
+                android:id="@+id/imageSignLogo"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="20dp"
+                android:contentDescription="@string/considered_costs_logo"
+                app:layout_constraintBottom_toTopOf="@id/usernameLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/logo_sign" />
 
-    <TextView
-        android:id="@+id/emailLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/usernameField"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:labelFor="@id/emailField"
-        android:text="@string/email"
-        android:textColor="@color/colorPrimary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@id/emailField"
-        app:layout_constraintEnd_toEndOf="@+id/usernameField"
-        app:layout_constraintStart_toStartOf="@+id/usernameField"
-        app:layout_constraintTop_toBottomOf="@+id/usernameField" />
+            <TextView
+                android:id="@+id/usernameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="42dp"
+                android:ems="10"
+                android:labelFor="@id/usernameField"
+                android:text="@string/username"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/usernameField"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageSignLogo" />
 
-    <EditText
-        android:id="@+id/emailField"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:imeOptions="actionDone"
-        android:layout_below="@id/emailLabel"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/sign_rounded_edit_texts"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@id/passwordLabel"
-        app:layout_constraintEnd_toEndOf="@+id/emailLabel"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/emailLabel"
-        app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
+            <EditText
+                android:id="@+id/usernameField"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="42dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/sign_rounded_edit_texts"
+                android:bottomLeftRadius="133dp"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@id/emailLabel"
+                app:layout_constraintEnd_toEndOf="@+id/usernameLabel"
+                app:layout_constraintStart_toStartOf="@+id/usernameLabel"
+                app:layout_constraintTop_toBottomOf="@+id/usernameLabel" />
 
-    <TextView
-        android:id="@+id/passwordLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/emailField"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:labelFor="@id/passwordField"
-        android:text="@string/password"
-        android:textColor="@color/colorPrimary"
-        android:textSize="12sp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginStart="42dp"
-        app:layout_constraintBottom_toTopOf="@id/passwordField"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailField" />
+            <TextView
+                android:id="@+id/emailLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/usernameField"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="42dp"
+                android:ems="10"
+                android:labelFor="@id/emailField"
+                android:text="@string/email"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/emailField"
+                app:layout_constraintEnd_toEndOf="@+id/usernameField"
+                app:layout_constraintStart_toStartOf="@+id/usernameField"
+                app:layout_constraintTop_toBottomOf="@+id/usernameField" />
 
-    <EditText
-        android:id="@+id/passwordField"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_below="@id/passwordLabel"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/sign_rounded_edit_texts"
-        android:inputType="textPassword"
-        android:textColor="@color/colorPrimary"
-        android:imeOptions="actionDone"
-        android:textSize="14sp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginStart="42dp"
-        app:layout_constraintBottom_toTopOf="@id/confPassLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordLabel" />
+            <EditText
+                android:id="@+id/emailField"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="42dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/sign_rounded_edit_texts"
 
-    <TextView
-        android:id="@+id/confPassLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/passwordField"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:labelFor="@id/confPassField"
-        android:text="@string/confPassword"
-        android:textColor="@color/colorPrimary"
-        android:textSize="12sp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginStart="42dp"
-        app:layout_constraintBottom_toTopOf="@id/confPassField"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@id/passwordLabel"
+                app:layout_constraintEnd_toEndOf="@+id/emailLabel"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/emailLabel"
+                app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
 
-    <EditText
-        android:id="@+id/confPassField"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_below="@id/confPassLabel"
-        android:layout_centerHorizontal="true"
-        android:imeOptions="actionDone"
-        android:background="@drawable/sign_rounded_edit_texts"
-        android:inputType="textPassword"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginStart="42dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/confPassLabel"
-        tools:layout_editor_absoluteY="467dp" />
+            <TextView
+                android:id="@+id/passwordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/emailField"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="42dp"
+                android:ems="10"
+                android:labelFor="@id/passwordField"
+                android:text="@string/password"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/passwordField"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailField" />
 
-    <Button
-        android:id="@+id/signButton"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginStart="42dp"
-        android:layout_marginBottom="60dp"
-        android:background="@drawable/rounded_white_buttons"
-        android:text="@string/signUpButtonText"
-        android:textColor="@color/colorTextBlue"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.502" />
+            <EditText
+                android:id="@+id/passwordField"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/passwordLabel"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="42dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/sign_rounded_edit_texts"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@id/confPassLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/passwordLabel" />
+
+            <TextView
+                android:id="@+id/confPassLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/passwordField"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="42dp"
+                android:ems="10"
+                android:labelFor="@id/confPassField"
+                android:text="@string/confPassword"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/confPassField"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+
+            <EditText
+                android:id="@+id/confPassField"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/confPassLabel"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="42dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/sign_rounded_edit_texts"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/confPassLabel"
+                tools:layout_editor_absoluteY="467dp" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
-        android:id="@+id/container"
-        android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:layout_below="@id/signButton"
-        android:layout_centerHorizontal="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signButton">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom">
 
-        <TextView
-            android:id="@+id/bottomSignText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/signAlreadyHave"
-            android:textColor="@color/colorHintBlue"
-            android:textSize="12sp" />
+        <Button
+            android:id="@+id/signButton"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="42dp"
+            android:layout_marginEnd="42dp"
+            android:background="@drawable/rounded_white_buttons"
+            android:text="@string/signUpButtonText"
+            android:textColor="@color/colorTextBlue"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
-        <TextView
-            android:id="@+id/bottomSignLink"
+        <LinearLayout
+            android:id="@+id/container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:text="@string/signInButtonText"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:layout_height="42dp"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signButton">
+
+            <TextView
+                android:id="@+id/bottomSignText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signAlreadyHave"
+                android:textColor="@color/colorHintBlue"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/bottomSignLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:text="@string/signInButtonText"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
