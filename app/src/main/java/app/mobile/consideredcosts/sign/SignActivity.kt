@@ -3,7 +3,6 @@ package app.mobile.consideredcosts.sign
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.data.SharedPreferencesManager
@@ -15,7 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SignActivity : AppCompatActivity(),ActivityChanger {
+class SignActivity : AppCompatActivity(), ActivityChanger {
 
     private var state = SignOption.LOGIN
     private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
@@ -35,6 +34,8 @@ class SignActivity : AppCompatActivity(),ActivityChanger {
                 confPassLabel.visibility = View.GONE
                 confPassField.visibility = View.GONE
                 signButton.text = resources.getText(R.string.signInButtonText)
+                bottomSignText.text = resources.getText(R.string.signDontHaveAccount)
+                bottomSignLink.text = resources.getText(R.string.signUpButtonText)
 
                 bottomSignLink.setOnClickListener {
                     screenState(SignOption.REGISTRATION)
@@ -51,13 +52,20 @@ class SignActivity : AppCompatActivity(),ActivityChanger {
                 confPassLabel.visibility = View.VISIBLE
                 confPassField.visibility = View.VISIBLE
                 signButton.text = resources.getText(R.string.signUpButtonText)
+                bottomSignText.text = resources.getText(R.string.signAlreadyHave)
+                bottomSignLink.text = resources.getText(R.string.signInButtonText)
 
                 bottomSignLink.setOnClickListener {
                     screenState(SignOption.LOGIN)
                 }
 
                 signButton.setOnClickListener {
-                    //todo Имплементация
+                    registration(
+                        usernameField.text.toString(),
+                        emailField.text.toString(),
+                        passwordField.text.toString(),
+                        confPassField.text.toString()
+                    )
                 }
             }
         }
@@ -69,22 +77,14 @@ class SignActivity : AppCompatActivity(),ActivityChanger {
         password: String,
         confirmPass: String
     ) {
-      //todo Имплементация
+
     }
 
     private fun login(username: String, password: String) {
-        if (username.length < 3) {
-            //todo Сделать обработку пустого
-        }
-
-        if (password.length < 3) {
-            //todo Сделать обработку пустого
-        }
-
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
                 launch {
-                    val response = RetrofitClient.get(username, password)
+                    val response = RetrofitClient.login(username, password)
                     when (response.code()) {
                         200 -> {
                             sharedPreferencesManager.setPassword(password)
@@ -94,31 +94,21 @@ class SignActivity : AppCompatActivity(),ActivityChanger {
                         }
                         401 -> {
                             //todo Сделать обработку
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(
-                                    this@SignActivity,
-                                    response.body()!!.message,
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                            }
                         }
                         else -> {
                             //todo Сделать обработку
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(this@SignActivity, "Else Pedik", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
                         }
                     }
 
                 }
             }
         }
-}
+    }
+
     override fun invokeMainActivity() {
         startActivity(Intent(this, MainActivity::class.java))
-        finish()    }
+        finish()
+    }
 
     override fun invokeGeneralErrorActivity() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
