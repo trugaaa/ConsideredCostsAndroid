@@ -176,15 +176,10 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom">
-
         <Button
             android:id="@+id/signButton"
             android:layout_width="match_parent"
+            android:layout_marginTop="24dp"
             android:layout_height="40dp"
             android:layout_marginStart="42dp"
             android:layout_marginEnd="42dp"
@@ -192,17 +187,17 @@
             android:text="@string/signUpButtonText"
             android:textColor="@color/colorTextBlue"
             android:textSize="14sp"
+            android:layout_gravity="bottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <LinearLayout
             android:id="@+id/container"
             android:layout_width="wrap_content"
             android:layout_height="42dp"
-            android:layout_gravity="bottom"
+            android:layout_gravity="center"
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -228,4 +223,4 @@
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+

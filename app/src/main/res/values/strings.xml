@@ -34,6 +34,11 @@
     <string name="signInButtonText">Sign In</string>
     <string name="signDontHaveAccount">Don`t have an account?</string>
     <string name="considered_costs_logo">Considered Costs logo</string>
-    <!-- Generic errors -->
 
+    <!-- Generic errors -->
+    <string name="errorUsernameField">Username is invalid. It can contain only characters, digits and "_" symbol</string>
+    <string name="errorEmailField">Email is invalid. Pls check your email</string>
+    <string name="errorPasswordField">Password is invalid. It should me more than 8 symbols and contain: Uppercase letter, Lowercase letter and digit</string>
+
+    <string name="errorGeneral">Oops! Something went wrong</string>
 </resources>

@@ -29,6 +29,11 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     private fun screenState(state: SignOption) {
         when (state) {
             SignOption.LOGIN -> {
+                usernameField.text = null
+                emailField.text = null
+                passwordField.text = null
+                confPassField.text = null
+
                 emailLabel.visibility = View.GONE
                 emailField.visibility = View.GONE
                 confPassLabel.visibility = View.GONE
@@ -47,6 +52,11 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
             }
 
             SignOption.REGISTRATION -> {
+                usernameField.text = null
+                emailField.text = null
+                passwordField.text = null
+                confPassField.text = null
+
                 emailLabel.visibility = View.VISIBLE
                 emailField.visibility = View.VISIBLE
                 confPassLabel.visibility = View.VISIBLE
@@ -77,7 +87,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         password: String,
         confirmPass: String
     ) {
-
+        //todo implementation
     }
 
     private fun login(username: String, password: String) {
