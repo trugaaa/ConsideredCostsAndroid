@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/colorSignTextField" />
+    <stroke
+        android:width="2dip"
+        android:color="@color/colorError" />
+    <corners android:radius="8dp" />
+    <padding
+        android:left="17.3dp"
+        android:right="17.3dp" />
+</shape>

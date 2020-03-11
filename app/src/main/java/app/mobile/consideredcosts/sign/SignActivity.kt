@@ -3,8 +3,12 @@ package app.mobile.consideredcosts.sign
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
+import app.mobile.consideredcosts.basic.FieldValidator
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.main.MainActivity
@@ -18,12 +22,32 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
 
     private var state = SignOption.LOGIN
     private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
+    private val fieldValidator = FieldValidator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign)
         screenState(state)
 
+        emailField.setOnTouchListener { _, _ ->
+            setThemeDefault(emailLabel,emailField)
+            false
+        }
+
+        usernameField.setOnTouchListener { _, _ ->
+            setThemeDefault(usernameLabel,usernameField)
+            false
+        }
+
+        passwordField.setOnTouchListener { _, _ ->
+            setThemeDefault(passwordLabel,passwordField)
+            false
+        }
+
+        confPassField.setOnTouchListener { _, _ ->
+            setThemeDefault(confPassLabel,confPassField)
+            false
+        }
     }
 
     private fun screenState(state: SignOption) {
@@ -87,7 +111,32 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         password: String,
         confirmPass: String
     ) {
-        //todo implementation
+        val errorList = validateEveryField(username, email, password, confirmPass)
+        if (errorList.isEmpty()) {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    launch {
+                        val response = RetrofitClient.registration(username, email, password)
+                        when (response.code()) {
+                            200 -> {
+                                login(username, password)
+                            }
+                            401 -> {
+                                //todo Сделать обработку
+                            }
+                            else -> {
+                                //todo Сделать обработку
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        else
+        {
+            invokeGeneralErrorActivity(errorList)
+        }
     }
 
     private fun login(username: String, password: String) {
@@ -120,10 +169,65 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         finish()
     }
 
-    override fun invokeGeneralErrorActivity() {
+    override fun invokeGeneralErrorActivity(errorText: MutableList<String>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+
+    fun validateEveryField(
+        username: String,
+        email: String,
+        password: String,
+        confPass: String
+    ): MutableList<String> {
+        val errorList = mutableListOf<String>()
+
+        if (!fieldValidator.isUsernameValid(username)) {
+            errorList.add(resources.getText(R.string.errorEmailField).toString())
+            setThemeError(usernameLabel,usernameField)
+
+        } else {
+            setThemeDefault(usernameLabel,usernameField)
+        }
+
+        if (password != confPass) {
+            errorList.add(resources.getText(R.string.errorPassesDontMatch).toString())
+            setThemeError(passwordLabel,passwordField)
+            setThemeError(confPassLabel,confPassField)
+
+        } else if (!fieldValidator.isPasswordValid(password)) {
+            setThemeError(passwordLabel,passwordField)
+            setThemeError(confPassLabel,confPassField)
+
+        } else {
+            setThemeDefault(passwordLabel,passwordField)
+            setThemeDefault(confPassLabel,confPassField)
+        }
+
+        if (!fieldValidator.isEmailValid(email)) {
+            errorList.add(resources.getText(R.string.errorEmailField).toString())
+            setThemeError(emailLabel,emailField)
+        } else {
+            setThemeDefault(emailLabel,emailField)
+        }
+
+        return errorList
+    }
+
+    private fun setThemeDefault(textView: TextView, editText:EditText)
+    {
+        textView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
+        editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts)
+        editText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
+    }
+    private fun setThemeError(textView: TextView, editText:EditText)
+    {
+        textView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
+        editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts)
+        editText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
+    }
 }
+
 
 enum class SignOption {
     LOGIN,
