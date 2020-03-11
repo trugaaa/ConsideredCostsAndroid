@@ -30,22 +30,22 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         screenState(state)
 
         emailField.setOnTouchListener { _, _ ->
-            setThemeDefault(emailLabel,emailField)
+            setThemeDefault(emailLabel, emailField)
             false
         }
 
         usernameField.setOnTouchListener { _, _ ->
-            setThemeDefault(usernameLabel,usernameField)
+            setThemeDefault(usernameLabel, usernameField)
             false
         }
 
         passwordField.setOnTouchListener { _, _ ->
-            setThemeDefault(passwordLabel,passwordField)
+            setThemeDefault(passwordLabel, passwordField)
             false
         }
 
         confPassField.setOnTouchListener { _, _ ->
-            setThemeDefault(confPassLabel,confPassField)
+            setThemeDefault(confPassLabel, confPassField)
             false
         }
     }
@@ -132,10 +132,8 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                     }
                 }
             }
-        }
-        else
-        {
-            invokeGeneralErrorActivity(errorList)
+        } else {
+//
         }
     }
 
@@ -174,7 +172,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     }
 
 
-    fun validateEveryField(
+    private fun validateEveryField(
         username: String,
         email: String,
         password: String,
@@ -184,44 +182,36 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
 
         if (!fieldValidator.isUsernameValid(username)) {
             errorList.add(resources.getText(R.string.errorEmailField).toString())
-            setThemeError(usernameLabel,usernameField)
-
-        } else {
-            setThemeDefault(usernameLabel,usernameField)
+            setThemeError(usernameLabel, usernameField)
         }
 
-        if (password != confPass) {
+        if (!fieldValidator.isPasswordValid(password)) {
+            errorList.add(resources.getText(R.string.errorPasswordField).toString())
+            setThemeError(passwordLabel, passwordField)
+            setThemeError(confPassLabel, confPassField)
+
+        } else if (password != confPass) {
             errorList.add(resources.getText(R.string.errorPassesDontMatch).toString())
-            setThemeError(passwordLabel,passwordField)
-            setThemeError(confPassLabel,confPassField)
+            setThemeError(passwordLabel, passwordField)
+            setThemeError(confPassLabel, confPassField)
 
-        } else if (!fieldValidator.isPasswordValid(password)) {
-            setThemeError(passwordLabel,passwordField)
-            setThemeError(confPassLabel,confPassField)
-
-        } else {
-            setThemeDefault(passwordLabel,passwordField)
-            setThemeDefault(confPassLabel,confPassField)
         }
 
         if (!fieldValidator.isEmailValid(email)) {
             errorList.add(resources.getText(R.string.errorEmailField).toString())
-            setThemeError(emailLabel,emailField)
-        } else {
-            setThemeDefault(emailLabel,emailField)
+            setThemeError(emailLabel, emailField)
         }
 
         return errorList
     }
 
-    private fun setThemeDefault(textView: TextView, editText:EditText)
-    {
+    private fun setThemeDefault(textView: TextView, editText: EditText) {
         textView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
         editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts)
         editText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
     }
-    private fun setThemeError(textView: TextView, editText:EditText)
-    {
+
+    private fun setThemeError(textView: TextView, editText: EditText) {
         textView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
         editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts)
         editText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
