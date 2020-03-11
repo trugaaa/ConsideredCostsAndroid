@@ -1,7 +1,6 @@
 package app.mobile.consideredcosts.basic
 
 class FieldValidator {
-
     fun isPasswordValid(password: String): Boolean {
         return password.matches(VALID_PASSWORD)
     }
@@ -10,10 +9,12 @@ class FieldValidator {
         return emailAddress.matches(VALID_EMAIL_ADDRESS)
     }
 
+    fun isUsernameValid(username: String): Boolean {
+        return username.matches(VALID_USERNAME)
+    }
+
     companion object {
-        private val VALID_PASSWORD =
-            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$){8,255}\$"
-                .toRegex()
+        private val VALID_PASSWORD = Regex("((?=.*[a-z])(?=.*d)(?=.*[A-Z]).{8,255})")
         private val VALID_EMAIL_ADDRESS =
             ("(?:[\\p{L}0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[\\p{L}0-9!#$%\\&'*+/=?\\^_`{|}" +
                     "~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\" +
@@ -23,7 +24,7 @@ class FieldValidator {
                     "9][0-9]?|[\\p{L}0-9-]*[\\p{L}0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21" +
                     "-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
                 .toRegex()
-        private val  VALID_USERNAME = "^[A-Za-z0-9_]{3,64}\$".toRegex()
+        private val  VALID_USERNAME = ("^[A-Za-z0-9_]{3,64}\$").toRegex()
     }
 
 

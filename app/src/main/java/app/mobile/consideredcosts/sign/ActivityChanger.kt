@@ -2,5 +2,5 @@ package app.mobile.consideredcosts.sign
 
 interface ActivityChanger {
     fun invokeMainActivity()
-    fun invokeGeneralErrorActivity()
+    fun invokeGeneralErrorActivity(errorText: MutableList<String>)
 }
