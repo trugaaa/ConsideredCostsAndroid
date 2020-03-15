@@ -28,8 +28,6 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val defaultScreenSize = Rect()
-
         setContentView(R.layout.activity_sign)
         screenState(currentScreenState)
 
@@ -72,6 +70,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                     login(usernameField.text.toString(), passwordField.text.toString())
                 }
             }
+
 
 
             SignOption.REGISTRATION -> {
