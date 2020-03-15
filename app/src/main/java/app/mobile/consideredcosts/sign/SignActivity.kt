@@ -73,6 +73,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                 }
             }
 
+
             SignOption.REGISTRATION -> {
                 resetFields(SignOption.REGISTRATION)
                 bottomSignLink.setOnClickListener {
