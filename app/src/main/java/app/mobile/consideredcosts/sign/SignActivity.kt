@@ -306,6 +306,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
             setThemeError(confPassLabel, confPassField)
             return false
         }
+        setThemeDefault(passwordLabel,passwordField)
         return true
     }
 
