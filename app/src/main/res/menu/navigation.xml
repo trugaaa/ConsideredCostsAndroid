@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navBarHomeMenuItem"
+        android:icon="@drawable/ic_home"
+        android:title="@string/navBarHome" />
+
+    <item
+        android:id="@+id/navBarTransactionsMenuItem"
+        android:icon="@drawable/ic_transactions"
+        android:title="@string/navBarTransactions" />
+
+    <item
+        android:id="@+id/navBarItemsMenuItem"
+        android:icon="@drawable/ic_item"
+        android:title="@string/navBarItems" />
+
+    <item
+        android:id="@+id/navBarGoalsMenuItem"
+        android:icon="@drawable/ic_goal"
+        android:title="@string/navBarGoals" />
+
+    <item
+        android:id="@+id/navBarElseMenuItem"
+        android:icon="@drawable/ic_menu"
+        android:title="@string/navBarElse" />
+
+</menu>

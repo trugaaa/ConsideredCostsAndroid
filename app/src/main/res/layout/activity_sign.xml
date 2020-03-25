@@ -190,7 +190,7 @@
             android:layout_marginEnd="42dp"
             android:background="@drawable/rounded_white_buttons"
             android:text="@string/signUpButtonText"
-            android:textColor="@color/colorTextBlue"
+            android:textColor="@color/colorBlue"
             android:textSize="14sp"
             android:layout_gravity="bottom"
             app:layout_constraintBottom_toBottomOf="parent"
