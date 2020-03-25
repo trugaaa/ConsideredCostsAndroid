@@ -35,6 +35,14 @@
     <string name="signDontHaveAccount">Don`t have an account?</string>
     <string name="considered_costs_logo">Considered Costs logo</string>
 
+    <!-- Nav bat -->
+    <string name="navBarHome">Home</string>
+    <string name="navBarTransactions">Transactions</string>
+    <string name="navBarItems">Items</string>
+    <string name="navBarGoals">Goals</string>
+    <string name="navBarElse">Else</string>
+
+
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
     <string name="errorEmailField">Email is invalid.\nPls check your email</string>
@@ -42,4 +50,7 @@
     <string name="errorPassesDontMatch">Passwords must be equal</string>
     <string name="errorGeneral">Something went wrong… Please try again later…</string>
     <string name="errorFieldIsRequired">Field is required</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

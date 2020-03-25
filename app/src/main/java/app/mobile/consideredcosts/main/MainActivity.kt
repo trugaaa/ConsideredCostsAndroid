@@ -2,20 +2,46 @@ package app.mobile.consideredcosts.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import app.mobile.consideredcosts.R
-import app.mobile.consideredcosts.data.SharedPreferencesManager
+import android.view.MenuItem
+import androidx.fragment.app.Fragment
+import app.mobile.consideredcosts.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val text: String =
-            "Your username " + sharedPreferencesManager.getUsername() + "\n" + "Your password " + sharedPreferencesManager.getPassword() + "\n" + "Token " + sharedPreferencesManager.getToken()
-        random.text = text
+        openFragment(HomeFragment())
+
+        mainNavBar.setOnNavigationItemSelectedListener { item: MenuItem ->
+            return@setOnNavigationItemSelectedListener when (item.itemId) {
+                R.id.navBarHomeMenuItem -> {
+                    openFragment(HomeFragment())
+                    true
+                }
+                R.id.navBarTransactionsMenuItem -> {
+                    openFragment(TransactionsFragment())
+                    true
+                }
+                R.id.navBarItemsMenuItem -> {
+                    openFragment(ItemsFragment())
+                    true
+                }
+                R.id.navBarGoalsMenuItem -> {
+                    openFragment(GoalsFragment())
+                    true
+                }
+                R.id.navBarElseMenuItem -> {
+                    openFragment(ProfileFragment())
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+    private fun openFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction().replace(R.id.mainContainer,fragment).commit()
     }
 }

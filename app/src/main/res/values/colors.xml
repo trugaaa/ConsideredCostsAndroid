@@ -9,6 +9,6 @@
     <color name="colorPrimaryShadow">#000</color>
     <color name="colorTransparent">#00000000</color>
     <color name="colorSignTextField">#4dffffff</color>
-    <color name="colorTextBlue">#43a7ff</color>
+    <color name="colorBlue">#43a7ff</color>
     <color name="colorHintBlue">#bfdef9</color>
 </resources>

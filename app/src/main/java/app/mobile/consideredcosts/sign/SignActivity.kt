@@ -1,7 +1,6 @@
 package app.mobile.consideredcosts.sign
 
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -28,8 +27,6 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val defaultScreenSize = Rect()
-
         setContentView(R.layout.activity_sign)
         screenState(currentScreenState)
 
@@ -39,11 +36,24 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
             setThemeDefault(emailLabel, emailField)
             false
         }
+        emailField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) validateEmail(emailField.text.toString())
+        }
 
         usernameField.setOnTouchListener { _, _ ->
             setThemeDefault(usernameLabel, usernameField)
             imageSignLogo.visibility = View.GONE
             false
+        }
+        usernameField.setOnFocusChangeListener { _, hasFocus ->
+            when (currentScreenState) {
+                SignOption.LOGIN ->{
+                    if (!hasFocus) validateNotEmpty(usernameLabel,usernameField)
+                }
+                SignOption.REGISTRATION->{
+                    if (!hasFocus) validateUsername(usernameField.text.toString())
+                }
+            }
         }
 
         passwordField.setOnTouchListener { _, _ ->
@@ -51,15 +61,29 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
             setThemeDefault(passwordLabel, passwordField)
             false
         }
+        passwordField.setOnFocusChangeListener { _, hasFocus ->
+            when (currentScreenState) {
+                SignOption.LOGIN ->{
+                    if (!hasFocus) validateNotEmpty(passwordLabel,passwordField)
+                }
+                SignOption.REGISTRATION->{
+                    if (!hasFocus) validatePassword(passwordField.text.toString())
+                }
+            }
+        }
 
         confPassField.setOnTouchListener { _, _ ->
             imageSignLogo.visibility = View.GONE
             setThemeDefault(confPassLabel, confPassField)
             false
         }
+        confPassField.setOnFocusChangeListener { _, hasFocus ->
+                    if (!hasFocus) validateConfPass(passwordField.text.toString(),confPassField.text.toString())
+        }
     }
 
     private fun screenState(state: SignOption) {
+        imageSignLogo.visibility = View.VISIBLE
         when (state) {
             SignOption.LOGIN -> {
                 resetFields(SignOption.LOGIN)
@@ -159,7 +183,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     }
 
     private fun login(username: String, password: String) {
-        if (validateLogin(username, password)) {
+        if (validateLogin()) {
             GlobalScope.launch {
                 withContext(Dispatchers.IO) {
                     launch {
@@ -204,68 +228,86 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         confPass: String
     ): Boolean {
         var allFieldsValid = true
-        if (username == "") {
-            usernameField.error = resources.getString(R.string.errorFieldIsRequired)
-            allFieldsValid = false
-            setThemeError(usernameLabel, usernameField)
-        } else if (!fieldValidator.isUsernameValid(username)) {
-            usernameField.error = resources.getString(R.string.errorUsernameField)
-            setThemeError(usernameLabel, usernameField)
-        }
-        if (email == "") {
-            emailField.error = resources.getString(R.string.errorFieldIsRequired)
-            allFieldsValid = false
-            setThemeError(emailLabel, emailField)
-        } else if (!fieldValidator.isEmailValid(email)) {
-            emailField.error = resources.getString(R.string.errorEmailField)
-            allFieldsValid = false
-            setThemeError(emailLabel, emailField)
-        }
+        allFieldsValid = validateUsername(username)
+        allFieldsValid = validateEmail(email)
+        allFieldsValid = validatePassword(password)
+        allFieldsValid = validateConfPass(password, confPass)
 
-        if (password == "") {
-            allFieldsValid = false
-            setThemeError(passwordLabel, passwordField)
-            passwordField.error = resources.getString(R.string.errorFieldIsRequired)
-        } else if (!fieldValidator.isPasswordValid(password)) {
-            passwordField.error = resources.getString(R.string.errorPasswordField)
-            confPassField.error = resources.getString(R.string.errorPasswordField)
-            allFieldsValid = false
-            setThemeError(passwordLabel, passwordField)
-            setThemeError(confPassLabel, confPassField)
-        }
-        if (password != confPass) {
-            confPassField.error = resources.getString(R.string.errorPassesDontMatch)
-            allFieldsValid = false
-            setThemeError(passwordLabel, passwordField)
-            setThemeError(confPassLabel, confPassField)
-        }
-
-        if (confPass == "") {
-            confPassField.error = resources.getString(R.string.errorFieldIsRequired)
-            allFieldsValid = false
-            setThemeError(confPassLabel, confPassField)
-        }
         return allFieldsValid
     }
 
     private fun validateLogin(
-        username: String,
-        password: String
     ): Boolean {
         var allFieldsValid = true
-        if (username == "") {
-            usernameField.error = resources.getString(R.string.errorFieldIsRequired)
-            allFieldsValid = false
-            setThemeError(usernameLabel, usernameField)
-        }
-
-        if (password == "") {
-            passwordField.error = resources.getString(R.string.errorFieldIsRequired)
-            allFieldsValid = false
-            setThemeError(passwordLabel, passwordField)
-        }
+        allFieldsValid = validateNotEmpty(usernameLabel, usernameField)
+        allFieldsValid = validateNotEmpty(passwordLabel, passwordField)
 
         return allFieldsValid
+    }
+
+    private fun validateNotEmpty(textView: TextView, editText: EditText): Boolean {
+        if (editText.text.toString() == "") {
+            editText.error = resources.getString(R.string.errorFieldIsRequired)
+            setThemeError(textView, editText)
+            return false
+        }
+        return true
+    }
+
+    private fun validateUsername(username: String): Boolean {
+        if (username == "") {
+            usernameField.error = resources.getString(R.string.errorFieldIsRequired)
+            setThemeError(usernameLabel, usernameField)
+            return false
+        } else if (!fieldValidator.isUsernameValid(username)) {
+            usernameField.error = resources.getString(R.string.errorUsernameField)
+            setThemeError(usernameLabel, usernameField)
+            return false
+        }
+        return true
+    }
+
+    private fun validateEmail(email: String): Boolean {
+        if (email == "") {
+            emailField.error = resources.getString(R.string.errorFieldIsRequired)
+            setThemeError(emailLabel, emailField)
+            return false
+        } else if (!fieldValidator.isEmailValid(email)) {
+            emailField.error = resources.getString(R.string.errorEmailField)
+            setThemeError(emailLabel, emailField)
+            return false
+        }
+        return true
+    }
+
+    private fun validatePassword(password: String): Boolean {
+        if (password == "") {
+            setThemeError(passwordLabel, passwordField)
+            passwordField.error = resources.getString(R.string.errorFieldIsRequired)
+            return false
+        } else if (!fieldValidator.isPasswordValid(password)) {
+            passwordField.error = resources.getString(R.string.errorPasswordField)
+            setThemeError(passwordLabel, passwordField)
+            return false
+        }
+        return true
+    }
+
+    private fun validateConfPass(password: String, confPass: String): Boolean {
+
+        if (confPass == "") {
+            confPassField.error = resources.getString(R.string.errorFieldIsRequired)
+            setThemeError(confPassLabel, confPassField)
+            return false
+        }
+        if (password != confPass) {
+            confPassField.error = resources.getString(R.string.errorPassesDontMatch)
+            setThemeError(passwordLabel, passwordField)
+            setThemeError(confPassLabel, confPassField)
+            return false
+        }
+        setThemeDefault(passwordLabel,passwordField)
+        return true
     }
 
     private fun setThemeDefault(textView: TextView, editText: EditText) {

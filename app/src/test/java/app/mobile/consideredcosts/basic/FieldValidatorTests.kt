@@ -78,7 +78,8 @@ class FieldValidatorTests {
     @Test
     fun validPassword() {
         //Just all necessary symbols
-        Assert.assertTrue(fieldValidator.isPasswordValid("31AAa1dzZ"))
+        Assert.assertTrue(fieldValidator.isPasswordValid("abCD1234"))
+        Assert.assertTrue(fieldValidator.isPasswordValid("a4Dsdasdda"))
         //All necessary symbols and some special chars
         Assert.assertTrue(fieldValidator.isPasswordValid("31@A%Aa1dz#Z"))
     }
