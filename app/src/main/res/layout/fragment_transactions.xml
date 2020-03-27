@@ -2,13 +2,25 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/colorLightGray"
     android:layout_height="match_parent"
-    tools:context=".TransactionsFragment">
+    tools:context=".main.navigation.TransactionsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="5dp"
+        android:id="@+id/transactionsViewList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Transactions" />
+/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_margin="10dp"
+        android:id="@+id/transactionAddButton"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_add"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        />
 
 </FrameLayout>

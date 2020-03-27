@@ -42,7 +42,19 @@
     <string name="navBarGoals">Goals</string>
     <string name="navBarElse">Else</string>
 
+    <!-- Transactions -->
+    <string name="date">Date:</string>
+    <string name="type">Type:</string>
 
+    <string name="description">Description:</string>
+
+    <!-- Incomes -->
+    <string name="incomePatern">+ %s</string>
+    <string name="source">Source:</string>
+    <!-- Outgoes -->
+    <string name="outgoePatern">- %s</string>
+    <string name="item">Item:</string>
+    
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
     <string name="errorEmailField">Email is invalid.\nPls check your email</string>
@@ -51,6 +63,4 @@
     <string name="errorGeneral">Something went wrong… Please try again later…</string>
     <string name="errorFieldIsRequired">Field is required</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-</resources>
+#</resources>
