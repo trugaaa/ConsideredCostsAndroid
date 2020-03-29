@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_margin="4dp"
+    android:background="@drawable/transaction_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/sourceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/source"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sourceValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        tools:text="Salary"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="@id/sourceText"
+        app:layout_constraintStart_toEndOf="@id/sourceText"
+        app:layout_constraintEnd_toStartOf="@id/transactionDelete"/>
+
+    <ImageView
+        android:id="@+id/transactionDelete"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="10dp"
+
+        android:src="@drawable/ic_x_cross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/transactionDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/date"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sourceText" />
+
+    <TextView
+        android:id="@+id/transactionDateValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        tools:text="11/11/2019 11:11:13"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="@id/transactionDate"
+        app:layout_constraintStart_toEndOf="@id/transactionDate"
+        app:layout_constraintEnd_toStartOf="@id/transactionDelete"/>
+
+
+    <TextView
+        android:id="@+id/transactionType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/type"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transactionDateValue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/transactionTypeValue"/>
+
+    <TextView
+        android:id="@+id/transactionTypeValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        tools:text ="Family"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/transactionType"
+        app:layout_constraintTop_toTopOf="@id/transactionType"
+        app:layout_constraintStart_toEndOf="@id/transactionType"
+        app:layout_constraintEnd_toStartOf="@id/transactionMoney"/>
+
+    <TextView
+        android:id="@+id/transactionMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        tools:text = "1500"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/transactionCurrency"
+        app:layout_constraintBottom_toBottomOf="@id/transactionCurrency"
+ />
+
+    <TextView
+        android:id="@+id/transactionCurrency"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        tools:text="USD"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        android:textAllCaps="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

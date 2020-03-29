@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.navigation.transaction.TransactionActivity">
+
+    <ImageView
+        android:id="@+id/transactionOpenBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/transactionOfferTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/addTransactionTitle"
+        android:textColor="@color/colorBlue"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@id/transactionOpenBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/transactionOpenBack"
+        app:layout_constraintTop_toTopOf="@id/transactionOpenBack"
+        tools:text="Edit outgo" />
+
+    <RadioGroup
+        android:id="@+id/transactionRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="42dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginStart="42dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transactionOpenBack">
+
+        <RadioButton
+            android:buttonTint="@color/colorBlue"
+            android:checked="true"
+            android:id="@+id/transactionRadioIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="4dp"
+            android:text="@string/income"
+            android:textColor="@color/colorBlue"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:buttonTint="@color/colorBlue"
+            android:id="@+id/transactionRadioOutgo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="4dp"
+            android:text="@string/outgo"
+            android:textColor="@color/colorBlue"
+            android:textSize="18sp" />
+    </RadioGroup>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutTransaction"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/transactionAddButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/transactionRadioGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transactionRadioGroup"
+        app:layout_constraintVertical_bias="0.0">
+
+        <EditText
+            android:id="@+id/transactionMoney"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:autofillHints="@string/money"
+            android:background="@drawable/transaction_combo_background"
+            android:bottomLeftRadius="133dp"
+            android:hint="@string/money"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:padding="12dp"
+            android:textColor="@color/colorBlue"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@id/transactionCurrency"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+
+            android:id="@+id/transactionCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="42dp"
+            android:background="@drawable/transaction_combo_background"
+            app:layout_constraintBottom_toBottomOf="@id/transactionMoney"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/transactionMoney"
+            app:layout_constraintTop_toTopOf="@id/transactionMoney" />
+
+        <Spinner
+
+            android:id="@+id/transactionType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="42dp"
+            android:background="@drawable/transaction_combo_background"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/transactionMoney" />
+
+        <Spinner
+            android:visibility="gone"
+            android:id="@+id/outgoItemType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="42dp"
+            android:background="@drawable/transaction_combo_background"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/transactionType" />
+
+        <Spinner
+            android:id="@+id/incomeWorkType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="42dp"
+            android:background="@drawable/transaction_combo_background"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/outgoItemType" />
+
+        <EditText
+
+            android:id="@+id/transactionAddDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="42dp"
+            android:autofillHints="@string/enterDate"
+            android:background="@drawable/transaction_combo_background"
+            android:hint="@string/enterDate"
+            android:inputType="date"
+            android:padding="8dp"
+            android:textColor="@color/colorBlue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/incomeWorkType" />
+
+        <EditText
+
+            android:id="@+id/transactionDescription"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="42dp"
+            android:autofillHints=""
+            android:background="@drawable/transaction_combo_background"
+            android:gravity="top"
+            android:hint="@string/addDescription"
+
+            android:inputType="text"
+            android:lines="3"
+            android:maxLines="6"
+            android:padding="8dp"
+            android:textColor="@color/colorBlue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/transactionAddDate" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+            android:id="@+id/transactionAddButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="42dp"
+            android:background="@color/colorBlue"
+            android:textColor="@color/colorPrimaryText"
+            app:layout_constraintTop_toBottomOf="@id/layoutTransaction"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+</androidx.constraintlayout.widget.ConstraintLayout>
