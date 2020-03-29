@@ -5,8 +5,9 @@ data class Transactions(
     val money: Double,
     val type: TransactionsType,
     val date: String,
-    val description: String?,
     val currency: String,
+
+    val description: String?,
     val workType: IncomeWorkType?,
     val itemId:Int?,
     val item:String?
