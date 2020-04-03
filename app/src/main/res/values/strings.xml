@@ -65,6 +65,12 @@
     <string name="outgo">Outgo</string>
     <string name="item">Item:</string>
 
+    <!-- Items -->
+    <string name="productPattern">Product: %s </string>
+    <string name="amountOfOutgoesPattern">Outgoes: %s</string>
+    <string name="amountOfMoneyPattern">Money spent: %1$s %2$s</string>
+    <string name="percentPattern">%1$s %2$s</string>
+
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
     <string name="errorEmailField">Email is invalid.\nPls check your email</string>

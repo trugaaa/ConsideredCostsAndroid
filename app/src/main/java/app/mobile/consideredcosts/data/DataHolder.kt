@@ -1,12 +1,14 @@
 package app.mobile.consideredcosts.data
 
 import app.mobile.consideredcosts.http.models.IncomeWorkType
+import app.mobile.consideredcosts.http.models.ItemElement
 import app.mobile.consideredcosts.http.models.Transactions
 import app.mobile.consideredcosts.http.models.TransactionsType
 
-object DataHolder{
+object DataHolder {
 
-    var mutableLisTransactions  = mutableListOf<Transactions>()
+    var mutableLisTransactions = mutableListOf<Transactions>()
+    var itemListMock = mutableListOf<ItemElement>()
 
     init {
         for (i in 0..10) {
@@ -36,6 +38,12 @@ object DataHolder{
                     null
                 )
             )
+
+            for (j in 0..10) {
+                itemListMock.add(
+                    ItemElement(j, "Food", 10.0, 10, 10000.0, 1)
+                )
+            }
         }
     }
 }
