@@ -11,6 +11,12 @@ object DataHolder {
     var itemListMock = mutableListOf<ItemElement>()
 
     init {
+        for (j in 0..6) {
+            itemListMock.add(
+                ItemElement(j, "Food", 10.0, 10, 10000.0, 1)
+            )
+        }
+
         for (i in 0..10) {
             mutableLisTransactions.add(
                 Transactions(
@@ -38,12 +44,6 @@ object DataHolder {
                     null
                 )
             )
-
-            for (j in 0..10) {
-                itemListMock.add(
-                    ItemElement(j, "Food", 10.0, 10, 10000.0, 1)
-                )
-            }
         }
     }
 }

@@ -64,10 +64,13 @@
     <string name="item">Item:</string>
 
     <!-- Items -->
-    <string name="productPattern">Product: %s </string>
-    <string name="amountOfOutgoesPattern">Outgoes: %s</string>
-    <string name="amountOfMoneyPattern">Money spent: %1$s %2$s</string>
+    <string name="product">Product: </string>
+    <string name="amountOfOutgoes">Outgoes:  </string>
+    <string name="amountOfMoney">Money spent: </string>
+    <string name="amountOfMoneyPattern">%1$s %2$s</string>
     <string name="percentPattern">%1$s %2$s</string>
+    <string name="noItemsAvailable">No items are available</string>
+    <string name="plsAddItems">Please, add some items to start using all application`s functionality</string>
 
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>

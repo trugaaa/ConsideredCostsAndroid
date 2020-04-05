@@ -16,17 +16,21 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.item_piechart.view.*
 import kotlinx.android.synthetic.main.item_product.view.*
 
-class ItemsAdapter(private var itemList: MutableList<ItemElement>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ItemsAdapter(private var itemList: MutableList<ItemElement>,val click: (Int, MutableList<ItemElement>) -> Unit) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var cont: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         cont = parent.context
-        val pieView =  LayoutInflater.from(parent.context).inflate(R.layout.item_piechart,parent,false)
-        val emptyView = LayoutInflater.from(parent.context).inflate(R.layout.item_product,parent,false)
-        val items = LayoutInflater.from(parent.context).inflate(R.layout.item_list_space,parent,false)
-        return when (viewType)
-        {
-            TYPE_EMPTY ->  EmptyViewHolder(emptyView)
+        val pieView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_piechart, parent, false)
+        val emptyView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_list_space, parent, false)
+        val items =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
+
+        return when (viewType) {
+            TYPE_EMPTY -> EmptyViewHolder(emptyView)
             TYPE_PIE -> PieViewHolder(pieView)
             TYPE_ITEM -> ItemsViewHolder(items)
             else -> throw Exception()
@@ -36,52 +40,63 @@ class ItemsAdapter(private var itemList: MutableList<ItemElement>): RecyclerView
     override fun getItemCount(): Int = itemList.size + 2
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when
-        {
-            holder is PieViewHolder->
-            {
+        when (holder) {
+            is PieViewHolder -> {
                 setPieCharData(holder.itemView.itemsPieChart)
             }
-            holder is ItemsViewHolder->
-            {
-                with(itemList[position])
+            is ItemsViewHolder -> {
+                with(itemList[position - 1])
                 {
-                    holder.itemView.percent.text = "2"
+                    holder.itemView.textProductValue.text = id.toString()
+                    holder.itemView.amountOfMoneyValue.text = amountOfMoney.toString()
+                    holder.itemView.amountOfOutgoesValue.text = amountOfOutgoes.toString()
+                    holder.itemView.percentValue.text =
+                        cont.getString(R.string.percentPattern, percent.toString(), " %")
+                }
+
+                holder.itemView.itemDelete.setOnClickListener {
+                    click(position - 1,itemList)
                 }
             }
         }
+
+
     }
 
-    private fun setPieCharData(itemsChart:PieChart) {
+    private fun setPieCharData(itemsChart: PieChart) {
         val listPie = mutableListOf<PieEntry>()
-        itemList.forEach{
-            itemElement-> listPie.add(PieEntry(itemElement.percent.toFloat(),itemElement.name))
+        itemList.forEach { itemElement ->
+            listPie.add(PieEntry(itemElement.percent.toFloat(), itemElement.name))
         }
         val pieDataSet = PieDataSet(listPie, "")
         pieDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
         pieDataSet.valueTextColor = Color.WHITE
-
         val pieData = PieData(pieDataSet)
         pieData.setValueTextSize(20F)
-
         itemsChart.data = pieData
         itemsChart.setEntryLabelColor(Color.WHITE)
-        itemsChart.legend.isEnabled=false
+        itemsChart.legend.isEnabled = false
         itemsChart.setUsePercentValues(true)
-        itemsChart.holeRadius=20F
+        itemsChart.holeRadius = 20F
         itemsChart.transparentCircleRadius = 0F
         itemsChart.isDrawHoleEnabled = true
         itemsChart.description.isEnabled = false
-        itemsChart.animateXY(500,500)
+        itemsChart.animateXY(500, 500)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when{
-            position == 1 -> TYPE_PIE
-            position < itemList.size  -> TYPE_ITEM
-            position == itemList.size + 1 -> TYPE_EMPTY
-            else -> throw Exception()
+            return when {
+                position == 0 -> TYPE_PIE
+                position < itemList.size + 1 -> TYPE_ITEM
+                position == itemList.size + 1 -> TYPE_EMPTY
+                else -> throw Exception()
         }
+    }
+
+    fun listUpdate(list: MutableList<ItemElement>)
+    {
+        itemList = list
+        notifyDataSetChanged()
     }
 
     companion object {

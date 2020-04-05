@@ -12,7 +12,10 @@ import app.mobile.consideredcosts.R
  * A simple [Fragment] subclass.
  */
 class ItemsFragment : Fragment() {
-
+    private val itemsAdapter by lazy { ItemsAdapter(mutableListOf()) { position, list ->
+        list.removeAt(position)
+        updateState(list)
+    } }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

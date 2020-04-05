@@ -3,11 +3,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.navigation.ItemsFragment">
+    tools:context=".main.navigation.ItemsFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/itemsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemsEmptyListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ImageView
+            android:id="@+id/emptyListItemPicture"
+            android:layout_marginTop="150dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:src="@drawable/ic_empty_list"
+            app:layout_constraintBottom_toTopOf="@id/emptyListItemTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/emptyListItemTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlue"
+            android:textSize="24sp"
+            android:text="@string/noItemsAvailable"
+            android:textAlignment="center"
+            android:layout_marginStart="42dp"
+            android:layout_marginEnd="42dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emptyListItemPicture" />
+
+        <TextView
+            android:id="@+id/emptyListItemText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/plsAddItems"
+            android:textColor="@color/colorBlue"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="42dp"
+            android:layout_marginEnd="42dp"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@id/emptyListItemTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
