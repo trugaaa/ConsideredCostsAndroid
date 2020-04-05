@@ -102,7 +102,7 @@
 
             android:id="@+id/transactionCurrency"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="42dp"
             android:background="@drawable/transaction_combo_background"
@@ -112,7 +112,6 @@
             app:layout_constraintTop_toTopOf="@id/transactionMoney" />
 
         <Spinner
-
             android:id="@+id/transactionType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

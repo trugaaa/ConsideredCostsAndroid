@@ -8,16 +8,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.http.models.ItemElement
-import app.mobile.consideredcosts.http.models.Items
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
-import kotlinx.android.synthetic.main.item_piechart.*
 import kotlinx.android.synthetic.main.item_piechart.view.*
 import kotlinx.android.synthetic.main.item_product.view.*
-import java.lang.Exception
 
 class ItemsAdapter(private var itemList: MutableList<ItemElement>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     lateinit var cont: Context

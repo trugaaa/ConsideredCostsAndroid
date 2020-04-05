@@ -27,15 +27,15 @@ class TransactionActivity : AppCompatActivity() {
     }
 
     private val typeAdapter by lazy {
-        typeList.add(TransactionsType.FAMILY.toString())
-        typeList.add(TransactionsType.PRIVATE.toString())
+        typeList.add("Family")
+        typeList.add("Private")
         ArrayAdapter(this, R.layout.item_spinner, typeList)
     }
 
     private val workTypeAdapter by lazy {
-        workTypeList.add(IncomeWorkType.SALARY.toString())
-        workTypeList.add(IncomeWorkType.BUSINESS.toString())
-        workTypeList.add(IncomeWorkType.TEMP_WORK.toString())
+        workTypeList.add("Salary")
+        workTypeList.add("Business")
+        workTypeList.add("Temporary work")
         ArrayAdapter(this, R.layout.item_spinner, workTypeList)
     }
     private val itemTypeAdapter by lazy {
@@ -109,11 +109,11 @@ class TransactionActivity : AppCompatActivity() {
     private fun transactionType(type:Spinner):TransactionsType
     {
        return when(type.selectedItem.toString()){
-            "FAMILY"->
+            "Family"->
             {
                  TransactionsType.FAMILY
             }
-            "PRIVATE"->
+            "Private"->
             {
                  TransactionsType.PRIVATE
             }
@@ -124,15 +124,15 @@ class TransactionActivity : AppCompatActivity() {
     private fun incomeWorkType(type:Spinner):IncomeWorkType
     {
         return when(type.selectedItem.toString()){
-            "SALARY"->
+            "Salary"->
             {
                  IncomeWorkType.SALARY
             }
-            "BUSINESS"->
+            "Business"->
             {
                  IncomeWorkType.BUSINESS
             }
-            "TEMP_WORK"->
+            "Temporary work"->
             {
                  IncomeWorkType.TEMP_WORK
             }
