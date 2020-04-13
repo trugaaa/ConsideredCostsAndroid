@@ -1,14 +1,18 @@
 package app.mobile.consideredcosts.http.models
 
+import app.mobile.consideredcosts.http.BaseResponse
+
+class ItemsRequestResponse:BaseResponse<Items>()
+
 data class Items(
-    val list: List<ItemElement>?
+    val list: MutableList<ItemElement>?
 )
 
 data class ItemElement(
-    val id: Int,
-    val name: String,
-    val percent: Double,
-    val amountOfOutgoes: Int,
-    val amountOfMoney: Double,
-    val currencyId:Int
+    val Id: Int,
+    val Name: String,
+    val Percent: Double,
+    val AmountOfOutgoes: Int,
+    val AmountOfMoney: Double,
+    val CurrencyId:Int
 )

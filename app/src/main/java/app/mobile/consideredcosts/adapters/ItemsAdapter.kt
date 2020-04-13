@@ -47,11 +47,11 @@ class ItemsAdapter(private var itemList: MutableList<ItemElement>,val click: (In
             is ItemsViewHolder -> {
                 with(itemList[position - 1])
                 {
-                    holder.itemView.textProductValue.text = id.toString()
-                    holder.itemView.amountOfMoneyValue.text = amountOfMoney.toString()
-                    holder.itemView.amountOfOutgoesValue.text = amountOfOutgoes.toString()
+                    holder.itemView.textProductValue.text = Name
+                    holder.itemView.amountOfMoneyValue.text = AmountOfMoney.toString()
+                    holder.itemView.amountOfOutgoesValue.text = AmountOfOutgoes.toString()
                     holder.itemView.percentValue.text =
-                        cont.getString(R.string.percentPattern, percent.toString(), " %")
+                        cont.getString(R.string.percentPattern, Percent.toString(), " %")
                 }
 
                 holder.itemView.itemDelete.setOnClickListener {
@@ -66,7 +66,7 @@ class ItemsAdapter(private var itemList: MutableList<ItemElement>,val click: (In
     private fun setPieCharData(itemsChart: PieChart) {
         val listPie = mutableListOf<PieEntry>()
         itemList.forEach { itemElement ->
-            listPie.add(PieEntry(itemElement.percent.toFloat(), itemElement.name))
+            listPie.add(PieEntry(itemElement.Percent.toFloat(), itemElement.Name))
         }
         val pieDataSet = PieDataSet(listPie, "")
         pieDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)

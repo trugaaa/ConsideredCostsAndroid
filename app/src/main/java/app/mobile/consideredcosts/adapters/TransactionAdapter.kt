@@ -7,16 +7,17 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.mobile.consideredcosts.R
-import app.mobile.consideredcosts.http.models.Transactions
+import app.mobile.consideredcosts.data.DataHolder
+import app.mobile.consideredcosts.http.models.TransactionsElement
 import kotlinx.android.synthetic.main.item_transactions.view.*
 import java.lang.Exception
 
-class TransactionAdapter(private var transactionList: MutableList<Transactions>, val click: (Int, MutableList<Transactions>) -> Unit) :
+class TransactionAdapter(private var transactionList: MutableList<TransactionsElement>, val click: (Int, MutableList<TransactionsElement>) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var cont: Context
 
 
-    fun updateTransactions(list: MutableList<Transactions>) {
+    fun updateTransactions(list: MutableList<TransactionsElement>) {
         transactionList = list
         notifyDataSetChanged()
     }
@@ -40,10 +41,10 @@ class TransactionAdapter(private var transactionList: MutableList<Transactions>,
         if (holder is TransactionViewHolder) {
             with(transactionList[position])
             {
-                workType?.let {
-                    holder.itemView.sourceValue.text = workType.name
+                WorkType?.let {
+                    holder.itemView.sourceValue.text = WorkType.name.toLowerCase().capitalize()
                     holder.itemView.transactionMoney.text =
-                        cont.getString(R.string.incomePattern, money.toString())
+                        cont.getString(R.string.incomePattern, Money.toString())
                     holder.itemView.sourceText.text = cont.getString(R.string.source)
                     holder.itemView.transactionMoney.setTextColor(
                         ContextCompat.getColor(
@@ -59,11 +60,11 @@ class TransactionAdapter(private var transactionList: MutableList<Transactions>,
                     )
                 }
 
-                item?.let {
-                    holder.itemView.sourceValue.text = item
+                ItemId?.let {
+               //     holder.itemView.sourceValue.text = item
                     holder.itemView.sourceText.text = cont.getString(R.string.item)
                     holder.itemView.transactionMoney.text =
-                        cont.getString(R.string.outgoPattern, money.toString())
+                        cont.getString(R.string.outgoPattern, Money.toString())
                     holder.itemView.transactionMoney.setTextColor(
                         ContextCompat.getColor(
                             cont,
@@ -78,9 +79,12 @@ class TransactionAdapter(private var transactionList: MutableList<Transactions>,
                     )
                 }
 
-                holder.itemView.transactionDateValue.text = date
-                holder.itemView.transactionTypeValue.text = type.name
-                holder.itemView.transactionCurrency.text = currency
+                holder.itemView.transactionDateValue.text = Date
+                holder.itemView.transactionTypeValue.text = Type.name.toLowerCase().capitalize()
+
+                holder.itemView.transactionCurrency.text = DataHolder.currencyList.find{
+                    currencyElement -> currencyElement.Id == CurrencyId
+                }!!.Name
 
                 holder.itemView.transactionDelete.setOnClickListener {
                     click(position,transactionList)

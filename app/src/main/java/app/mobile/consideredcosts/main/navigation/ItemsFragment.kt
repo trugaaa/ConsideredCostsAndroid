@@ -9,13 +9,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.adapters.ItemsAdapter
 import app.mobile.consideredcosts.data.DataHolder
+import app.mobile.consideredcosts.data.SharedPreferencesManager
+import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.ItemElement
 import kotlinx.android.synthetic.main.fragment_items_.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ItemsFragment : Fragment() {
+    private val sharedPreferences by lazy {
+        SharedPreferencesManager(context!!)
+    }
+
     private val itemsAdapter by lazy { ItemsAdapter(mutableListOf()) { position, list ->
-        list.removeAt(position)
-        updateState(list)
+        deletingItem(list,position)
+        gettingList()
     } }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +57,65 @@ class ItemsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        updateState(DataHolder.itemListMock)
+        gettingList()
+    }
+
+    private fun gettingList() {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                launch {
+                    val response =
+                        RetrofitClient.getItems("Bearer " + sharedPreferences.getToken())
+                    when (response.code()) {
+                        200 -> {
+                            withContext(Dispatchers.Main) {
+                                if (response.body()!!.data != null) {
+                                    DataHolder.itemListMock =
+                                        response.body()!!.data!!.list!!
+                                } else {
+                                    DataHolder.itemListMock.clear()
+                                }
+                                updateState(DataHolder.itemListMock)
+                            }
+                        }
+                        400 -> {
+                            //todo Сделать обработку
+                        }
+                        else -> {
+                            //todo Сделать обработку
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    private fun deletingItem(list: MutableList<ItemElement>, position: Int) {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                launch {
+                    val response =
+                        RetrofitClient.deleteItem(
+                            "Bearer " + sharedPreferences.getToken(),
+                            list[position].Id!!
+                        )
+                    when (response.code()) {
+                        200 -> {
+                            withContext(Dispatchers.Main) {
+                                gettingList()
+                            }
+                        }
+                        400 -> {
+                            //todo Сделать обработку
+                        }
+                        else -> {
+                            //todo Сделать обработку
+                        }
+                    }
+
+                }
+            }
+        }
     }
 }

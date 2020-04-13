@@ -2,6 +2,7 @@ package app.mobile.consideredcosts.http
 
 import app.mobile.consideredcosts.http.models.LoginRequest
 import app.mobile.consideredcosts.http.models.RegistrationRequest
+import app.mobile.consideredcosts.http.models.TransactionsElement
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -28,5 +29,10 @@ object RetrofitClient {
     suspend fun login(login: String, password: String) = api.login(LoginRequest(login, password))
     suspend fun registration(username: String,email:String, password: String) = api.registration(
         RegistrationRequest(username, email, password))
-
+    suspend fun getCurrencyList() = api.currencies()
+    suspend fun getTransactions(token:String) = api.getTransactions(token)
+    suspend fun postTransaction(token: String, transElement: TransactionsElement) = api.postTransactions(token,transElement)
+    suspend fun deleteTransaction(token: String, id:Int) = api.deleteTransaction(token,id)
+    suspend fun getItems(token: String) = api.getItems(token)
+    suspend fun deleteItem(token: String, id:Int) = api.deleteItem(token,id)
 }
