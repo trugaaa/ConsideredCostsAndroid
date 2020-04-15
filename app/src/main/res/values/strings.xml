@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Considered Costs</string>
+
     <!-- Welcome informational screens -->
     <string name="welcomeImageDescription">"Welcome image"</string>
     <string name="welcome1Title">GET AN OVERVIEW</string>
     <string name="welcome1Text">OF INCOMES AND OUTGOES</string>
-
     <string name="welcome2Title">SET FINANCIAL GOALS</string>
     <string name="welcome2Text">AND ACHIEVE THEM</string>
-
     <string name="welcome3Title">TAKE CARE</string>
     <string name="welcome3Text">OF YOUR PROFIT</string>
-
     <string name="skipLinkText">SKIP</string>
     <string name="nextLinkText">NEXT</string>
     <string name="doneLinkText">DONE</string>
     <string name="startLinkText">START</string>
 
-
     <!-- SignUp screen -->
     <string name="signAlreadyHave">Already have an account?</string>
     <string name="signUpButtonText">Sign Up</string>
+
     <!-- SignIn screen -->
     <string name="username">Username</string>
     <string name="plsUsername">Please enter your username</string>
@@ -30,9 +28,8 @@
     <string name="plsPassword">Please enter your password</string>
     <string name="confPassword">Confirm password</string>
     <string name="plsConfPassword">Please confirm your password</string>
-
     <string name="signInButtonText">Sign In</string>
-    <string name="signDontHaveAccount">Don`t have an account?</string>
+    <string name="signDoNotHaveAccount">Don`t have an account?</string>
     <string name="considered_costs_logo">Considered Costs logo</string>
 
     <!-- Nav bat -->
@@ -45,31 +42,41 @@
     <!-- Transactions -->
     <string name="date">Date:</string>
     <string name="type">Type:</string>
-
     <string name="description">Description:</string>
     <string name="addTransactionTitle">Add transaction</string>
     <string name="edit">Edit</string>
     <string name="add">Add</string>
-
     <string name="enterDate">Enter transaction date</string>
     <string name="money">Enter money amount</string>
     <string name="currency">Select currency</string>
     <string name="addDescription">Add description if necessary</string>
+    <string name="noTransactionsAvailable">No transaction are available</string>
+    <string name="plsAddTransactions">Please, add some transactions to start using all application`s functionality</string>
+
     <!-- Incomes -->
-    <string name="incomePatern">+ %s</string>
+    <string name="incomePattern">+ %s</string>
     <string name="source">Source:</string>
     <string name="income">Income</string>
 
     <!-- Outgoes -->
-    <string name="outgoePatern">- %s</string>
+    <string name="outgoPattern">- %s</string>
     <string name="outgo">Outgo</string>
     <string name="item">Item:</string>
 
+    <!-- Items -->
+    <string name="product">Product: </string>
+    <string name="amountOfOutgoes">Outgoes:  </string>
+    <string name="amountOfMoney">Money spent: </string>
+    <string name="amountOfMoneyPattern">%1$s %2$s</string>
+    <string name="percentPattern">%1$s %2$s</string>
+    <string name="noItemsAvailable">No items are available</string>
+    <string name="plsAddItems">Please, add some items to start using all application`s functionality</string>
+    <string name="addItem">Enter item name</string>
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
     <string name="errorEmailField">Email is invalid.\nPls check your email</string>
     <string name="errorPasswordField">Password is invalid.\nIt should me more than 8 symbols and contain: Uppercase letter, Lowercase letter and digit</string>
-    <string name="errorPassesDontMatch">Passwords must be equal</string>
+    <string name="errorPassesDoNotMatch">Passwords must be equal</string>
     <string name="errorGeneral">Something went wrong… Please try again later…</string>
     <string name="errorFieldIsRequired">Field is required</string>
 

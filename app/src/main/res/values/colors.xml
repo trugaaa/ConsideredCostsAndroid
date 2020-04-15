@@ -4,11 +4,12 @@
     <color name="colorPrimaryDark">#393e46</color>
     <color name="colorAccent">@color/colorPrimaryText</color>
     <color name="colorError">#b83b5e</color>
-    <color name="colorSuccess">#7fff00</color>
+    <color name="colorSuccess">#228B22</color>
     <color name="colorPrimaryText">#ffffff</color>
     <color name="colorDarkText">#222831</color>
     <color name="colorPrimaryShadow">#000</color>
     <color name="colorTransparent">#00000000</color>
+    <color name="colorGray">#595959</color>
     <color name="colorSignTextField">#4dffffff</color>
     <color name="colorBlue">#2699fb</color>
     <color name="colorHintBlue">#bfdef9</color>

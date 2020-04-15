@@ -137,7 +137,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                 confPassLabel.visibility = View.GONE
                 confPassField.visibility = View.GONE
                 signButton.text = resources.getText(R.string.signInButtonText)
-                bottomSignText.text = resources.getText(R.string.signDontHaveAccount)
+                bottomSignText.text = resources.getText(R.string.signDoNotHaveAccount)
                 bottomSignLink.text = resources.getText(R.string.signUpButtonText)
             }
             SignOption.REGISTRATION -> {
@@ -301,7 +301,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
             return false
         }
         if (password != confPass) {
-            confPassField.error = resources.getString(R.string.errorPassesDontMatch)
+            confPassField.error = resources.getString(R.string.errorPassesDoNotMatch)
             setThemeError(passwordLabel, passwordField)
             setThemeError(confPassLabel, confPassField)
             return false

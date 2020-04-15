@@ -7,35 +7,41 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.data.DataHolder
+import app.mobile.consideredcosts.data.DataHolder.currencyList
+import app.mobile.consideredcosts.data.SharedPreferencesManager
+import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.IncomeWorkType
-import app.mobile.consideredcosts.http.models.Transactions
+import app.mobile.consideredcosts.http.models.TransactionsElement
 import app.mobile.consideredcosts.http.models.TransactionsType
 import kotlinx.android.synthetic.main.activity_transaction.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.NullPointerException
 
 class TransactionActivity : AppCompatActivity() {
-    private val currencyList = mutableListOf<String>()
     private val typeList = mutableListOf<String>()
     private val workTypeList = mutableListOf<String>()
     private val itemTypeList = mutableListOf<String>()
-
-    private val currencyAdapter by lazy {
-        currencyList.add("EUR")
-        currencyList.add("UAH")
-        currencyList.add("USD")
-        ArrayAdapter(this, R.layout.item_spinner, currencyList)
+    private val sharedPreferences by lazy {
+        SharedPreferencesManager(this)
     }
-
+    private val currencyAdapter by lazy {
+        ArrayAdapter(this, R.layout.item_spinner, currencyList.map {
+            it.Name
+        })
+    }
     private val typeAdapter by lazy {
-        typeList.add(TransactionsType.FAMILY.toString())
-        typeList.add(TransactionsType.PRIVATE.toString())
+        typeList.add("Family")
+        typeList.add("Private")
         ArrayAdapter(this, R.layout.item_spinner, typeList)
     }
 
     private val workTypeAdapter by lazy {
-        workTypeList.add(IncomeWorkType.SALARY.toString())
-        workTypeList.add(IncomeWorkType.BUSINESS.toString())
-        workTypeList.add(IncomeWorkType.TEMP_WORK.toString())
+        workTypeList.add("Salary")
+        workTypeList.add("Business")
+        workTypeList.add("Temporary work")
         ArrayAdapter(this, R.layout.item_spinner, workTypeList)
     }
     private val itemTypeAdapter by lazy {
@@ -64,39 +70,64 @@ class TransactionActivity : AppCompatActivity() {
         }
 
         transactionAddButton.setOnClickListener {
-            when{
+            val transToSend: TransactionsElement = when {
                 transactionRadioIncome.isChecked -> {
-                    DataHolder.mutableLisTransactions.add(
-                        Transactions(
-                            DataHolder.mutableLisTransactions.size,
-                            transactionMoney.text.toString().toDouble(),
-                            transactionType(transactionType),
-                            transactionAddDate.text.toString(),
-                            transactionCurrency.selectedItem.toString(),
+                    TransactionsElement(
+                        null,
+                        transactionMoney.text.toString().toDouble(),
+                        transactionType(transactionType),
+                        transactionAddDate.text.toString(),
+                        currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
 
-                            transactionDescription.text.toString(),
-                            incomeWorkType(incomeWorkType),
-                            null,
-                            null
-                        ))
+                        transactionDescription.text.toString(),
+                        incomeWorkType(incomeWorkType),
+                        null
+                    )
                 }
 
                 transactionRadioOutgo.isChecked -> {
-                    DataHolder.mutableLisTransactions.add(
-                        Transactions(
-                            DataHolder.mutableLisTransactions.size,
-                            transactionMoney.text.toString().toDouble(),
-                            transactionType(transactionType),
-                            transactionAddDate.text.toString(),
-                            transactionCurrency.selectedItem.toString(),
+                    TransactionsElement(
+                        null,
+                        transactionMoney.text.toString().toDouble(),
+                        transactionType(transactionType),
+                        transactionAddDate.text.toString(),
+                        currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
 
-                            transactionDescription.text.toString(),
-                            null,
-                            DataHolder.mutableLisTransactions.size,
-                            outgoItemType.selectedItem.toString()
-                        ))
+                        transactionDescription.text.toString(),
+                        null,
+                        1
+                    )
+                }
+                else -> throw Exception()
+            }
+
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    launch {
+                        val response = RetrofitClient.postTransaction(sharedPreferences.getToken()!!,
+                            transToSend
+                        )
+                        when (response.code()) {
+                            200 -> {
+                                withContext(Dispatchers.Main){
+                                    super.onBackPressed()
+                                }
+                            }
+                            400 -> {
+                                //todo Сделать обработку
+                            }
+                            else -> {
+                                //todo Сделать обработку
+                            }
+                        }
+
+                    }
                 }
             }
+
+
+
+
             super.onBackPressed()
         }
 
@@ -106,40 +137,34 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun transactionType(type:Spinner):TransactionsType
-    {
-       return when(type.selectedItem.toString()){
-            "FAMILY"->
-            {
-                 TransactionsType.FAMILY
+    private fun transactionType(type: Spinner): TransactionsType {
+        return when (type.selectedItem.toString()) {
+            "Family" -> {
+                TransactionsType.FAMILY
             }
-            "PRIVATE"->
-            {
-                 TransactionsType.PRIVATE
+            "Private" -> {
+                TransactionsType.PRIVATE
             }
-           else -> throw NullPointerException()
-       }
+            else -> throw NullPointerException()
+        }
     }
 
-    private fun incomeWorkType(type:Spinner):IncomeWorkType
-    {
-        return when(type.selectedItem.toString()){
-            "SALARY"->
-            {
-                 IncomeWorkType.SALARY
+    private fun incomeWorkType(type: Spinner): IncomeWorkType {
+        return when (type.selectedItem.toString()) {
+            "Salary" -> {
+                IncomeWorkType.SALARY
             }
-            "BUSINESS"->
-            {
-                 IncomeWorkType.BUSINESS
+            "Business" -> {
+                IncomeWorkType.BUSINESS
             }
-            "TEMP_WORK"->
-            {
-                 IncomeWorkType.TEMP_WORK
+            "Temporary work" -> {
+                IncomeWorkType.TEMP_WORK
             }
             else -> throw NullPointerException()
         }
 
     }
+
     private fun updateComboFields() {
         transactionCurrency.adapter = currencyAdapter
         transactionType.adapter = typeAdapter
