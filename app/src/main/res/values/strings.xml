@@ -71,7 +71,7 @@
     <string name="percentPattern">%1$s %2$s</string>
     <string name="noItemsAvailable">No items are available</string>
     <string name="plsAddItems">Please, add some items to start using all application`s functionality</string>
-
+    <string name="addItem">Enter item name</string>
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
     <string name="errorEmailField">Email is invalid.\nPls check your email</string>

@@ -33,6 +33,10 @@ interface Api {
     suspend fun getItems(@Header("Authorization") token: String):
             Response<ItemsRequestResponse>
 
+    @POST("items")
+    suspend fun postItems(@Header("Authorization") token: String, @Body item:ItemElement):
+            Response<ItemsRequestResponse>
+
     @DELETE("items")
     suspend fun deleteItem(@Header("Authorization") token: String, @Header("Id") id: Int):
             Response<ItemsRequestResponse>

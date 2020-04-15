@@ -104,8 +104,7 @@ class TransactionActivity : AppCompatActivity() {
             GlobalScope.launch {
                 withContext(Dispatchers.IO) {
                     launch {
-                        val response = RetrofitClient.postTransaction(
-                            "Bearer " + sharedPreferences.getToken()!!,
+                        val response = RetrofitClient.postTransaction(sharedPreferences.getToken()!!,
                             transToSend
                         )
                         when (response.code()) {

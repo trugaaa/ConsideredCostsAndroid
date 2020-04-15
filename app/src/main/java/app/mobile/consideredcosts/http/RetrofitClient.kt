@@ -1,5 +1,6 @@
 package app.mobile.consideredcosts.http
 
+import app.mobile.consideredcosts.http.models.ItemElement
 import app.mobile.consideredcosts.http.models.LoginRequest
 import app.mobile.consideredcosts.http.models.RegistrationRequest
 import app.mobile.consideredcosts.http.models.TransactionsElement
@@ -35,4 +36,5 @@ object RetrofitClient {
     suspend fun deleteTransaction(token: String, id:Int) = api.deleteTransaction(token,id)
     suspend fun getItems(token: String) = api.getItems(token)
     suspend fun deleteItem(token: String, id:Int) = api.deleteItem(token,id)
+    suspend fun postItems(token: String,item:ItemElement) = api.postItems(token, item)
 }

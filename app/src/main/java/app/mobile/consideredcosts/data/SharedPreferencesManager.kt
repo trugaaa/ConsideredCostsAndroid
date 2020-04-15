@@ -19,7 +19,7 @@ class SharedPreferencesManager(context: Context) {
             sharedPreferences.edit().putString(TOKEN,token).apply()
     }
 
-    fun getToken(): String? = sharedPreferences.getString(TOKEN,"No token")
+    fun getToken(): String? = "Bearer " + sharedPreferences.getString(TOKEN,"No token")
 
     fun setUsername(username:String)
     {

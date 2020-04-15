@@ -16,9 +16,13 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.item_piechart.view.*
 import kotlinx.android.synthetic.main.item_product.view.*
 
-class ItemsAdapter(private var itemList: MutableList<ItemElement>,val click: (Int, MutableList<ItemElement>) -> Unit) :
+class ItemsAdapter(
+    private var itemList: MutableList<ItemElement>,
+    val click: (Int, MutableList<ItemElement>) -> Unit
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var cont: Context
+    var showPie: Boolean = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         cont = parent.context
@@ -42,7 +46,11 @@ class ItemsAdapter(private var itemList: MutableList<ItemElement>,val click: (In
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is PieViewHolder -> {
-                setPieCharData(holder.itemView.itemsPieChart)
+                if (showPie) {
+                    setPieCharData(holder.itemView.itemsPieChart)
+                } else {
+                    holder.itemView.itemsPieChart.visibility = View.GONE
+                }
             }
             is ItemsViewHolder -> {
                 with(itemList[position - 1])
@@ -55,12 +63,10 @@ class ItemsAdapter(private var itemList: MutableList<ItemElement>,val click: (In
                 }
 
                 holder.itemView.itemDelete.setOnClickListener {
-                    click(position - 1,itemList)
+                    click(position - 1, itemList)
                 }
             }
         }
-
-
     }
 
     private fun setPieCharData(itemsChart: PieChart) {
@@ -85,16 +91,23 @@ class ItemsAdapter(private var itemList: MutableList<ItemElement>,val click: (In
     }
 
     override fun getItemViewType(position: Int): Int {
-            return when {
-                position == 0 -> TYPE_PIE
-                position < itemList.size + 1 -> TYPE_ITEM
-                position == itemList.size + 1 -> TYPE_EMPTY
-                else -> throw Exception()
+        return when {
+            position == 0 -> TYPE_PIE
+            position < itemList.size + 1 -> TYPE_ITEM
+            position == itemList.size + 1 -> TYPE_EMPTY
+            else -> throw Exception()
         }
     }
 
-    fun listUpdate(list: MutableList<ItemElement>)
-    {
+    private fun elementsNotEmpty(list: MutableList<ItemElement>): Boolean {
+        list.forEach {
+            if (it.Percent != 0.0) return true
+        }
+        return false
+    }
+
+    fun listUpdate(list: MutableList<ItemElement>) {
+        showPie = elementsNotEmpty(list)
         itemList = list
         notifyDataSetChanged()
     }

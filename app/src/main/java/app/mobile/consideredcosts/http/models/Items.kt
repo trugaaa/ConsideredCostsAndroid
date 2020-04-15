@@ -9,10 +9,10 @@ data class Items(
 )
 
 data class ItemElement(
-    val Id: Int,
+    val Id: Int?,
     val Name: String,
     val Percent: Double,
     val AmountOfOutgoes: Int,
     val AmountOfMoney: Double,
-    val CurrencyId:Int
+    val CurrencyId: Int?
 )

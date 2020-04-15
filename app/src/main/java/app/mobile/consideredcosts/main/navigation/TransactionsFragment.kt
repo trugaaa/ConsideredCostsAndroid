@@ -75,8 +75,7 @@ class TransactionsFragment : Fragment() {
             withContext(Dispatchers.IO) {
                 launch {
                     val response =
-                        RetrofitClient.deleteTransaction(
-                            "Bearer " + sharedPreferences.getToken(),
+                        RetrofitClient.deleteTransaction(sharedPreferences.getToken()!!,
                             list[position].Id!!
                         )
                     when (response.code()) {
@@ -103,7 +102,7 @@ class TransactionsFragment : Fragment() {
             withContext(Dispatchers.IO) {
                 launch {
                     val response =
-                        RetrofitClient.getTransactions("Bearer " + sharedPreferences.getToken())
+                        RetrofitClient.getTransactions(sharedPreferences.getToken()!!)
                     when (response.code()) {
                         200 -> {
                             withContext(Dispatchers.Main) {

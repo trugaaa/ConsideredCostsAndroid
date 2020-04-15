@@ -23,10 +23,13 @@ class ItemsFragment : Fragment() {
         SharedPreferencesManager(context!!)
     }
 
-    private val itemsAdapter by lazy { ItemsAdapter(mutableListOf()) { position, list ->
-        deletingItem(list,position)
-        gettingList()
-    } }
+    private val itemsAdapter by lazy {
+        ItemsAdapter(mutableListOf()) { position, list ->
+            deletingItem(list, position)
+            gettingList()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,14 +44,11 @@ class ItemsFragment : Fragment() {
         updateState(DataHolder.itemListMock)
     }
 
-    private fun updateState(list: MutableList<ItemElement>)
-    {
-        if(list.isEmpty())
-        {
+    private fun updateState(list: MutableList<ItemElement>) {
+        if (list.isEmpty()) {
             itemsRecyclerView.visibility = View.GONE
             itemsEmptyListLayout.visibility = View.VISIBLE
-        }
-        else {
+        } else {
             itemsRecyclerView.visibility = View.VISIBLE
             itemsEmptyListLayout.visibility = View.GONE
             itemsAdapter.listUpdate(list)
@@ -57,6 +57,9 @@ class ItemsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        itemsAddButton.setOnClickListener {
+            savingItem()
+        }
         gettingList()
     }
 
@@ -65,7 +68,7 @@ class ItemsFragment : Fragment() {
             withContext(Dispatchers.IO) {
                 launch {
                     val response =
-                        RetrofitClient.getItems("Bearer " + sharedPreferences.getToken())
+                        RetrofitClient.getItems(sharedPreferences.getToken()!!)
                     when (response.code()) {
                         200 -> {
                             withContext(Dispatchers.Main) {
@@ -91,13 +94,45 @@ class ItemsFragment : Fragment() {
         }
     }
 
+    private fun savingItem() {
+        if (!itemEditText.text.isNullOrBlank()) {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    launch {
+                        val response = RetrofitClient.postItems(
+                            sharedPreferences.getToken()!!,
+                            ItemElement(null, itemEditText.text.toString(), 0.0, 0, 0.0, null)
+                        )
+                        when (response.code()) {
+                            200 -> {
+                                withContext(Dispatchers.Main) {
+                                    itemEditText.text.clear()
+                                    gettingList()
+                                }
+                            }
+                            400 -> {
+                                //todo Сделать обработку
+                            }
+                            else -> {
+                                //todo Сделать обработку
+                            }
+                        }
+
+                    }
+                }
+            }
+        } else {
+            itemEditText.error = resources.getString(R.string.errorFieldIsRequired)
+        }
+    }
+
     private fun deletingItem(list: MutableList<ItemElement>, position: Int) {
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
                 launch {
                     val response =
                         RetrofitClient.deleteItem(
-                            "Bearer " + sharedPreferences.getToken(),
+                            sharedPreferences.getToken()!!,
                             list[position].Id!!
                         )
                     when (response.code()) {
