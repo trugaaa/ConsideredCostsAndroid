@@ -23,7 +23,6 @@ import java.lang.NullPointerException
 class TransactionActivity : AppCompatActivity() {
     private val typeList = mutableListOf<String>()
     private val workTypeList = mutableListOf<String>()
-    private val itemTypeList = mutableListOf<String>()
     private val sharedPreferences by lazy {
         SharedPreferencesManager(this)
     }
@@ -45,10 +44,7 @@ class TransactionActivity : AppCompatActivity() {
         ArrayAdapter(this, R.layout.item_spinner, workTypeList)
     }
     private val itemTypeAdapter by lazy {
-        itemTypeList.add("Food")
-        itemTypeList.add("Transport")
-        itemTypeList.add("Audi TT")
-        ArrayAdapter(this, R.layout.item_spinner, itemTypeList)
+        ArrayAdapter(this, R.layout.item_spinner, DataHolder.itemListMock)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
