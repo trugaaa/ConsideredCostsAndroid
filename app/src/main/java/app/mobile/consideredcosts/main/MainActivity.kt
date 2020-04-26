@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-9421
+
     override fun onResume() {
         if (DataHolder.isSentToItemsAdd) {
             mainNavBar.selectedItemId = R.id.navBarItemsMenuItem
