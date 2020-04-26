@@ -1,7 +1,9 @@
 package app.mobile.consideredcosts.sign
 
 import android.content.Intent
+import android.graphics.Point
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -23,16 +25,29 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     private var currentScreenState = SignOption.LOGIN
     private val sharedPreferencesManager by lazy { SharedPreferencesManager(this) }
     private val fieldValidator = FieldValidator()
+    private var fullScreenRect : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_sign)
+
+
+        val size = Point()
+        windowManager.defaultDisplay.getSize(size)
+        signScreenLayout.viewTreeObserver.addOnGlobalLayoutListener {
+            if(size.y - signScreenLayout.height > 100)
+            {
+                imageSignLogo.visibility = View.GONE
+            }
+           else
+            {
+                imageSignLogo.visibility = View.VISIBLE
+            }
+        }
+
         screenState(currentScreenState)
 
-
         emailField.setOnTouchListener { _, _ ->
-            imageSignLogo.visibility = View.GONE
             setThemeDefault(emailLabel, emailField)
             false
         }
@@ -42,7 +57,6 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
 
         usernameField.setOnTouchListener { _, _ ->
             setThemeDefault(usernameLabel, usernameField)
-            imageSignLogo.visibility = View.GONE
             false
         }
         usernameField.setOnFocusChangeListener { _, hasFocus ->
@@ -57,7 +71,6 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         }
 
         passwordField.setOnTouchListener { _, _ ->
-            imageSignLogo.visibility = View.GONE
             setThemeDefault(passwordLabel, passwordField)
             false
         }
@@ -73,7 +86,6 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         }
 
         confPassField.setOnTouchListener { _, _ ->
-            imageSignLogo.visibility = View.GONE
             setThemeDefault(confPassLabel, confPassField)
             false
         }
@@ -81,6 +93,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                     if (!hasFocus) validateConfPass(passwordField.text.toString(),confPassField.text.toString())
         }
     }
+
 
     private fun screenState(state: SignOption) {
         imageSignLogo.visibility = View.VISIBLE
@@ -206,8 +219,6 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                     }
                 }
             }
-        } else {
-
         }
     }
 

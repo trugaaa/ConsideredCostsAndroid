@@ -1,5 +1,7 @@
 package app.mobile.consideredcosts.main
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         refreshLists()
+
         openFragment(HomeFragment())
 
         mainNavBar.setOnNavigationItemSelectedListener { item: MenuItem ->
@@ -52,14 +55,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
+9421
     override fun onResume() {
+        if (DataHolder.isSentToItemsAdd) {
+            mainNavBar.selectedItemId = R.id.navBarItemsMenuItem
+            openFragment(ItemsFragment())
+            DataHolder.isSentToItemsAdd = false
+        }
+
         refreshLists()
         super.onResume()
     }
+
     private fun refreshLists() {
         refreshCurrencyList()
-        refreshItems()
+        refreshItemsList()
     }
 
     private fun refreshCurrencyList() {
@@ -87,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun refreshItems() {
+    private fun refreshItemsList() {
         try {
             GlobalScope.launch {
                 withContext(Dispatchers.IO) {
@@ -108,13 +118,12 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-    } catch (e: KotlinNullPointerException)
-    {
-        //todo ekran oshibki ebanoi
+        } catch (e: KotlinNullPointerException) {
+            //todo ekran oshibki ebanoi
+        }
     }
-}
 
-private fun openFragment(fragment: Fragment) {
-    supportFragmentManager.beginTransaction().replace(R.id.mainContainer, fragment).commit()
-}
+    private fun openFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.mainContainer, fragment).commit()
+    }
 }

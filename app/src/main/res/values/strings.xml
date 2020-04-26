@@ -70,6 +70,7 @@
     <string name="amountOfMoneyPattern">%1$s %2$s</string>
     <string name="percentPattern">%1$s %2$s</string>
     <string name="noItemsAvailable">No items are available</string>
+    <string name="addItems">Add items</string>
     <string name="plsAddItems">Please, add some items to start using all application`s functionality</string>
     <string name="addItem">Enter item name</string>
     <!-- Generic errors -->

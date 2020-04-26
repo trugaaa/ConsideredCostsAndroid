@@ -49,8 +49,14 @@ class TransactionsFragment : Fragment() {
         updateLayout(DataHolder.mutableLisTransactions)
 
         transactionAddButton.setOnClickListener() {
-            startActivity(Intent(context, TransactionActivity::class.java))
+            startActivityForResult(Intent(context, TransactionActivity::class.java), 1)
         }
+    }
+
+    override fun onResume() {
+        gettingList()
+        super.onResume()
+
     }
 
     private fun updateLayout(list: MutableList<TransactionsElement>) {
@@ -64,18 +70,13 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        gettingList()
-        super.onResume()
-
-    }
-
     private fun deletingTransaction(list: MutableList<TransactionsElement>, position: Int) {
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
                 launch {
                     val response =
-                        RetrofitClient.deleteTransaction(sharedPreferences.getToken()!!,
+                        RetrofitClient.deleteTransaction(
+                            sharedPreferences.getToken()!!,
                             list[position].Id!!
                         )
                     when (response.code()) {

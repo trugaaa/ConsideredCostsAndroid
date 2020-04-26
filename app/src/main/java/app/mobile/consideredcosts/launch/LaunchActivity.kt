@@ -5,17 +5,25 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.data.SharedPreferencesManager
+import app.mobile.consideredcosts.http.RetrofitClient
+import app.mobile.consideredcosts.main.MainActivity
 import app.mobile.consideredcosts.sign.SignActivity
 import app.mobile.consideredcosts.welcome.WelcomeSliderAdapter
 import app.mobile.consideredcosts.welcome.WelcomeSliderFragment
+import kotlinx.android.synthetic.main.activity_sign.*
 
 import kotlinx.android.synthetic.main.activity_welcome.*
 import kotlinx.android.synthetic.main.fragment_welcome_slider.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class LaunchActivity : AppCompatActivity(),PagerListener {
+class LaunchActivity : AppCompatActivity(), PagerListener {
 
     val welcomeSliderAdapter by lazy { WelcomeSliderAdapter(supportFragmentManager) }
 
@@ -44,7 +52,34 @@ class LaunchActivity : AppCompatActivity(),PagerListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(sharedPreferencesManager.isFirstOpened()) openSignActivity()
+        /*    if (sharedPreferencesManager.getUsername() != null && sharedPreferencesManager.getPassword() != null) {
+
+                  GlobalScope.launch {
+                      withContext(Dispatchers.IO) {
+                          launch {
+                              val response = RetrofitClient.login(
+                                  sharedPreferencesManager.getUsername()!!,
+                                  sharedPreferencesManager.getPassword()!!
+                              )
+                              when (response.code()) {
+                                  200 -> {
+                                      sharedPreferencesManager.setToken(response.body()!!.data!!.access_token)
+                                      openMainActivity()
+                                  }
+                                  401 -> {
+                                      //todo Сделать обработку
+                                  }
+                                  else -> {
+                                      //todo Сделать обработку
+                                  }
+                              }
+
+                          }
+                      }
+                  }
+              }*/
+
+        if (sharedPreferencesManager.isFirstOpened()) openSignActivity()
 
         setContentView(R.layout.activity_welcome)
 
@@ -122,12 +157,17 @@ class LaunchActivity : AppCompatActivity(),PagerListener {
 
     }
 
-   override fun openNextFragment() {
+    override fun openNextFragment() {
         welcomeViewPager.currentItem++
     }
 
     override fun openSignActivity() {
         startActivity(Intent(this, SignActivity::class.java))
+        finish()
+    }
+
+    fun openMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }

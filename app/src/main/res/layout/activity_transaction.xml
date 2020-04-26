@@ -187,6 +187,58 @@
             app:layout_constraintTop_toBottomOf="@id/transactionAddDate" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemsEmptyOnOutgoAdd"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@id/transactionAddButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutTransaction">
+
+        <ImageView
+            android:id="@+id/emptyListItemPicture"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_empty_list"
+            app:layout_constraintBottom_toTopOf="@id/emptyListItemTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/emptyListItemTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:layout_marginEnd="42dp"
+            android:text="@string/noItemsAvailable"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlue"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emptyListItemPicture" />
+
+        <TextView
+            android:id="@+id/emptyListItemText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="42dp"
+            android:text="@string/plsAddItems"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlue"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emptyListItemTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <Button
             android:id="@+id/transactionAddButton"
             android:layout_width="match_parent"
@@ -198,7 +250,6 @@
             android:layout_marginEnd="42dp"
             android:background="@color/colorBlue"
             android:textColor="@color/colorPrimaryText"
-            app:layout_constraintTop_toBottomOf="@id/layoutTransaction"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
