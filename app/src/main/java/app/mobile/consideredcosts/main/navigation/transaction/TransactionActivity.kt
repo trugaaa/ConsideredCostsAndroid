@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
-import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.DataHolder.itemListMock
 import app.mobile.consideredcosts.data.DataHolder.currencyList
 import app.mobile.consideredcosts.data.DataHolder.isSentToItemsAdd
@@ -15,7 +15,9 @@ import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.IncomeWorkType
 import app.mobile.consideredcosts.http.models.TransactionsElement
 import app.mobile.consideredcosts.http.models.TransactionsType
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_transaction.*
+import kotlinx.android.synthetic.main.activity_transaction.transactionAddButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -137,11 +139,12 @@ class TransactionActivity : AppCompatActivity() {
                                         super.onBackPressed()
                                     }
                                 }
-                                400 -> {
-                                    //todo Сделать обработку
+                                504,503,502,501,500->
+                                {
+                                    invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                                 }
                                 else -> {
-                                    //todo Сделать обработку
+                                    invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                                 }
                             }
 
@@ -184,6 +187,28 @@ class TransactionActivity : AppCompatActivity() {
             else -> throw NullPointerException()
         }
 
+    }
+
+    private fun invokeGeneralErrorActivity(errorText: String) {
+        val snackBar = Snackbar.make(
+            transactionActivityLayout,
+            errorText,
+            Snackbar.LENGTH_LONG
+        )
+
+        snackBar.view.setBackgroundColor(
+            ContextCompat.getColor(
+                applicationContext,
+                R.color.colorError
+            )
+        )
+        snackBar.setActionTextColor(
+            ContextCompat.getColor(
+                applicationContext,
+                R.color.colorPrimaryText
+            )
+        )
+        snackBar.show()
     }
 
     private fun updateComboFields() {

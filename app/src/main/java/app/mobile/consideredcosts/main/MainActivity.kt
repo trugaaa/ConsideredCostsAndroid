@@ -1,17 +1,19 @@
 package app.mobile.consideredcosts.main
 
-import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import app.mobile.consideredcosts.*
 import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.main.navigation.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_sign.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -82,18 +84,19 @@ class MainActivity : AppCompatActivity() {
                             200 -> {
                                 DataHolder.currencyList = response.body()!!.data!!.list
                             }
-                            400 -> {
-                                //todo Сделать обработку
+                            504,503,502,501,500->
+                            {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
-                                //todo Сделать обработку
+                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                             }
                         }
                     }
                 }
             }
         } catch (e: KotlinNullPointerException) {
-            //todo ekran oshibki ebanoi
+            Log.e("Crash caught:",e.localizedMessage)
         }
     }
 
@@ -107,11 +110,12 @@ class MainActivity : AppCompatActivity() {
                             200 -> {
                                 DataHolder.itemListMock = response.body()!!.data!!.list!!
                             }
-                            400 -> {
-                                //todo Сделать обработку
+                            504,503,502,501,500->
+                            {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
-                                //todo Сделать обработку
+                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                             }
                         }
 
@@ -119,8 +123,20 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } catch (e: KotlinNullPointerException) {
-            //todo ekran oshibki ebanoi
+            Log.e("Crash caught:",e.localizedMessage)
         }
+    }
+
+    fun invokeGeneralErrorActivity(errorText: String) {
+        val snackBar = Snackbar.make(
+            mainActivityLayout,
+            errorText,
+            Snackbar.LENGTH_LONG
+        )
+
+        snackBar.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.colorError))
+        snackBar.setActionTextColor(ContextCompat.getColor(applicationContext,R.color.colorPrimaryText))
+        snackBar.show()
     }
 
     private fun openFragment(fragment: Fragment) {

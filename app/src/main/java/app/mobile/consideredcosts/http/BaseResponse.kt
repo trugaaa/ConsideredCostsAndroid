@@ -8,16 +8,15 @@ open class BaseResponse<out T>(
     @SerializedName("messages")
     val messages: List<ErrorResponse>? = null)
 {
-    val message: String?
+    val firstMessage: String?
         get() {
-            return messages!!.first().text
+            return messages!!.first().Text
         }
 
     fun isMessageExists() = messages != null && messages.isNotEmpty()
 }
 
 data class ErrorResponse(
-    val type: String?,
-    val text: String?,
-    val field: String?
+    val Text: String?,
+    val Field: String?
 )
