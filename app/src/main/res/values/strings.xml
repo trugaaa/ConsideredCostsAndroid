@@ -52,6 +52,7 @@
     <string name="addDescription">Add description if necessary</string>
     <string name="noTransactionsAvailable">No transaction are available</string>
     <string name="plsAddTransactions">Please, add some transactions to start using all application`s functionality</string>
+    <string name="datePattern">%1$s-%2$s-%3$s</string>
 
     <!-- Incomes -->
     <string name="incomePattern">+ %s</string>
