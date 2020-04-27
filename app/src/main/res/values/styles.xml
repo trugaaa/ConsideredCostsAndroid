@@ -7,4 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="DataPickerStyle" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/colorBlue</item>
+        <item name="android:textColorPrimaryInverse">@color/colorDarkText</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
 </resources>

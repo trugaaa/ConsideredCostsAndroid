@@ -1,5 +1,6 @@
 package app.mobile.consideredcosts.main.navigation.transaction
 
+import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -18,11 +19,15 @@ import app.mobile.consideredcosts.http.models.TransactionsType
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_transaction.*
 import kotlinx.android.synthetic.main.activity_transaction.transactionAddButton
+import kotlinx.android.synthetic.main.activity_transaction.transactionCurrency
+import kotlinx.android.synthetic.main.activity_transaction.transactionMoney
+import kotlinx.android.synthetic.main.activity_transaction.transactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.NullPointerException
+import java.util.*
 
 class TransactionActivity : AppCompatActivity() {
     private val typeList = mutableListOf<String>()
@@ -57,6 +62,26 @@ class TransactionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transaction)
         updateComboFields()
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        transactionAddDate.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                this,R.style.DataPickerStyle,
+                DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                    transactionAddDate.text = applicationContext.getString(R.string.datePattern,
+                        dayOfMonth.toString(),
+                        month.toString(),
+                        year.toString())
+                },
+                year,
+                month,
+                day
+            )
+            datePickerDialog.show()
+        }
 
         transactionRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -91,6 +116,7 @@ class TransactionActivity : AppCompatActivity() {
 
             val transToSend: TransactionsElement? = when {
                 transactionRadioIncome.isChecked -> {
+                    isSentToItemsAdd = false
                     TransactionsElement(
                         null,
                         transactionMoney.text.toString().toDouble(),
@@ -120,7 +146,6 @@ class TransactionActivity : AppCompatActivity() {
                     } else {
                         null
                     }
-
                 }
                 else -> throw Exception()
             }
@@ -135,19 +160,16 @@ class TransactionActivity : AppCompatActivity() {
                             when (response.code()) {
                                 200 -> {
                                     withContext(Dispatchers.Main) {
-                                        setResult(0)
                                         super.onBackPressed()
                                     }
                                 }
-                                504,503,502,501,500->
-                                {
+                                504, 503, 502, 501, 500 -> {
                                     invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                                 }
                                 else -> {
                                     invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                                 }
                             }
-
                         }
                     }
                 }

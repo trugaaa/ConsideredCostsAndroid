@@ -86,11 +86,12 @@ class TransactionsFragment : Fragment() {
                                 gettingList()
                             }
                         }
-                        400 -> {
-                            //todo Сделать обработку
+                        504,503,502,501,500->
+                        {
+                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
-                            //todo Сделать обработку
+                            invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                         }
                     }
 
