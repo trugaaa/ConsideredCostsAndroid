@@ -17,12 +17,12 @@
         <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name=".sign.SignActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".launch.LaunchActivity"
             android:screenOrientation="portrait"

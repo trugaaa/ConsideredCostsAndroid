@@ -5,15 +5,19 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
-import app.mobile.consideredcosts.data.DataHolder
+import app.mobile.consideredcosts.data.DataHolder.itemListMock
 import app.mobile.consideredcosts.data.DataHolder.currencyList
+import app.mobile.consideredcosts.data.DataHolder.isSentToItemsAdd
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.IncomeWorkType
 import app.mobile.consideredcosts.http.models.TransactionsElement
 import app.mobile.consideredcosts.http.models.TransactionsType
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_transaction.*
+import kotlinx.android.synthetic.main.activity_transaction.transactionAddButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,7 +48,9 @@ class TransactionActivity : AppCompatActivity() {
         ArrayAdapter(this, R.layout.item_spinner, workTypeList)
     }
     private val itemTypeAdapter by lazy {
-        ArrayAdapter(this, R.layout.item_spinner, DataHolder.itemListMock)
+        ArrayAdapter(this, R.layout.item_spinner, itemListMock.map {
+            it.Name
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,18 +61,35 @@ class TransactionActivity : AppCompatActivity() {
         transactionRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.transactionRadioIncome -> {
+                    layoutTransaction.visibility = View.VISIBLE
+                    itemsEmptyOnOutgoAdd.visibility = View.GONE
                     incomeWorkType.visibility = View.VISIBLE
                     outgoItemType.visibility = View.GONE
+                    transactionAddButton.text = resources.getString(R.string.add)
                 }
                 R.id.transactionRadioOutgo -> {
-                    incomeWorkType.visibility = View.GONE
-                    outgoItemType.visibility = View.VISIBLE
+                    if (itemListMock.isNullOrEmpty()) {
+                        transactionAddButton.text = resources.getString(R.string.addItems)
+                        layoutTransaction.visibility = View.GONE
+                        itemsEmptyOnOutgoAdd.visibility = View.VISIBLE
+                    } else {
+                        transactionAddButton.text = resources.getString(R.string.add)
+                        layoutTransaction.visibility = View.VISIBLE
+                        itemsEmptyOnOutgoAdd.visibility = View.GONE
+                        incomeWorkType.visibility = View.GONE
+                        outgoItemType.visibility = View.VISIBLE
+                    }
                 }
             }
         }
 
         transactionAddButton.setOnClickListener {
-            val transToSend: TransactionsElement = when {
+            if (itemListMock.isNullOrEmpty()) {
+                isSentToItemsAdd = true
+                super.onBackPressed()
+            }
+
+            val transToSend: TransactionsElement? = when {
                 transactionRadioIncome.isChecked -> {
                     TransactionsElement(
                         null,
@@ -82,53 +105,58 @@ class TransactionActivity : AppCompatActivity() {
                 }
 
                 transactionRadioOutgo.isChecked -> {
-                    TransactionsElement(
-                        null,
-                        transactionMoney.text.toString().toDouble(),
-                        transactionType(transactionType),
-                        transactionAddDate.text.toString(),
-                        currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
+                    if (!isSentToItemsAdd) {
+                        TransactionsElement(
+                            null,
+                            transactionMoney.text.toString().toDouble(),
+                            transactionType(transactionType),
+                            transactionAddDate.text.toString(),
+                            currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
 
-                        transactionDescription.text.toString(),
-                        null,
-                        1
-                    )
+                            transactionDescription.text.toString(),
+                            null,
+                            1
+                        )
+                    } else {
+                        null
+                    }
+
                 }
                 else -> throw Exception()
             }
-
-            GlobalScope.launch {
-                withContext(Dispatchers.IO) {
-                    launch {
-                        val response = RetrofitClient.postTransaction(sharedPreferences.getToken()!!,
-                            transToSend
-                        )
-                        when (response.code()) {
-                            200 -> {
-                                withContext(Dispatchers.Main){
-                                    super.onBackPressed()
+            if (!isSentToItemsAdd) {
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO) {
+                        launch {
+                            val response = RetrofitClient.postTransaction(
+                                sharedPreferences.getToken()!!,
+                                transToSend!!
+                            )
+                            when (response.code()) {
+                                200 -> {
+                                    withContext(Dispatchers.Main) {
+                                        setResult(0)
+                                        super.onBackPressed()
+                                    }
+                                }
+                                504,503,502,501,500->
+                                {
+                                    invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                                }
+                                else -> {
+                                    invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                                 }
                             }
-                            400 -> {
-                                //todo Сделать обработку
-                            }
-                            else -> {
-                                //todo Сделать обработку
-                            }
-                        }
 
+                        }
                     }
                 }
             }
-
-
-
-
-            super.onBackPressed()
         }
 
         transactionOpenBack.setOnClickListener()
         {
+            setResult(0)
             super.onBackPressed()
         }
     }
@@ -159,6 +187,28 @@ class TransactionActivity : AppCompatActivity() {
             else -> throw NullPointerException()
         }
 
+    }
+
+    private fun invokeGeneralErrorActivity(errorText: String) {
+        val snackBar = Snackbar.make(
+            transactionActivityLayout,
+            errorText,
+            Snackbar.LENGTH_LONG
+        )
+
+        snackBar.view.setBackgroundColor(
+            ContextCompat.getColor(
+                applicationContext,
+                R.color.colorError
+            )
+        )
+        snackBar.setActionTextColor(
+            ContextCompat.getColor(
+                applicationContext,
+                R.color.colorPrimaryText
+            )
+        )
+        snackBar.show()
     }
 
     private fun updateComboFields() {

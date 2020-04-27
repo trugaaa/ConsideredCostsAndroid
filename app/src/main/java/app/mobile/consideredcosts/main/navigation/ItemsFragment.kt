@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.mobile.consideredcosts.R
@@ -12,7 +13,8 @@ import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.ItemElement
-import kotlinx.android.synthetic.main.fragment_items_.*
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_items.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,7 +36,7 @@ class ItemsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_items_, container, false)
+        return inflater.inflate(R.layout.fragment_items, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,11 +83,12 @@ class ItemsFragment : Fragment() {
                                 updateState(DataHolder.itemListMock)
                             }
                         }
-                        400 -> {
-                            //todo Сделать обработку
+                        504,503,502,501,500->
+                        {
+                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
-                            //todo Сделать обработку
+                            invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                         }
                     }
 
@@ -110,14 +113,14 @@ class ItemsFragment : Fragment() {
                                     gettingList()
                                 }
                             }
-                            400 -> {
-                                //todo Сделать обработку
+                            504,503,502,501,500->
+                            {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
-                                //todo Сделать обработку
+                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                             }
                         }
-
                     }
                 }
             }
@@ -141,16 +144,29 @@ class ItemsFragment : Fragment() {
                                 gettingList()
                             }
                         }
-                        400 -> {
-                            //todo Сделать обработку
+                        504,503,502,501,500->
+                        {
+                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
-                            //todo Сделать обработку
+                            invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                         }
                     }
 
                 }
             }
         }
+    }
+
+    private fun invokeGeneralErrorActivity(errorText: String) {
+        val snackBar = Snackbar.make(
+            itemsFragmentLayout,
+            errorText,
+            Snackbar.LENGTH_LONG
+        )
+
+        snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!,R.color.colorError))
+        snackBar.setActionTextColor(ContextCompat.getColor(context!!,R.color.colorPrimaryText))
+        snackBar.show()
     }
 }

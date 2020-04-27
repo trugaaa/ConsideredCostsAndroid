@@ -3,7 +3,7 @@
     <color name="colorPrimary">#eeeeee</color>
     <color name="colorPrimaryDark">#393e46</color>
     <color name="colorAccent">@color/colorPrimaryText</color>
-    <color name="colorError">#b83b5e</color>
+    <color name="colorError">#d21404</color>
     <color name="colorSuccess">#228B22</color>
     <color name="colorPrimaryText">#ffffff</color>
     <color name="colorDarkText">#222831</color>

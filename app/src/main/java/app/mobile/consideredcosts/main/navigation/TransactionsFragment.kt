@@ -1,12 +1,12 @@
 package app.mobile.consideredcosts.main.navigation
 
-
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.adapters.TransactionAdapter
@@ -15,6 +15,7 @@ import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.TransactionsElement
 import app.mobile.consideredcosts.main.navigation.transaction.TransactionActivity
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -49,8 +50,14 @@ class TransactionsFragment : Fragment() {
         updateLayout(DataHolder.mutableLisTransactions)
 
         transactionAddButton.setOnClickListener() {
-            startActivity(Intent(context, TransactionActivity::class.java))
+            startActivityForResult(Intent(context, TransactionActivity::class.java), 1)
         }
+    }
+
+    override fun onResume() {
+        gettingList()
+        super.onResume()
+
     }
 
     private fun updateLayout(list: MutableList<TransactionsElement>) {
@@ -64,18 +71,13 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        gettingList()
-        super.onResume()
-
-    }
-
     private fun deletingTransaction(list: MutableList<TransactionsElement>, position: Int) {
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
                 launch {
                     val response =
-                        RetrofitClient.deleteTransaction(sharedPreferences.getToken()!!,
+                        RetrofitClient.deleteTransaction(
+                            sharedPreferences.getToken()!!,
                             list[position].Id!!
                         )
                     when (response.code()) {
@@ -115,16 +117,29 @@ class TransactionsFragment : Fragment() {
                                 updateLayout(DataHolder.mutableLisTransactions)
                             }
                         }
-                        400 -> {
-                            //todo Сделать обработку
+                        504,503,502,501,500->
+                        {
+                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
-                            //todo Сделать обработку
+                            invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                         }
                     }
 
                 }
             }
         }
+    }
+
+    private fun invokeGeneralErrorActivity(errorText: String) {
+        val snackBar = Snackbar.make(
+            transactionFragmentLayout,
+            errorText,
+            Snackbar.LENGTH_LONG
+        )
+
+        snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!,R.color.colorError))
+        snackBar.setActionTextColor(ContextCompat.getColor(context!!,R.color.colorPrimaryText))
+        snackBar.show()
     }
 }

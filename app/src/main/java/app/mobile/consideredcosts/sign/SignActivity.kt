@@ -1,6 +1,7 @@
 package app.mobile.consideredcosts.sign
 
 import android.content.Intent
+import android.graphics.Point
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -12,6 +13,7 @@ import app.mobile.consideredcosts.basic.FieldValidator
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.main.MainActivity
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_sign.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,13 +28,22 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_sign)
+
+
+        val size = Point()
+        windowManager.defaultDisplay.getSize(size)
+        signScreenLayout.viewTreeObserver.addOnGlobalLayoutListener {
+            if (size.y - signScreenLayout.height > 100) {
+                imageSignLogo.visibility = View.GONE
+            } else {
+                imageSignLogo.visibility = View.VISIBLE
+            }
+        }
+
         screenState(currentScreenState)
 
-
         emailField.setOnTouchListener { _, _ ->
-            imageSignLogo.visibility = View.GONE
             setThemeDefault(emailLabel, emailField)
             false
         }
@@ -42,45 +53,46 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
 
         usernameField.setOnTouchListener { _, _ ->
             setThemeDefault(usernameLabel, usernameField)
-            imageSignLogo.visibility = View.GONE
             false
         }
         usernameField.setOnFocusChangeListener { _, hasFocus ->
             when (currentScreenState) {
-                SignOption.LOGIN ->{
-                    if (!hasFocus) validateNotEmpty(usernameLabel,usernameField)
+                SignOption.LOGIN -> {
+                    if (!hasFocus) validateNotEmpty(usernameLabel, usernameField)
                 }
-                SignOption.REGISTRATION->{
+                SignOption.REGISTRATION -> {
                     if (!hasFocus) validateUsername(usernameField.text.toString())
                 }
             }
         }
 
         passwordField.setOnTouchListener { _, _ ->
-            imageSignLogo.visibility = View.GONE
             setThemeDefault(passwordLabel, passwordField)
             false
         }
         passwordField.setOnFocusChangeListener { _, hasFocus ->
             when (currentScreenState) {
-                SignOption.LOGIN ->{
-                    if (!hasFocus) validateNotEmpty(passwordLabel,passwordField)
+                SignOption.LOGIN -> {
+                    if (!hasFocus) validateNotEmpty(passwordLabel, passwordField)
                 }
-                SignOption.REGISTRATION->{
+                SignOption.REGISTRATION -> {
                     if (!hasFocus) validatePassword(passwordField.text.toString())
                 }
             }
         }
 
         confPassField.setOnTouchListener { _, _ ->
-            imageSignLogo.visibility = View.GONE
             setThemeDefault(confPassLabel, confPassField)
             false
         }
         confPassField.setOnFocusChangeListener { _, hasFocus ->
-                    if (!hasFocus) validateConfPass(passwordField.text.toString(),confPassField.text.toString())
+            if (!hasFocus) validateConfPass(
+                passwordField.text.toString(),
+                confPassField.text.toString()
+            )
         }
     }
+
 
     private fun screenState(state: SignOption) {
         imageSignLogo.visibility = View.VISIBLE
@@ -168,14 +180,14 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                             200 -> {
                                 login(username, password)
                             }
-                            400 -> {
-                                //todo Сделать обработку
+                            504,503,502,501,500->
+                            {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
-                                //todo Сделать обработку
+                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                             }
                         }
-
                     }
                 }
             }
@@ -195,19 +207,18 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                                 sharedPreferencesManager.setToken(response.body()!!.data!!.access_token)
                                 invokeMainActivity()
                             }
-                            401 -> {
-                                //todo Сделать обработку
+                            504,503,502,501,500->
+                            {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
-                                //todo Сделать обработку
+                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
                             }
                         }
 
                     }
                 }
             }
-        } else {
-
         }
     }
 
@@ -216,111 +227,118 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         finish()
     }
 
-    override fun invokeGeneralErrorActivity(errorText: MutableList<String>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override  fun invokeGeneralErrorActivity(errorText: String) {
+            val snackBar = Snackbar.make(
+                signScreenLayout,
+                errorText,
+                Snackbar.LENGTH_LONG
+            )
+
+            snackBar.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.colorError))
+            snackBar.setActionTextColor(ContextCompat.getColor(applicationContext,R.color.colorPrimaryText))
+            snackBar.show()
+}
+
+private fun validateRegistration(
+    username: String,
+    email: String,
+    password: String,
+    confPass: String
+): Boolean {
+    var allFieldsValid = true
+    allFieldsValid = validateUsername(username)
+    allFieldsValid = validateEmail(email)
+    allFieldsValid = validatePassword(password)
+    allFieldsValid = validateConfPass(password, confPass)
+
+    return allFieldsValid
+}
+
+private fun validateLogin(
+): Boolean {
+    var allFieldsValid = true
+    allFieldsValid = validateNotEmpty(usernameLabel, usernameField)
+    allFieldsValid = validateNotEmpty(passwordLabel, passwordField)
+
+    return allFieldsValid
+}
+
+private fun validateNotEmpty(textView: TextView, editText: EditText): Boolean {
+    if (editText.text.toString() == "") {
+        editText.error = resources.getString(R.string.errorFieldIsRequired)
+        setThemeError(textView, editText)
+        return false
     }
+    return true
+}
 
-
-    private fun validateRegistration(
-        username: String,
-        email: String,
-        password: String,
-        confPass: String
-    ): Boolean {
-        var allFieldsValid = true
-        allFieldsValid = validateUsername(username)
-        allFieldsValid = validateEmail(email)
-        allFieldsValid = validatePassword(password)
-        allFieldsValid = validateConfPass(password, confPass)
-
-        return allFieldsValid
+private fun validateUsername(username: String): Boolean {
+    if (username == "") {
+        usernameField.error = resources.getString(R.string.errorFieldIsRequired)
+        setThemeError(usernameLabel, usernameField)
+        return false
+    } else if (!fieldValidator.isUsernameValid(username)) {
+        usernameField.error = resources.getString(R.string.errorUsernameField)
+        setThemeError(usernameLabel, usernameField)
+        return false
     }
+    return true
+}
 
-    private fun validateLogin(
-    ): Boolean {
-        var allFieldsValid = true
-        allFieldsValid = validateNotEmpty(usernameLabel, usernameField)
-        allFieldsValid = validateNotEmpty(passwordLabel, passwordField)
-
-        return allFieldsValid
+private fun validateEmail(email: String): Boolean {
+    if (email == "") {
+        emailField.error = resources.getString(R.string.errorFieldIsRequired)
+        setThemeError(emailLabel, emailField)
+        return false
+    } else if (!fieldValidator.isEmailValid(email)) {
+        emailField.error = resources.getString(R.string.errorEmailField)
+        setThemeError(emailLabel, emailField)
+        return false
     }
+    return true
+}
 
-    private fun validateNotEmpty(textView: TextView, editText: EditText): Boolean {
-        if (editText.text.toString() == "") {
-            editText.error = resources.getString(R.string.errorFieldIsRequired)
-            setThemeError(textView, editText)
-            return false
-        }
-        return true
+private fun validatePassword(password: String): Boolean {
+    if (password == "") {
+        setThemeError(passwordLabel, passwordField)
+        passwordField.error = resources.getString(R.string.errorFieldIsRequired)
+        return false
+    } else if (!fieldValidator.isPasswordValid(password)) {
+        passwordField.error = resources.getString(R.string.errorPasswordField)
+        setThemeError(passwordLabel, passwordField)
+        return false
     }
+    return true
+}
 
-    private fun validateUsername(username: String): Boolean {
-        if (username == "") {
-            usernameField.error = resources.getString(R.string.errorFieldIsRequired)
-            setThemeError(usernameLabel, usernameField)
-            return false
-        } else if (!fieldValidator.isUsernameValid(username)) {
-            usernameField.error = resources.getString(R.string.errorUsernameField)
-            setThemeError(usernameLabel, usernameField)
-            return false
-        }
-        return true
+private fun validateConfPass(password: String, confPass: String): Boolean {
+
+    if (confPass == "") {
+        confPassField.error = resources.getString(R.string.errorFieldIsRequired)
+        setThemeError(confPassLabel, confPassField)
+        return false
     }
-
-    private fun validateEmail(email: String): Boolean {
-        if (email == "") {
-            emailField.error = resources.getString(R.string.errorFieldIsRequired)
-            setThemeError(emailLabel, emailField)
-            return false
-        } else if (!fieldValidator.isEmailValid(email)) {
-            emailField.error = resources.getString(R.string.errorEmailField)
-            setThemeError(emailLabel, emailField)
-            return false
-        }
-        return true
+    if (password != confPass) {
+        confPassField.error = resources.getString(R.string.errorPassesDoNotMatch)
+        setThemeError(passwordLabel, passwordField)
+        setThemeError(confPassLabel, confPassField)
+        return false
     }
+    setThemeDefault(passwordLabel, passwordField)
+    return true
+}
 
-    private fun validatePassword(password: String): Boolean {
-        if (password == "") {
-            setThemeError(passwordLabel, passwordField)
-            passwordField.error = resources.getString(R.string.errorFieldIsRequired)
-            return false
-        } else if (!fieldValidator.isPasswordValid(password)) {
-            passwordField.error = resources.getString(R.string.errorPasswordField)
-            setThemeError(passwordLabel, passwordField)
-            return false
-        }
-        return true
-    }
+private fun setThemeDefault(textView: TextView, editText: EditText) {
+    textView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
+    editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts)
+    editText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
+}
 
-    private fun validateConfPass(password: String, confPass: String): Boolean {
-
-        if (confPass == "") {
-            confPassField.error = resources.getString(R.string.errorFieldIsRequired)
-            setThemeError(confPassLabel, confPassField)
-            return false
-        }
-        if (password != confPass) {
-            confPassField.error = resources.getString(R.string.errorPassesDoNotMatch)
-            setThemeError(passwordLabel, passwordField)
-            setThemeError(confPassLabel, confPassField)
-            return false
-        }
-        setThemeDefault(passwordLabel,passwordField)
-        return true
-    }
-
-    private fun setThemeDefault(textView: TextView, editText: EditText) {
-        textView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
-        editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts)
-        editText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
-    }
-
-    private fun setThemeError(textView: TextView, editText: EditText) {
-        textView.setTextColor(ContextCompat.getColor(this, R.color.colorError))
-        editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts_error)
-        editText.setTextColor(ContextCompat.getColor(this, R.color.colorError))
-    }
+private fun setThemeError(textView: TextView, editText: EditText) {
+    textView.setTextColor(ContextCompat.getColor(this, R.color.colorError))
+    editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts_error)
+    editText.setTextColor(ContextCompat.getColor(this, R.color.colorError))
+}
 }
 
 
