@@ -8,13 +8,13 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
-import app.mobile.consideredcosts.data.DataHolder.itemListMock
+import app.mobile.consideredcosts.data.DataHolder.itemsList
 import app.mobile.consideredcosts.data.DataHolder.currencyList
 import app.mobile.consideredcosts.data.DataHolder.isSentToItemsAdd
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.IncomeWorkType
-import app.mobile.consideredcosts.http.models.TransactionsElement
+import app.mobile.consideredcosts.http.models.TransactionElement
 import app.mobile.consideredcosts.http.models.TransactionsType
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_transaction.*
@@ -53,7 +53,7 @@ class TransactionActivity : AppCompatActivity() {
         ArrayAdapter(this, R.layout.item_spinner, workTypeList)
     }
     private val itemTypeAdapter by lazy {
-        ArrayAdapter(this, R.layout.item_spinner, itemListMock.map {
+        ArrayAdapter(this, R.layout.item_spinner, itemsList.map {
             it.Name
         })
     }
@@ -93,7 +93,7 @@ class TransactionActivity : AppCompatActivity() {
                     transactionAddButton.text = resources.getString(R.string.add)
                 }
                 R.id.transactionRadioOutgo -> {
-                    if (itemListMock.isNullOrEmpty()) {
+                    if (itemsList.isNullOrEmpty()) {
                         transactionAddButton.text = resources.getString(R.string.addItems)
                         layoutTransaction.visibility = View.GONE
                         itemsEmptyOnOutgoAdd.visibility = View.VISIBLE
@@ -109,15 +109,15 @@ class TransactionActivity : AppCompatActivity() {
         }
 
         transactionAddButton.setOnClickListener {
-            if (itemListMock.isNullOrEmpty()) {
+            if (itemsList.isNullOrEmpty()) {
                 isSentToItemsAdd = true
                 super.onBackPressed()
             }
 
-            val transToSend: TransactionsElement? = when {
+            val transToSend: TransactionElement? = when {
                 transactionRadioIncome.isChecked -> {
                     isSentToItemsAdd = false
-                    TransactionsElement(
+                    TransactionElement(
                         null,
                         transactionMoney.text.toString().toDouble(),
                         transactionType(transactionType),
@@ -132,7 +132,7 @@ class TransactionActivity : AppCompatActivity() {
 
                 transactionRadioOutgo.isChecked -> {
                     if (!isSentToItemsAdd) {
-                        TransactionsElement(
+                        TransactionElement(
                             null,
                             transactionMoney.text.toString().toDouble(),
                             transactionType(transactionType),

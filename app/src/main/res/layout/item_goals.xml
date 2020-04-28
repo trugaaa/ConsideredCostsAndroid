@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_margin="4dp"
+    android:background="@drawable/transaction_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/goalView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/goal"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/goalValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/goalValuePattern"
+        tools:text="111 USD"
+        app:layout_constraintTop_toTopOf="@id/goalView"
+        app:layout_constraintStart_toEndOf="@id/goalView"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        />
+
+    <ImageView
+        android:id="@+id/transactionDelete"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_x_cross"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/startDateView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/goalView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/from"
+        />
+
+    <TextView
+        android:id="@+id/startDateValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        tools:text="11-11-2011"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="@id/startDateView"
+        app:layout_constraintStart_toEndOf="@id/startDateView"
+        android:text="@string/from"
+        />
+
+    <TextView
+    android:id="@+id/endDateView"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:textColor="@color/colorBlue"
+        android:gravity="end"
+        android:layout_marginEnd="10dp"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    android:text="@string/to"
+    app:layout_constraintTop_toTopOf="@id/startDateView"
+    app:layout_constraintStart_toEndOf="@id/startDateValue"
+        app:layout_constraintEnd_toStartOf="@id/endDateValue"
+    />
+
+    <TextView
+        android:id="@+id/endDateValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+       tools:text="11-11-2009"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="@id/startDateView"
+        app:layout_constraintStart_toEndOf="@id/endDateView"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+    android:id="@+id/statusView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="@color/colorBlue"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    android:text="@string/status"
+    android:layout_marginEnd="10dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    app:layout_constraintTop_toBottomOf="@id/startDateValue"
+    app:layout_constraintStart_toStartOf="parent"
+    />
+
+    <TextView
+        android:id="@+id/statusValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlue"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Active"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="@id/statusView"
+        app:layout_constraintStart_toEndOf="@id/statusView"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

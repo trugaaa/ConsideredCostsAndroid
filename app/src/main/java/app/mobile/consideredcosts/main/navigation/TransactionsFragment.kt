@@ -13,7 +13,7 @@ import app.mobile.consideredcosts.adapters.TransactionAdapter
 import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
-import app.mobile.consideredcosts.http.models.TransactionsElement
+import app.mobile.consideredcosts.http.models.TransactionElement
 import app.mobile.consideredcosts.main.navigation.transaction.TransactionActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_transactions.*
@@ -47,7 +47,7 @@ class TransactionsFragment : Fragment() {
 
         transactionsViewList.layoutManager = LinearLayoutManager(context!!)
         transactionsViewList.adapter = adapter
-        updateLayout(DataHolder.mutableLisTransactions)
+        updateLayout(DataHolder.transactionsList)
 
         transactionAddButton.setOnClickListener() {
             startActivityForResult(Intent(context, TransactionActivity::class.java), 1)
@@ -60,7 +60,7 @@ class TransactionsFragment : Fragment() {
 
     }
 
-    private fun updateLayout(list: MutableList<TransactionsElement>) {
+    private fun updateLayout(list: MutableList<TransactionElement>) {
         if (list.isEmpty()) {
             transactionsEmptyListLayout.visibility = View.VISIBLE
             transactionsViewList.visibility = View.GONE
@@ -71,7 +71,7 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    private fun deletingTransaction(list: MutableList<TransactionsElement>, position: Int) {
+    private fun deletingTransaction(list: MutableList<TransactionElement>, position: Int) {
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
                 launch {
@@ -110,12 +110,12 @@ class TransactionsFragment : Fragment() {
                         200 -> {
                             withContext(Dispatchers.Main) {
                                 if (response.body()!!.data != null) {
-                                    DataHolder.mutableLisTransactions =
+                                    DataHolder.transactionsList =
                                         response.body()!!.data!!.list
                                 } else {
-                                    DataHolder.mutableLisTransactions.clear()
+                                    DataHolder.transactionsList.clear()
                                 }
-                                updateLayout(DataHolder.mutableLisTransactions)
+                                updateLayout(DataHolder.transactionsList)
                             }
                         }
                         504,503,502,501,500->

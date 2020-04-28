@@ -75,6 +75,13 @@
     <string name="plsAddItems">Please, add some items to start using all application`s functionality</string>
     <string name="addItem">Enter item name</string>
 
+    <!-- Goals -->
+    <string name="goal">Goal:</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="status">Status:</string>
+    <string name="goalValuePattern">%1$s %2$s</string>
+
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
     <string name="errorEmailField">Email is invalid.\nPls check your email</string>
