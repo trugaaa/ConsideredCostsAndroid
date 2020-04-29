@@ -26,7 +26,7 @@ class GoalsFragment : Fragment() {
 
     private val adapter by lazy {
         GoalAdapter(mutableListOf()) { position, list ->
-            //deletingTransaction(list, position)
+            deletingGoal(position,list )
         }
     }
 
@@ -75,5 +75,10 @@ class GoalsFragment : Fragment() {
         snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!,R.color.colorError))
         snackBar.setActionTextColor(ContextCompat.getColor(context!!,R.color.colorPrimaryText))
         snackBar.show()
+    }
+
+    private fun deletingGoal(list: MutableList<GoalElement>, position: Int)
+    {
+        list.removeAt(position)
     }
 }

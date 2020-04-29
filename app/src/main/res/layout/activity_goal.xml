@@ -6,4 +6,110 @@
     android:layout_height="match_parent"
     tools:context=".main.navigation.goal.GoalActivity">
 
+    <ImageView
+        android:id="@+id/goalOpenBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/goalAddTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/addGoal"
+        android:textColor="@color/colorBlue"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toBottomOf="@id/goalOpenBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/goalOpenBack"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/goalMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/money"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/transaction_combo_background"
+        android:hint="@string/money"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:padding="12dp"
+        android:textColor="@color/colorBlue"
+        app:layout_constraintStart_toStartOf="@id/goalStartDate"
+        app:layout_constraintEnd_toStartOf="@id/goalCurrency"
+        app:layout_constraintTop_toBottomOf="@id/goalOpenBack"
+        android:textColorHint="@color/colorBlue"
+        android:textSize="20sp"
+        tools:text="1000" />
+
+    <Spinner
+        android:id="@+id/goalCurrency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="42dp"
+        android:background="@drawable/transaction_combo_background"
+        android:textColor="@color/colorBlue"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/goalMoney"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/goalMoney"
+        app:layout_constraintTop_toTopOf="@id/goalMoney" />
+
+    <TextView
+    android:id="@+id/goalStartDate"
+    android:layout_width="0dp"
+    android:layout_height="50dp"
+    android:layout_marginStart="42dp"
+    android:layout_marginTop="10dp"
+    android:textColorHint="@color/colorBlue"
+    android:textColor="@color/colorBlue"
+    android:textSize="20sp"
+    android:layout_marginEnd="42dp"
+    android:autofillHints="@string/enterDate"
+    android:background="@drawable/transaction_combo_background"
+    android:hint="@string/enterStartDate"
+    android:padding="6dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/goalMoney" />
+
+    <TextView
+        android:id="@+id/goalEndDate"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="10dp"
+        android:textColorHint="@color/colorBlue"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        android:layout_marginEnd="42dp"
+        android:autofillHints="@string/enterDate"
+        android:background="@drawable/transaction_combo_background"
+        android:hint="@string/enterEndDate"
+        android:padding="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/goalStartDate" />
+
+    <Button
+        android:id="@+id/goalAddButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="42dp"
+        android:background="@color/colorBlue"
+        android:textColor="@color/colorPrimaryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

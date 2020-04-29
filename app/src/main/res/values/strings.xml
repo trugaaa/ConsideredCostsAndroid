@@ -83,6 +83,9 @@
     <string name="goalValuePattern">%1$s %2$s</string>
     <string name="noGoalsAvailable">No goals are set</string>
     <string name="plsAddGoals">Please, add some goals to start using all application`s functionality</string>
+    <string name="addGoal">Add Goal</string>
+    <string name="enterStartDate">Enter Goal start date</string>
+    <string name="enterEndDate">Enter Goal end date</string>
 
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>

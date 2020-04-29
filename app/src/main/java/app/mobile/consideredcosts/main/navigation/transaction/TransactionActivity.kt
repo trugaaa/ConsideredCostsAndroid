@@ -178,7 +178,6 @@ class TransactionActivity : AppCompatActivity() {
 
         transactionOpenBack.setOnClickListener()
         {
-            setResult(0)
             super.onBackPressed()
         }
     }

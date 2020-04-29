@@ -14,7 +14,7 @@ import java.lang.Exception
 
 class GoalAdapter(
     private var goalsList: MutableList<GoalElement>,
-    val click: (Int, MutableList<GoalElement>) -> Unit
+    val click: (MutableList<GoalElement>, Int) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var context: Context
@@ -30,8 +30,6 @@ class GoalAdapter(
             TYPE_GOALS -> GoalViewHolder(goals)
             else -> throw Exception()
         }
-
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -43,24 +41,31 @@ class GoalAdapter(
                 holder.itemView.startDateValue.text = DateStart
                 holder.itemView.endDateValue.text = DateFinish
                 holder.itemView.statusValue.text = Status
-                if (Status == "Success") holder.itemView.statusValue.setTextColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.colorSuccess
+                when (Status) {
+                    "Success" -> holder.itemView.statusValue.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.colorSuccess
+                        )
                     )
-                )
-                else if (Status == "Active") holder.itemView.statusValue.setTextColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.colorProgress
+                    "Active" -> holder.itemView.statusValue.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.colorProgress
+                        )
                     )
-                )
-                else if (Status == "Failed") holder.itemView.statusValue.setTextColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.colorError
+                    "Failed" -> holder.itemView.statusValue.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.colorError
+                        )
                     )
-                )
+                }
+            }
+
+            holder.itemView.goalDelete.setOnClickListener{
+                click(goalsList,position)
+                notifyDataSetChanged()
             }
         }
     }
