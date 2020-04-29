@@ -26,7 +26,7 @@ interface Api {
             Response<TransactionsRequestResponse>
 
     @POST("transactions")
-    suspend fun postTransactions(@Header("Authorization") token: String, @Body transactionParameters: TransactionsElement):
+    suspend fun postTransactions(@Header("Authorization") token: String, @Body transactionParameters: TransactionElement):
             Response<TransactionsRequestResponse>
 
     @GET("items")
@@ -34,10 +34,22 @@ interface Api {
             Response<ItemsRequestResponse>
 
     @POST("items")
-    suspend fun postItems(@Header("Authorization") token: String, @Body item:ItemElement):
+    suspend fun postItems(@Header("Authorization") token: String, @Body item: ItemElement):
             Response<ItemsRequestResponse>
 
     @DELETE("items")
     suspend fun deleteItem(@Header("Authorization") token: String, @Header("Id") id: Int):
             Response<ItemsRequestResponse>
+
+    @GET("goals")
+    suspend fun getGoals(@Header("Authorization") token: String):
+            Response<GoalsRequestResponse>
+
+    @POST("goals")
+    suspend fun postGoal(@Header("Authorization") token: String, @Body goal: GoalElement):
+            Response<GoalsRequestResponse>
+
+    @DELETE("goals")
+    suspend fun deleteGoal(@Header("Authorization") token: String, @Header("Id") id: Int):
+            Response<GoalsRequestResponse>
 }

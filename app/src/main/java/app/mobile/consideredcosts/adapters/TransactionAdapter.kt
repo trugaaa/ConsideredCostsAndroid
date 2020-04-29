@@ -8,16 +8,16 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.data.DataHolder
-import app.mobile.consideredcosts.http.models.TransactionsElement
+import app.mobile.consideredcosts.http.models.TransactionElement
 import kotlinx.android.synthetic.main.item_transactions.view.*
 import java.lang.Exception
 
-class TransactionAdapter(private var transactionList: MutableList<TransactionsElement>, val click: (Int, MutableList<TransactionsElement>) -> Unit) :
+class TransactionAdapter(private var transactionList: MutableList<TransactionElement>, val click: (Int, MutableList<TransactionElement>) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var cont: Context
 
 
-    fun updateTransactions(list: MutableList<TransactionsElement>) {
+    fun updateTransactions(list: MutableList<TransactionElement>) {
         transactionList = list
         notifyDataSetChanged()
     }

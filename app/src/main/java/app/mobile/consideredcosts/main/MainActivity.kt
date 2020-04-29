@@ -13,7 +13,6 @@ import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.main.navigation.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_sign.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -108,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                         val response = RetrofitClient.getItems(sharedPreferences.getToken()!!)
                         when (response.code()) {
                             200 -> {
-                                DataHolder.itemListMock = response.body()!!.data!!.list!!
+                                DataHolder.itemsList = response.body()!!.data!!.list!!
                             }
                             504,503,502,501,500->
                             {

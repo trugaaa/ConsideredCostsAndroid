@@ -43,7 +43,7 @@ class ItemsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         itemsRecyclerView.layoutManager = LinearLayoutManager(context!!)
         itemsRecyclerView.adapter = itemsAdapter
-        updateState(DataHolder.itemListMock)
+        updateState(DataHolder.itemsList)
     }
 
     private fun updateState(list: MutableList<ItemElement>) {
@@ -75,12 +75,12 @@ class ItemsFragment : Fragment() {
                         200 -> {
                             withContext(Dispatchers.Main) {
                                 if (response.body()!!.data != null) {
-                                    DataHolder.itemListMock =
+                                    DataHolder.itemsList =
                                         response.body()!!.data!!.list!!
                                 } else {
-                                    DataHolder.itemListMock.clear()
+                                    DataHolder.itemsList.clear()
                                 }
-                                updateState(DataHolder.itemListMock)
+                                updateState(DataHolder.itemsList)
                             }
                         }
                         504,503,502,501,500->
