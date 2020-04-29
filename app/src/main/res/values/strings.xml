@@ -50,7 +50,7 @@
     <string name="money">Enter money amount</string>
     <string name="currency">Select currency</string>
     <string name="addDescription">Add description if necessary</string>
-    <string name="noTransactionsAvailable">No transaction are available</string>
+    <string name="noTransactionsAvailable">No transaction are set</string>
     <string name="plsAddTransactions">Please, add some transactions to start using all application`s functionality</string>
     <string name="datePattern">%1$s-%2$s-%3$s</string>
 
@@ -70,7 +70,7 @@
     <string name="amountOfMoney">Money spent: </string>
     <string name="amountOfMoneyPattern">%1$s %2$s</string>
     <string name="percentPattern">%1$s %2$s</string>
-    <string name="noItemsAvailable">No items are available</string>
+    <string name="noItemsAvailable">No items are set</string>
     <string name="addItems">Add items</string>
     <string name="plsAddItems">Please, add some items to start using all application`s functionality</string>
     <string name="addItem">Enter item name</string>
@@ -81,6 +81,8 @@
     <string name="to">To:</string>
     <string name="status">Status:</string>
     <string name="goalValuePattern">%1$s %2$s</string>
+    <string name="noGoalsAvailable">No goals are set</string>
+    <string name="plsAddGoals">Please, add some goals to start using all application`s functionality</string>
 
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>

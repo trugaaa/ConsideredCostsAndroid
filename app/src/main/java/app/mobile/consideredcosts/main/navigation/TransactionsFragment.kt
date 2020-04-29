@@ -28,36 +28,33 @@ class TransactionsFragment : Fragment() {
     }
 
     private val adapter by lazy {
-        TransactionAdapter(mutableListOf()) { position, list ->
-            deletingTransaction(list, position)
-        }
+                TransactionAdapter(mutableListOf()) { position, list ->
+                    deletingTransaction(list, position)
+                }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_transactions, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         transactionsViewList.layoutManager = LinearLayoutManager(context!!)
         transactionsViewList.adapter = adapter
         updateLayout(DataHolder.transactionsList)
 
         transactionAddButton.setOnClickListener() {
-            startActivityForResult(Intent(context, TransactionActivity::class.java), 1)
+            startActivity(Intent(context, TransactionActivity::class.java))
         }
     }
 
     override fun onResume() {
         gettingList()
         super.onResume()
-
     }
 
     private fun updateLayout(list: MutableList<TransactionElement>) {
