@@ -1,6 +1,5 @@
 package app.mobile.consideredcosts.main.navigation
 
-
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -50,6 +49,7 @@ class GoalsFragment : Fragment() {
     }
 
     override fun onResume() {
+        updateLayout(DataHolder.goalsList)
         super.onResume()
     }
 
@@ -80,5 +80,6 @@ class GoalsFragment : Fragment() {
     private fun deletingGoal(list: MutableList<GoalElement>, position: Int)
     {
         list.removeAt(position)
+        updateLayout(list)
     }
 }
