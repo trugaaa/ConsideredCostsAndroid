@@ -4,9 +4,9 @@ import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.data.DataHolder.itemsList
@@ -62,7 +62,6 @@ class TransactionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transaction)
-        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         updateComboFields()
         val calendar = Calendar.getInstance()
@@ -70,14 +69,36 @@ class TransactionActivity : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+        transactionMoney.setOnTouchListener { _, _ ->
+            setThemeDefault(transactionMoney)
+            false
+        }
+
+        transactionMoney.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validateMoney()
+            }
+        }
+
+        transactionAddDate.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validateDate()
+            }
+        }
+
         transactionAddDate.setOnClickListener {
+            setThemeDefault(transactionAddDate)
+            transactionAddDate.error = null
+
             val datePickerDialog = DatePickerDialog(
-                this,R.style.DataPickerStyle,
+                this, R.style.DataPickerStyle,
                 DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    transactionAddDate.text = applicationContext.getString(R.string.datePattern,
+                    transactionAddDate.text = applicationContext.getString(
+                        R.string.datePattern,
                         dayOfMonth.toString(),
                         month.toString(),
-                        year.toString())
+                        year.toString()
+                    )
                 },
                 year,
                 month,
@@ -87,6 +108,7 @@ class TransactionActivity : AppCompatActivity() {
         }
 
         transactionRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+
             when (checkedId) {
                 R.id.transactionRadioIncome -> {
                     layoutTransaction.visibility = View.VISIBLE
@@ -112,29 +134,15 @@ class TransactionActivity : AppCompatActivity() {
         }
 
         transactionAddButton.setOnClickListener {
-            if (itemsList.isNullOrEmpty()) {
-                isSentToItemsAdd = true
-                super.onBackPressed()
-            }
-
-            val transToSend: TransactionElement? = when {
-                transactionRadioIncome.isChecked -> {
-                    isSentToItemsAdd = false
-                    TransactionElement(
-                        null,
-                        transactionMoney.text.toString().toDouble(),
-                        transactionType(transactionType),
-                        transactionAddDate.text.toString(),
-                        currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
-
-                        transactionDescription.text.toString(),
-                        incomeWorkType(incomeWorkType),
-                        null
-                    )
+            if (validateDate() and validateMoney()) {
+                if (itemsList.isNullOrEmpty()) {
+                    isSentToItemsAdd = true
+                    super.onBackPressed()
                 }
 
-                transactionRadioOutgo.isChecked -> {
-                    if (!isSentToItemsAdd) {
+                val transToSend: TransactionElement? = when {
+                    transactionRadioIncome.isChecked -> {
+                        isSentToItemsAdd = false
                         TransactionElement(
                             null,
                             transactionMoney.text.toString().toDouble(),
@@ -143,34 +151,50 @@ class TransactionActivity : AppCompatActivity() {
                             currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
 
                             transactionDescription.text.toString(),
-                            null,
-                            1
+                            incomeWorkType(incomeWorkType),
+                            null
                         )
-                    } else {
-                        null
                     }
-                }
-                else -> throw Exception()
-            }
-            if (!isSentToItemsAdd) {
-                GlobalScope.launch {
-                    withContext(Dispatchers.IO) {
-                        launch {
-                            val response = RetrofitClient.postTransaction(
-                                sharedPreferences.getToken()!!,
-                                transToSend!!
+
+                    transactionRadioOutgo.isChecked -> {
+                        if (!isSentToItemsAdd) {
+                            TransactionElement(
+                                null,
+                                transactionMoney.text.toString().toDouble(),
+                                transactionType(transactionType),
+                                transactionAddDate.text.toString(),
+                                currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
+
+                                transactionDescription.text.toString(),
+                                null,
+                                1
                             )
-                            when (response.code()) {
-                                200 -> {
-                                    withContext(Dispatchers.Main) {
-                                        super.onBackPressed()
+                        } else {
+                            null
+                        }
+                    }
+                    else -> throw Exception()
+                }
+                if (!isSentToItemsAdd) {
+                    GlobalScope.launch {
+                        withContext(Dispatchers.IO) {
+                            launch {
+                                val response = RetrofitClient.postTransaction(
+                                    sharedPreferences.getToken()!!,
+                                    transToSend!!
+                                )
+                                when (response.code()) {
+                                    200 -> {
+                                        withContext(Dispatchers.Main) {
+                                            super.onBackPressed()
+                                        }
                                     }
-                                }
-                                504, 503, 502, 501, 500 -> {
-                                    invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
-                                }
-                                else -> {
-                                    invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                                    504, 503, 502, 501, 500 -> {
+                                        invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                                    }
+                                    else -> {
+                                        invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                                    }
                                 }
                             }
                         }
@@ -178,7 +202,6 @@ class TransactionActivity : AppCompatActivity() {
                 }
             }
         }
-
         transactionOpenBack.setOnClickListener()
         {
             super.onBackPressed()
@@ -235,12 +258,35 @@ class TransactionActivity : AppCompatActivity() {
         snackBar.show()
     }
 
+    private fun setThemeDefault(editText: TextView) {
+        editText.setBackgroundResource(R.drawable.transaction_combo_background)
+        editText.setTextColor(ContextCompat.getColor(this, R.color.colorBlue))
+    }
+
     private fun updateComboFields() {
         transactionCurrency.adapter = currencyAdapter
         transactionType.adapter = typeAdapter
 
         incomeWorkType.adapter = workTypeAdapter
         outgoItemType.adapter = itemTypeAdapter
+    }
+
+
+    private fun validateMoney(): Boolean {
+        return if (transactionMoney.text.toString() == "") {
+            transactionMoney.error = resources.getString(R.string.errorFieldIsRequired)
+            transactionMoney.setBackgroundResource(R.drawable.transaction_combo_background_error)
+
+            false
+        } else true
+    }
+
+    private fun validateDate(): Boolean {
+        return if (transactionAddDate.text.toString() == "") {
+            transactionAddDate.error = resources.getString(R.string.errorFieldIsRequired)
+            transactionAddDate.setBackgroundResource(R.drawable.transaction_combo_background_error)
+            false
+        } else true
     }
 }
 
