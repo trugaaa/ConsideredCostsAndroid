@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,12 +30,12 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign)
-
+        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         val size = Point()
         windowManager.defaultDisplay.getSize(size)
         signScreenLayout.viewTreeObserver.addOnGlobalLayoutListener {
-            if (size.y - signScreenLayout.height > 100) {
+            if (size.y - signScreenLayout.height > 100 && currentScreenState == SignOption.REGISTRATION) {
                 imageSignLogo.visibility = View.GONE
             } else {
                 imageSignLogo.visibility = View.VISIBLE

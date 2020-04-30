@@ -65,7 +65,7 @@ class GoalAdapter(
 
             holder.itemView.goalDelete.setOnClickListener{
                 click(goalsList,position)
-                notifyDataSetChanged()
+                gettingGoalsListRequest()
             }
         }
     }
@@ -83,6 +83,11 @@ class GoalAdapter(
             position < goalsList.size -> TYPE_GOALS
             else -> throw Exception()
         }
+    }
+
+    private fun gettingGoalsListRequest()
+    {
+        updateGoals(DataHolder.goalsList)
     }
 
     companion object {

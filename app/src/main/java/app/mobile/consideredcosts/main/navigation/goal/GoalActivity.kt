@@ -3,14 +3,13 @@ package app.mobile.consideredcosts.main.navigation.goal
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.http.models.GoalElement
 import kotlinx.android.synthetic.main.activity_goal.*
 import kotlinx.android.synthetic.main.activity_goal.goalCurrency
-import kotlinx.android.synthetic.main.activity_transaction.*
-import kotlinx.android.synthetic.main.item_goals.*
 import java.util.*
 
 class GoalActivity : AppCompatActivity() {
@@ -23,6 +22,8 @@ class GoalActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_goal)
+        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         updateComboFields()
 
         val calendar = Calendar.getInstance()
