@@ -8,10 +8,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
-import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.main.MainActivity
@@ -29,6 +27,11 @@ class PinActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
+        if (sharedPreferencesManager.getUsername().isNullOrBlank() &&
+            sharedPreferencesManager.getPassword().isNullOrBlank())
+        {
+            invokeSignActivity()
+        }
     }
 
     override fun onResume() {
