@@ -1,9 +1,12 @@
 package app.mobile.consideredcosts.main.navigation
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class ItemsFragment : Fragment() {
     private val sharedPreferences by lazy {
@@ -59,9 +63,12 @@ class ItemsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
         itemsAddButton.setOnClickListener {
+            closeKeyboard(context!!,itemsAddButton)
             savingItem()
         }
+
         gettingList()
     }
 
@@ -88,7 +95,10 @@ class ItemsFragment : Fragment() {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
-                            invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage
+                                    ?: resources.getString(R.string.unknownError)
+                            )
                         }
                     }
 
@@ -118,7 +128,10 @@ class ItemsFragment : Fragment() {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
-                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage
+                                        ?: resources.getString(R.string.unknownError)
+                                )
                             }
                         }
                     }
@@ -149,7 +162,10 @@ class ItemsFragment : Fragment() {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
-                            invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage
+                                    ?: resources.getString(R.string.unknownError)
+                            )
                         }
                     }
 
@@ -166,7 +182,12 @@ class ItemsFragment : Fragment() {
         )
 
         snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!,R.color.colorError))
-        snackBar.setActionTextColor(ContextCompat.getColor(context!!,R.color.colorPrimaryText))
+        snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
         snackBar.show()
+    }
+
+    private fun closeKeyboard(context:Context, view:View ) {
+         val imm =  context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
