@@ -15,6 +15,7 @@ import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.TransactionElement
 import app.mobile.consideredcosts.main.navigation.transaction.TransactionActivity
+import app.mobile.consideredcosts.sign.PinActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.coroutines.Dispatchers
@@ -83,6 +84,9 @@ class TransactionsFragment : Fragment() {
                                 gettingList()
                             }
                         }
+                        401 -> {
+                            openPinActivity()
+                        }
                         504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
@@ -117,6 +121,9 @@ class TransactionsFragment : Fragment() {
                                 updateLayout(DataHolder.transactionsList)
                             }
                         }
+                        401 -> {
+                            openPinActivity()
+                        }
                         504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
@@ -143,5 +150,11 @@ class TransactionsFragment : Fragment() {
         snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorError))
         snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
         snackBar.show()
+    }
+
+    private fun openPinActivity()
+    {
+        startActivity(Intent(context, PinActivity::class.java))
+        activity!!.finish()
     }
 }

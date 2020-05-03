@@ -147,7 +147,7 @@ class LaunchActivity : AppCompatActivity(), PagerListener {
 
     private fun openPinActivity()
     {
-        startActivity(Intent(this, PinActivity::class.java))
-        finish()
+            startActivity(Intent(this, PinActivity::class.java))
+            finish()
     }
 }

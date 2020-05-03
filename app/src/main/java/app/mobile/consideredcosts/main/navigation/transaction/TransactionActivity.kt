@@ -2,6 +2,7 @@ package app.mobile.consideredcosts.main.navigation.transaction
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -23,6 +24,7 @@ import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.IncomeWorkType
 import app.mobile.consideredcosts.http.models.TransactionElement
 import app.mobile.consideredcosts.http.models.TransactionsType
+import app.mobile.consideredcosts.sign.PinActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_transaction.*
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +36,7 @@ import java.util.*
 
 class TransactionActivity : AppCompatActivity() {
     private lateinit var transactionDateForSend: DateTrugaaa
-    private lateinit var calendar:Calendar
+    private lateinit var calendar: Calendar
 
     private val typeList = mutableListOf<String>()
     private val workTypeList = mutableListOf<String>()
@@ -70,7 +72,7 @@ class TransactionActivity : AppCompatActivity() {
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
         updateComboFields()
-         calendar = Calendar.getInstance()
+        calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
@@ -89,19 +91,17 @@ class TransactionActivity : AppCompatActivity() {
         transactionAddDate.setOnClickListener {
             try {
                 closeKeyboard()
-            }
-            catch (ex:Exception)
-            {
-                Log.w("WARNING",ex.stackTrace.toString())
+            } catch (ex: Exception) {
+                Log.w("WARNING", ex.stackTrace.toString())
             }
             setThemeDefault(transactionAddDate)
             transactionAddDate.error = null
 
             val datePickerDialog = DatePickerDialog(
                 this, R.style.DataPickerStyle,
-                DatePickerDialog.OnDateSetListener { _, year, month,dayOfMonth ->
-                    transactionDateForSend = DateFormatter(this).
-                        dateGetFromCalendar(dayOfMonth,month,year)
+                DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                    transactionDateForSend =
+                        DateFormatter(this).dateGetFromCalendar(dayOfMonth, month, year)
                     transactionAddDate.text = transactionDateForSend.toString()
 
                 },
@@ -195,6 +195,9 @@ class TransactionActivity : AppCompatActivity() {
                                         withContext(Dispatchers.Main) {
                                             super.onBackPressed()
                                         }
+                                    }
+                                    401 -> {
+                                        openPinActivity()
                                     }
                                     504, 503, 502, 501, 500 -> {
                                         invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
@@ -306,6 +309,11 @@ class TransactionActivity : AppCompatActivity() {
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view!!.windowToken, 0)
         }
+    }
+
+    private fun openPinActivity() {
+        startActivity(Intent(this, PinActivity::class.java))
+        finish()
     }
 }
 

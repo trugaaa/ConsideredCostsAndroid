@@ -2,6 +2,7 @@ package app.mobile.consideredcosts.main.navigation.goal
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +19,7 @@ import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.GoalElement
+import app.mobile.consideredcosts.sign.PinActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_goal.*
 import kotlinx.android.synthetic.main.activity_goal.goalCurrency
@@ -67,10 +69,8 @@ class GoalActivity : AppCompatActivity() {
         goalEndDate.setOnClickListener {
             try {
                 closeKeyboard()
-            }
-            catch (ex:Exception)
-            {
-                Log.w("WARNING",ex.stackTrace.toString())
+            } catch (ex: Exception) {
+                Log.w("WARNING", ex.stackTrace.toString())
             }
 
             setThemeDefault(goalEndDate)
@@ -93,10 +93,8 @@ class GoalActivity : AppCompatActivity() {
         goalStartDate.setOnClickListener {
             try {
                 closeKeyboard()
-            }
-            catch (ex:Exception)
-            {
-                Log.w("WARNING",ex.stackTrace.toString())
+            } catch (ex: Exception) {
+                Log.w("WARNING", ex.stackTrace.toString())
             }
             setThemeDefault(goalStartDate)
             goalStartDate.error = null
@@ -182,6 +180,9 @@ class GoalActivity : AppCompatActivity() {
                                 super.onBackPressed()
                             }
                         }
+                        401 -> {
+                            openPinActivity()
+                        }
                         504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
@@ -230,5 +231,10 @@ class GoalActivity : AppCompatActivity() {
 
     private fun updateComboFields() {
         goalCurrency.adapter = currencyAdapter
+    }
+
+    private fun openPinActivity() {
+        startActivity(Intent(this, PinActivity::class.java))
+        finish()
     }
 }

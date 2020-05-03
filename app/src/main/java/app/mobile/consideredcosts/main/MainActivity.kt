@@ -1,5 +1,6 @@
 package app.mobile.consideredcosts.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.main.navigation.*
+import app.mobile.consideredcosts.sign.PinActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
@@ -140,5 +142,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun openFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.mainContainer, fragment).commit()
+    }
+
+    private fun openPinActivity()
+    {
+        startActivity(Intent(this, PinActivity::class.java))
+        finish()
     }
 }

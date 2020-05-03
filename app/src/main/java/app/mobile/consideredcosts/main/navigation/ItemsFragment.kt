@@ -2,6 +2,7 @@ package app.mobile.consideredcosts.main.navigation
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.ItemElement
+import app.mobile.consideredcosts.sign.PinActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_items.*
 import kotlinx.coroutines.Dispatchers
@@ -90,6 +92,9 @@ class ItemsFragment : Fragment() {
                                 updateState(DataHolder.itemsList)
                             }
                         }
+                        401 -> {
+                            openPinActivity()
+                        }
                         504,503,502,501,500->
                         {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
@@ -122,6 +127,9 @@ class ItemsFragment : Fragment() {
                                     itemEditText.text.clear()
                                     gettingList()
                                 }
+                            }
+                            401 -> {
+                                openPinActivity()
                             }
                             504,503,502,501,500->
                             {
@@ -157,6 +165,9 @@ class ItemsFragment : Fragment() {
                                 gettingList()
                             }
                         }
+                        401 -> {
+                            openPinActivity()
+                        }
                         504,503,502,501,500->
                         {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
@@ -189,5 +200,11 @@ class ItemsFragment : Fragment() {
     private fun closeKeyboard(context:Context, view:View ) {
          val imm =  context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun openPinActivity()
+    {
+        startActivity(Intent(context, PinActivity::class.java))
+        activity!!.finish()
     }
 }

@@ -15,6 +15,7 @@ import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.GoalElement
 import app.mobile.consideredcosts.main.navigation.goal.GoalActivity
+import app.mobile.consideredcosts.sign.PinActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_goals.*
 import kotlinx.coroutines.Dispatchers
@@ -96,8 +97,10 @@ class GoalsFragment : Fragment() {
                                 } else {
                                     DataHolder.goalsList.clear()
                                 }
-                                updateLayout(DataHolder.goalsList)
                             }
+                        }
+                        401 -> {
+                            openPinActivity()
                         }
                         504,503,502,501,500->
                         {
@@ -114,6 +117,7 @@ class GoalsFragment : Fragment() {
                 }
             }
         }
+        updateLayout(DataHolder.goalsList)
     }
 
 
@@ -132,9 +136,16 @@ class GoalsFragment : Fragment() {
                                 gettingList()
                             }
                         }
+                        401 -> {
+                            openPinActivity()
+                        }
                         504,503,502,501,500->
                         {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                        }
+                        401->
+                        {
+
                         }
                         else -> {
                             invokeGeneralErrorActivity(
@@ -147,6 +158,12 @@ class GoalsFragment : Fragment() {
                 }
             }
         }
+        updateLayout(DataHolder.goalsList)
     }
 
+    private fun openPinActivity()
+    {
+        startActivity(Intent(context, PinActivity::class.java))
+        activity!!.finish()
+    }
 }
