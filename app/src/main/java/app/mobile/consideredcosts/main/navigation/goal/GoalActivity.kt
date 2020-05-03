@@ -8,18 +8,34 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
+import app.mobile.consideredcosts.basic.DateFormatter
+import app.mobile.consideredcosts.basic.DateTrugaaa
 import app.mobile.consideredcosts.data.DataHolder
+import app.mobile.consideredcosts.data.SharedPreferencesManager
+import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.GoalElement
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_goal.*
 import kotlinx.android.synthetic.main.activity_goal.goalCurrency
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class GoalActivity : AppCompatActivity() {
+    private lateinit var goalStartDateForSend: DateTrugaaa
+    private lateinit var goalEndDateForSend: DateTrugaaa
+
     private val currencyAdapter by lazy {
         ArrayAdapter(this, R.layout.item_spinner, DataHolder.currencyList.map {
             it.Name
         })
     }
+    private val sharedPreferences by lazy {
+        SharedPreferencesManager(this)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +67,9 @@ class GoalActivity : AppCompatActivity() {
             val datePickerDialog = DatePickerDialog(
                 this, R.style.DataPickerStyle,
                 DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    goalEndDate.text = applicationContext.getString(
-                        R.string.datePattern,
-                        dayOfMonth.toString(),
-                        month.toString(),
-                        year.toString()
-                    )
+                    goalEndDateForSend =
+                        DateFormatter(this).dateGetFromCalendar(dayOfMonth, month, year)
+                    goalEndDate.text = goalEndDateForSend.toString()
                 },
                 year,
                 month,
@@ -72,12 +85,9 @@ class GoalActivity : AppCompatActivity() {
             val datePickerDialog = DatePickerDialog(
                 this, R.style.DataPickerStyle,
                 DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    goalStartDate.text = applicationContext.getString(
-                        R.string.datePattern,
-                        dayOfMonth.toString(),
-                        month.toString(),
-                        year.toString()
-                    )
+                    goalStartDateForSend =
+                        DateFormatter(this).dateGetFromCalendar(dayOfMonth, month, year)
+                    goalStartDate.text = goalStartDateForSend.toString()
                 },
                 year,
                 month,
@@ -88,16 +98,16 @@ class GoalActivity : AppCompatActivity() {
 
         goalAddButton.setOnClickListener {
             if (validateMoney() and validateEndDate() and validateStartDate()) {
-                DataHolder.goalsList.add(
+                goalSaving(
                     GoalElement(
-                        DataHolder.goalsList.size,
-                        "Active",
+                        null,
+                        null,
                         goalMoney.text.toString().toDouble(),
                         DataHolder.currencyList.find { currencyElement ->
                             currencyElement.Name == goalCurrency.selectedItem.toString()
                         }!!.Id,
-                        goalStartDate.text.toString(),
-                        goalEndDate.text.toString()
+                        goalStartDateForSend.fullFormat,
+                        goalEndDateForSend.fullFormat
                     )
                 )
                 super.onBackPressed()
@@ -137,6 +147,57 @@ class GoalActivity : AppCompatActivity() {
             goalEndDate.setBackgroundResource(R.drawable.transaction_combo_background_error)
             false
         } else true
+    }
+
+    private fun goalSaving(goal: GoalElement) {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                launch {
+                    val response = RetrofitClient.postGoal(
+                        sharedPreferences.getToken()!!,
+                        goal
+                    )
+                    when (response.code()) {
+                        200 -> {
+                            withContext(Dispatchers.Main) {
+                                super.onBackPressed()
+                            }
+                        }
+                        504, 503, 502, 501, 500 -> {
+                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                        }
+                        else -> {
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage
+                                    ?: resources.getString(R.string.unknownError)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun invokeGeneralErrorActivity(errorText: String) {
+        val snackBar = Snackbar.make(
+            activityGoalLayout,
+            errorText,
+            Snackbar.LENGTH_LONG
+        )
+
+        snackBar.view.setBackgroundColor(
+            ContextCompat.getColor(
+                applicationContext,
+                R.color.colorError
+            )
+        )
+        snackBar.setActionTextColor(
+            ContextCompat.getColor(
+                applicationContext,
+                R.color.colorPrimaryText
+            )
+        )
+        snackBar.show()
     }
 
     private fun updateComboFields() {
