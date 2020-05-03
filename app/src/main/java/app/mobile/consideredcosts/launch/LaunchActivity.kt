@@ -2,26 +2,22 @@ package app.mobile.consideredcosts.launch
 
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.data.SharedPreferencesManager
-import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.main.MainActivity
 import app.mobile.consideredcosts.sign.SignActivity
 import app.mobile.consideredcosts.welcome.WelcomeSliderAdapter
 import app.mobile.consideredcosts.welcome.WelcomeSliderFragment
-import kotlinx.android.synthetic.main.activity_sign.*
-
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
 import kotlinx.android.synthetic.main.activity_welcome.*
 import kotlinx.android.synthetic.main.fragment_welcome_slider.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class LaunchActivity : AppCompatActivity(), PagerListener {
 
@@ -52,32 +48,14 @@ class LaunchActivity : AppCompatActivity(), PagerListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*    if (sharedPreferencesManager.getUsername() != null && sharedPreferencesManager.getPassword() != null) {
-
-                  GlobalScope.launch {
-                      withContext(Dispatchers.IO) {
-                          launch {
-                              val response = RetrofitClient.login(
-                                  sharedPreferencesManager.getUsername()!!,
-                                  sharedPreferencesManager.getPassword()!!
-                              )
-                              when (response.code()) {
-                                  200 -> {
-                                      sharedPreferencesManager.setToken(response.body()!!.data!!.access_token)
-                                      openMainActivity()
-                                  }
-                                  401 -> {
-                                      //todo Сделать обработку
-                                  }
-                                  else -> {
-                                      //todo Сделать обработку
-                                  }
-                              }
-
-                          }
-                      }
-                  }
-              }*/
+        AppCenter.start(
+            application, "11f60d15-2cf8-4a18-9465-1924b3e7804f",
+            Analytics::class.java, Crashes::class.java
+        )
+        AppCenter.start(
+            application, "11f60d15-2cf8-4a18-9465-1924b3e7804f",
+            Analytics::class.java, Crashes::class.java
+        )
 
         if (sharedPreferencesManager.isFirstOpened()) openSignActivity()
 
@@ -165,9 +143,5 @@ class LaunchActivity : AppCompatActivity(), PagerListener {
         startActivity(Intent(this, SignActivity::class.java))
         finish()
     }
-
-    fun openMainActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
-    }
+    
 }

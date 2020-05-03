@@ -190,7 +190,10 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
-                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage
+                                        ?: resources.getString(R.string.unknownError)
+                                )
                             }
                         }
                     }
@@ -216,7 +219,10 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
-                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage
+                                        ?: resources.getString(R.string.unknownError)
+                                )
                             }
                         }
 
@@ -354,12 +360,12 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         editText.setTextColor(ContextCompat.getColor(this, R.color.colorError))
     }
 
-    private fun closeKeyboard()
-    {
+    private fun closeKeyboard() {
         val view: View? = this.currentFocus
         view.let {
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view!!.windowToken,0)
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view!!.windowToken, 0)
         }
     }
 }

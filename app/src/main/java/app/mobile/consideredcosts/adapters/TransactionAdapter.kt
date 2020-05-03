@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.mobile.consideredcosts.R
+import app.mobile.consideredcosts.basic.DateFormatter
 import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.http.models.TransactionElement
 import kotlinx.android.synthetic.main.item_transactions.view.*
@@ -61,7 +62,6 @@ class TransactionAdapter(private var transactionList: MutableList<TransactionEle
                 }
 
                 ItemId?.let {
-               //     holder.itemView.sourceValue.text = item
                     holder.itemView.sourceText.text = cont.getString(R.string.item)
                     holder.itemView.transactionMoney.text =
                         cont.getString(R.string.outgoPattern, Money.toString())
@@ -79,7 +79,7 @@ class TransactionAdapter(private var transactionList: MutableList<TransactionEle
                     )
                 }
 
-                holder.itemView.transactionDateValue.text = Date
+                holder.itemView.transactionDateValue.text = DateFormatter(cont).dateFromString(Date).toString()
                 holder.itemView.transactionTypeValue.text = Type.name.toLowerCase().capitalize()
 
                 holder.itemView.transactionCurrency.text = DataHolder.currencyList.find{

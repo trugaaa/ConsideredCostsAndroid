@@ -3,7 +3,6 @@ package app.mobile.consideredcosts.data
 import app.mobile.consideredcosts.http.models.*
 
 object DataHolder {
-
     var transactionsList = mutableListOf<TransactionElement>()
     var itemsList = mutableListOf<ItemElement>()
     var currencyList = mutableListOf<CurrencyElement>()
