@@ -87,6 +87,13 @@
     <string name="enterStartDate">Enter Goal start date</string>
     <string name="enterEndDate">Enter Goal end date</string>
 
+    <!-- PIN screen-->
+    <string name="enterPin">Enter PIN</string>
+    <string name="setupPin">Set up PIN</string>
+    <string name="enterConfirmPin">Confirm your 4-digit PIN</string>
+    <string name="enterYourPin">Enter your 4-digit PIN</string>
+    <string name="submit">Submit</string>
+
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
     <string name="errorEmailField">Email is invalid.\nPls check your email</string>
@@ -97,4 +104,9 @@
     <string name="serverNotAvailable">Server is not available</string>
     <string name="incorrectLogin">Incorrect username or password</string>
     <string name="unknownError">Unknown error</string>
+    <string name="pinError">PIN is incorrect, PIN need to be 4-digit</string>
+    <string name="pinNotMatch">PIN and confirm PIN are not equal</string>
+    <string name="pinIncorrect">PIN is incorrect</string>
+
+
 </resources>

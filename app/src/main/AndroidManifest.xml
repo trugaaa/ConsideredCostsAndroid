@@ -2,16 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.mobile.consideredcosts">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        />
-    <uses-permission android:name="android.permission.INTERNET"
-        />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_app_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".sign.PinActivity"></activity>
         <activity android:name=".main.navigation.goal.GoalActivity" />
         <activity
             android:name=".main.navigation.transaction.TransactionActivity"

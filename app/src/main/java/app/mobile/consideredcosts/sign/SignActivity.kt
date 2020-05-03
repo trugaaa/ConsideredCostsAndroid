@@ -3,7 +3,6 @@ package app.mobile.consideredcosts.sign
 import android.content.Context
 import android.content.Intent
 import android.graphics.Point
-import android.inputmethodservice.Keyboard
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -16,7 +15,6 @@ import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.basic.FieldValidator
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
-import app.mobile.consideredcosts.main.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_sign.*
 import kotlinx.coroutines.Dispatchers
@@ -213,7 +211,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                                 sharedPreferencesManager.setPassword(password)
                                 sharedPreferencesManager.setUsername(username)
                                 sharedPreferencesManager.setToken(response.body()!!.data!!.access_token)
-                                invokeMainActivity()
+                                invokePinActivity()
                             }
                             504, 503, 502, 501, 500 -> {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
@@ -232,8 +230,8 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         }
     }
 
-    override fun invokeMainActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
+    override fun invokePinActivity() {
+        startActivity(Intent(this, PinActivity::class.java))
         finish()
     }
 

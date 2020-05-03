@@ -96,10 +96,10 @@ class TransactionActivity : AppCompatActivity() {
             val datePickerDialog = DatePickerDialog(
                 this, R.style.DataPickerStyle,
                 DatePickerDialog.OnDateSetListener { _, year, month,dayOfMonth ->
-                    val date = DateFormatter(this).
+                    transactionDateForSend = DateFormatter(this).
                         dateGetFromCalendar(dayOfMonth,month,year)
-                    transactionAddDate.text = date.toString()
-                    transactionDateForSend = date
+                    transactionAddDate.text = transactionDateForSend.toString()
+
                 },
                 year,
                 month,

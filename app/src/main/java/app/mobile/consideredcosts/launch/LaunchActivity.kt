@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.data.SharedPreferencesManager
-import app.mobile.consideredcosts.main.MainActivity
+import app.mobile.consideredcosts.sign.PinActivity
 import app.mobile.consideredcosts.sign.SignActivity
 import app.mobile.consideredcosts.welcome.WelcomeSliderAdapter
 import app.mobile.consideredcosts.welcome.WelcomeSliderFragment
@@ -57,7 +57,8 @@ class LaunchActivity : AppCompatActivity(), PagerListener {
             Analytics::class.java, Crashes::class.java
         )
 
-        if (sharedPreferencesManager.isFirstOpened()) openSignActivity()
+        if(sharedPreferencesManager.getIsPinSet()!!) openPinActivity()
+        else if (sharedPreferencesManager.isFirstOpened()) openSignActivity()
 
         setContentView(R.layout.activity_welcome)
 
@@ -143,5 +144,10 @@ class LaunchActivity : AppCompatActivity(), PagerListener {
         startActivity(Intent(this, SignActivity::class.java))
         finish()
     }
-    
+
+    private fun openPinActivity()
+    {
+        startActivity(Intent(this, PinActivity::class.java))
+        finish()
+    }
 }
