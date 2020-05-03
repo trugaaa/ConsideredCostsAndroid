@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.data.DataHolder
@@ -42,7 +44,11 @@ class PinActivity : AppCompatActivity() {
         }
 
         pinText.setOnClickListener {
+            setThemeDefault(pinText)
+        }
 
+        pinConfirmText.setOnClickListener {
+            setThemeDefault(pinConfirmText)
         }
 
         submitPinButton.setOnClickListener {
@@ -162,6 +168,11 @@ class PinActivity : AppCompatActivity() {
             )
         )
         snackBar.show()
+    }
+
+    private fun setThemeDefault(editText: EditText) {
+        editText.setBackgroundResource(R.drawable.sign_rounded_edit_text_items)
+        editText.setTextColor(ContextCompat.getColor(this, R.color.colorBlue))
     }
 
     private fun closeKeyboard() {
