@@ -3,6 +3,7 @@ package app.mobile.consideredcosts.main.navigation.transaction
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -89,7 +90,10 @@ class TransactionActivity : AppCompatActivity() {
             try {
                 closeKeyboard()
             }
-            finally {}
+            catch (ex:Exception)
+            {
+                Log.w("WARNING",ex.stackTrace.toString())
+            }
             setThemeDefault(transactionAddDate)
             transactionAddDate.error = null
 

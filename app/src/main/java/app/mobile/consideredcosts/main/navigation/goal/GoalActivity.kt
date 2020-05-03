@@ -1,9 +1,13 @@
 package app.mobile.consideredcosts.main.navigation.goal
 
 import android.app.DatePickerDialog
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -61,6 +65,14 @@ class GoalActivity : AppCompatActivity() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         goalEndDate.setOnClickListener {
+            try {
+                closeKeyboard()
+            }
+            catch (ex:Exception)
+            {
+                Log.w("WARNING",ex.stackTrace.toString())
+            }
+
             setThemeDefault(goalEndDate)
             goalEndDate.error = null
 
@@ -79,6 +91,13 @@ class GoalActivity : AppCompatActivity() {
         }
 
         goalStartDate.setOnClickListener {
+            try {
+                closeKeyboard()
+            }
+            catch (ex:Exception)
+            {
+                Log.w("WARNING",ex.stackTrace.toString())
+            }
             setThemeDefault(goalStartDate)
             goalStartDate.error = null
 
@@ -198,6 +217,15 @@ class GoalActivity : AppCompatActivity() {
             )
         )
         snackBar.show()
+    }
+
+    private fun closeKeyboard() {
+        val view: View? = this.currentFocus
+        view.let {
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view!!.windowToken, 0)
+        }
     }
 
     private fun updateComboFields() {

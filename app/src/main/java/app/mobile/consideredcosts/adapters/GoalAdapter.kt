@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.mobile.consideredcosts.R
+import app.mobile.consideredcosts.basic.DateFormatter
 import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.http.models.GoalElement
 import kotlinx.android.synthetic.main.item_goals.view.*
@@ -18,9 +19,12 @@ class GoalAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var context: Context
+    private lateinit var formatter :DateFormatter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.context
+        formatter = DateFormatter(context)
+
         val emptyView =
             LayoutInflater.from(parent.context).inflate(R.layout.item_list_space, parent, false)
         val goals =
@@ -38,8 +42,8 @@ class GoalAdapter(
             {
                 holder.itemView.goalValue.text = Money.toString()
                 holder.itemView.goalCurrency.text = DataHolder.currencyList[CurrencyId].Name
-                holder.itemView.startDateValue.text = DateStart
-                holder.itemView.endDateValue.text = DateFinish
+                holder.itemView.startDateValue.text = formatter.dateFromString(DateStart).toString()
+                holder.itemView.endDateValue.text = formatter.dateFromString(DateFinish).toString()
                 holder.itemView.statusValue.text = Status
                 when (Status) {
                     "Success" -> holder.itemView.statusValue.setTextColor(
