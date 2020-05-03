@@ -12,11 +12,15 @@ import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.adapters.GoalAdapter
 import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
+import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.GoalElement
 import app.mobile.consideredcosts.main.navigation.goal.GoalActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_goals.*
-import kotlinx.android.synthetic.main.fragment_transactions.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class GoalsFragment : Fragment() {
     private val sharedPreferences by lazy {
@@ -49,8 +53,8 @@ class GoalsFragment : Fragment() {
     }
 
     override fun onResume() {
-        updateLayout(DataHolder.goalsList)
         super.onResume()
+        gettingList()
     }
 
     private fun updateLayout(list: MutableList<GoalElement>) {
@@ -67,7 +71,7 @@ class GoalsFragment : Fragment() {
 
     private fun invokeGeneralErrorActivity(errorText: String) {
         val snackBar = Snackbar.make(
-            transactionFragmentLayout,
+            goalFragmentLayout,
             errorText,
             Snackbar.LENGTH_LONG
         )
@@ -77,9 +81,72 @@ class GoalsFragment : Fragment() {
         snackBar.show()
     }
 
-    private fun deletingGoal(list: MutableList<GoalElement>, position: Int)
-    {
-        list.removeAt(position)
-        updateLayout(list)
+    private fun gettingList() {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                launch {
+                    val response =
+                        RetrofitClient.getGoals(sharedPreferences.getToken()!!)
+                    when (response.code()) {
+                        200 -> {
+                            withContext(Dispatchers.Main) {
+                                if (response.body()!!.data != null) {
+                                    DataHolder.goalsList =
+                                        response.body()!!.data!!.list!!
+                                } else {
+                                    DataHolder.goalsList.clear()
+                                }
+                                updateLayout(DataHolder.goalsList)
+                            }
+                        }
+                        504,503,502,501,500->
+                        {
+                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                        }
+                        else -> {
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage
+                                    ?: resources.getString(R.string.unknownError)
+                            )
+                        }
+                    }
+
+                }
+            }
+        }
     }
+
+
+    private fun deletingGoal(list: MutableList<GoalElement>, position: Int) {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                launch {
+                    val response =
+                        RetrofitClient.deleteGoal(
+                            sharedPreferences.getToken()!!,
+                            list[position].Id!!
+                        )
+                    when (response.code()) {
+                        200 -> {
+                            withContext(Dispatchers.Main) {
+                                gettingList()
+                            }
+                        }
+                        504,503,502,501,500->
+                        {
+                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                        }
+                        else -> {
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage
+                                    ?: resources.getString(R.string.unknownError)
+                            )
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
 }

@@ -28,9 +28,9 @@ class TransactionsFragment : Fragment() {
     }
 
     private val adapter by lazy {
-                TransactionAdapter(mutableListOf()) { position, list ->
-                    deletingTransaction(list, position)
-                }
+        TransactionAdapter(mutableListOf()) { position, list ->
+            deletingTransaction(list, position)
+        }
     }
 
     override fun onCreateView(
@@ -53,8 +53,8 @@ class TransactionsFragment : Fragment() {
     }
 
     override fun onResume() {
-        gettingList()
         super.onResume()
+        gettingList()
     }
 
     private fun updateLayout(list: MutableList<TransactionElement>) {
@@ -83,12 +83,14 @@ class TransactionsFragment : Fragment() {
                                 gettingList()
                             }
                         }
-                        504,503,502,501,500->
-                        {
+                        504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
-                            invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage
+                                    ?: resources.getString(R.string.unknownError)
+                            )
                         }
                     }
 
@@ -115,12 +117,14 @@ class TransactionsFragment : Fragment() {
                                 updateLayout(DataHolder.transactionsList)
                             }
                         }
-                        504,503,502,501,500->
-                        {
+                        504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
-                            invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage
+                                    ?: resources.getString(R.string.unknownError)
+                            )
                         }
                     }
 
@@ -136,8 +140,8 @@ class TransactionsFragment : Fragment() {
             Snackbar.LENGTH_LONG
         )
 
-        snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!,R.color.colorError))
-        snackBar.setActionTextColor(ContextCompat.getColor(context!!,R.color.colorPrimaryText))
+        snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorError))
+        snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
         snackBar.show()
     }
 }

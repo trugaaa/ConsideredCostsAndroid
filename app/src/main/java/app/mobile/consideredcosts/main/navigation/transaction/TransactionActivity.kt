@@ -1,18 +1,22 @@
 package app.mobile.consideredcosts.main.navigation.transaction
 
 import android.app.DatePickerDialog
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
-import app.mobile.consideredcosts.data.DataHolder.itemsList
+import app.mobile.consideredcosts.basic.DateFormatter
+import app.mobile.consideredcosts.basic.DateTrugaaa
 import app.mobile.consideredcosts.data.DataHolder.currencyList
 import app.mobile.consideredcosts.data.DataHolder.isSentToItemsAdd
+import app.mobile.consideredcosts.data.DataHolder.itemsList
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.IncomeWorkType
@@ -20,18 +24,17 @@ import app.mobile.consideredcosts.http.models.TransactionElement
 import app.mobile.consideredcosts.http.models.TransactionsType
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_transaction.*
-import kotlinx.android.synthetic.main.activity_transaction.transactionAddButton
-import kotlinx.android.synthetic.main.activity_transaction.transactionCurrency
-import kotlinx.android.synthetic.main.activity_transaction.transactionMoney
-import kotlinx.android.synthetic.main.activity_transaction.transactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.NullPointerException
 import java.util.*
 
+
 class TransactionActivity : AppCompatActivity() {
+    private lateinit var transactionDateForSend: DateTrugaaa
+    private lateinit var calendar:Calendar
+
     private val typeList = mutableListOf<String>()
     private val workTypeList = mutableListOf<String>()
     private val sharedPreferences by lazy {
@@ -66,7 +69,7 @@ class TransactionActivity : AppCompatActivity() {
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
         updateComboFields()
-        val calendar = Calendar.getInstance()
+         calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
@@ -82,30 +85,27 @@ class TransactionActivity : AppCompatActivity() {
             }
         }
 
-        transactionAddDate.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                validateDate()
-            }
-        }
-
         transactionAddDate.setOnClickListener {
+            try {
+                closeKeyboard()
+            }
+            finally {}
             setThemeDefault(transactionAddDate)
             transactionAddDate.error = null
 
             val datePickerDialog = DatePickerDialog(
                 this, R.style.DataPickerStyle,
-                DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    transactionAddDate.text = applicationContext.getString(
-                        R.string.datePattern,
-                        dayOfMonth.toString(),
-                        month.toString(),
-                        year.toString()
-                    )
+                DatePickerDialog.OnDateSetListener { _, year, month,dayOfMonth ->
+                    val date = DateFormatter(this).
+                        dateGetFromCalendar(dayOfMonth,month,year)
+                    transactionAddDate.text = date.toString()
+                    transactionDateForSend = date
                 },
                 year,
                 month,
                 day
             )
+
             datePickerDialog.show()
         }
 
@@ -136,12 +136,13 @@ class TransactionActivity : AppCompatActivity() {
         }
 
         transactionAddButton.setOnClickListener {
-            if (validateDate() and validateMoney()) {
-                if (itemsList.isNullOrEmpty()) {
-                    isSentToItemsAdd = true
-                    super.onBackPressed()
-                }
 
+            if (itemsList.isNullOrEmpty()) {
+                isSentToItemsAdd = true
+                super.onBackPressed()
+            }
+
+            if (validateDate() and validateMoney()) {
                 val transToSend: TransactionElement? = when {
                     transactionRadioIncome.isChecked -> {
                         isSentToItemsAdd = false
@@ -149,7 +150,7 @@ class TransactionActivity : AppCompatActivity() {
                             null,
                             transactionMoney.text.toString().toDouble(),
                             transactionType(transactionType),
-                            transactionAddDate.text.toString(),
+                            transactionDateForSend.fullFormat,
                             currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
 
                             transactionDescription.text.toString(),
@@ -164,7 +165,7 @@ class TransactionActivity : AppCompatActivity() {
                                 null,
                                 transactionMoney.text.toString().toDouble(),
                                 transactionType(transactionType),
-                                transactionAddDate.text.toString(),
+                                transactionDateForSend.fullFormat,
                                 currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
 
                                 transactionDescription.text.toString(),
@@ -195,7 +196,10 @@ class TransactionActivity : AppCompatActivity() {
                                         invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                                     }
                                     else -> {
-                                        invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                                        invokeGeneralErrorActivity(
+                                            response.body()?.firstMessage
+                                                ?: resources.getString(R.string.unknownError)
+                                        )
                                     }
                                 }
                             }
@@ -289,6 +293,15 @@ class TransactionActivity : AppCompatActivity() {
             transactionAddDate.setBackgroundResource(R.drawable.transaction_combo_background_error)
             false
         } else true
+    }
+
+    private fun closeKeyboard() {
+        val view: View? = this.currentFocus
+        view.let {
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view!!.windowToken, 0)
+        }
     }
 }
 
