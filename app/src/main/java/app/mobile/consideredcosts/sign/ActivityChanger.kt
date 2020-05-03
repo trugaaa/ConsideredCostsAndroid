@@ -1,6 +1,6 @@
 package app.mobile.consideredcosts.sign
 
 interface ActivityChanger {
-    fun invokeMainActivity()
+    fun invokePinActivity()
     fun invokeGeneralErrorActivity(errorText: String)
 }

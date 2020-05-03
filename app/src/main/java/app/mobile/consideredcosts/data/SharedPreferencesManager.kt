@@ -35,10 +35,28 @@ class SharedPreferencesManager(context: Context) {
 
     fun getPassword(): String? = sharedPreferences.getString(PASSWORD,"No password")
 
+
+    fun setIsPinSet(bool:Boolean)
+    {
+        sharedPreferences.edit().putBoolean(IS_PIN_SET,bool).apply()
+    }
+
+    fun getIsPinSet(): Boolean? = sharedPreferences.getBoolean(IS_PIN_SET,false)
+
+
+    fun setPin(pin: String)
+    {
+        sharedPreferences.edit().putString(PIN,pin).apply()
+    }
+
+    fun getPin(): String? = sharedPreferences.getString(PIN,"nopin")
+
     companion object {
         private const val FIRST_OPEN = "FIRST_OPEN"
         private const val TOKEN = "TOKEN"
         private const val USERNAME = "USERNAME"
         private const val PASSWORD = "PASSWORD"
+        private const val IS_PIN_SET = "IS_PIN_SET"
+        private const val PIN = "PIN"
     }
 }
