@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.net.SocketTimeoutException
 
 class SignActivity : AppCompatActivity(), ActivityChanger {
 
@@ -176,56 +177,66 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     ) {
         val areAllFieldsValid = validateRegistration(username, email, password, confirmPass)
         if (areAllFieldsValid) {
-            GlobalScope.launch {
-                withContext(Dispatchers.IO) {
-                    launch {
-                        val response = RetrofitClient.registration(username, email, password)
-                        when (response.code()) {
-                            200 -> {
-                                login(username, password)
-                            }
-                            504, 503, 502, 501, 500 -> {
-                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
-                            }
-                            else -> {
-                                invokeGeneralErrorActivity(
-                                    response.body()?.firstMessage
-                                        ?: resources.getString(R.string.unknownError)
-                                )
+            try {
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO) {
+                        launch {
+                            val response = RetrofitClient.registration(username, email, password)
+                            when (response.code()) {
+                                200 -> {
+                                    login(username, password)
+                                }
+                                504, 503, 502, 501, 500 -> {
+                                    invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                                }
+                                else -> {
+                                    invokeGeneralErrorActivity(
+                                        response.body()?.firstMessage
+                                            ?: resources.getString(R.string.unknownError)
+                                    )
+                                }
                             }
                         }
                     }
                 }
+            } catch (ex: SocketTimeoutException) {
+                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+
             }
         }
     }
 
     private fun login(username: String, password: String) {
         if (validateLogin()) {
-            GlobalScope.launch {
-                withContext(Dispatchers.IO) {
-                    launch {
-                        val response = RetrofitClient.login(username, password)
-                        when (response.code()) {
-                            200 -> {
-                                sharedPreferencesManager.setPassword(password)
-                                sharedPreferencesManager.setUsername(username)
-                                sharedPreferencesManager.setToken(response.body()!!.data!!.access_token)
-                                invokePinActivity()
+            try {
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO) {
+                        launch {
+                            val response = RetrofitClient.login(username, password)
+                            when (response.code()) {
+                                200 -> {
+                                    sharedPreferencesManager.setPassword(password)
+                                    sharedPreferencesManager.setUsername(username)
+                                    sharedPreferencesManager.setToken(response.body()!!.data!!.access_token)
+                                    invokePinActivity()
+                                }
+                                504, 503, 502, 501, 500 -> {
+                                    invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                                }
+                                else -> {
+                                    invokeGeneralErrorActivity(
+                                        response.body()?.firstMessage
+                                            ?: resources.getString(R.string.unknownError)
+                                    )
+                                }
                             }
-                            504, 503, 502, 501, 500 -> {
-                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
-                            }
-                            else -> {
-                                invokeGeneralErrorActivity(
-                                    response.body()?.firstMessage
-                                        ?: resources.getString(R.string.unknownError)
-                                )
-                            }
-                        }
 
+                        }
                     }
                 }
+            } catch (ex: SocketTimeoutException) {
+                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+
             }
         }
     }

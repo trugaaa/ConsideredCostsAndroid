@@ -51,6 +51,15 @@ class SharedPreferencesManager(context: Context) {
 
     fun getPin(): String? = sharedPreferences.getString(PIN,"nopin")
 
+
+    fun clearLoginData()
+    {
+        sharedPreferences.edit().remove(TOKEN).apply()
+        sharedPreferences.edit().remove(USERNAME).apply()
+        sharedPreferences.edit().remove(PASSWORD).apply()
+        sharedPreferences.edit().remove(IS_PIN_SET).apply()
+    }
+
     companion object {
         private const val FIRST_OPEN = "FIRST_OPEN"
         private const val TOKEN = "TOKEN"

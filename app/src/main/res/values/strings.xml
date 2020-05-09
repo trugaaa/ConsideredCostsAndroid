@@ -93,6 +93,7 @@
     <string name="enterConfirmPin">Confirm your 4-digit PIN</string>
     <string name="enterYourPin">Enter your 4-digit PIN</string>
     <string name="submit">Submit</string>
+    <string name="logout">Log out</string>
 
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>

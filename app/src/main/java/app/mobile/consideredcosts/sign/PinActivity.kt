@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.net.SocketTimeoutException
 
 class PinActivity : AppCompatActivity() {
     private lateinit var currentState: PinScreenState
@@ -28,8 +29,13 @@ class PinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
         if (sharedPreferencesManager.getUsername().isNullOrBlank() &&
-            sharedPreferencesManager.getPassword().isNullOrBlank())
-        {
+            sharedPreferencesManager.getPassword().isNullOrBlank()
+        ) {
+            invokeSignActivity()
+        }
+
+        logout.setOnClickListener {
+            sharedPreferencesManager.clearLoginData()
             invokeSignActivity()
         }
     }
@@ -55,7 +61,10 @@ class PinActivity : AppCompatActivity() {
         }
 
         submitPinButton.setOnClickListener {
-           try{ closeKeyboard() } finally { }
+            try {
+                closeKeyboard()
+            } finally {
+            }
             if (!sharedPreferencesManager.getPassword().isNullOrBlank() &&
                 !sharedPreferencesManager.getPassword().isNullOrBlank()
             ) {
@@ -66,62 +75,65 @@ class PinActivity : AppCompatActivity() {
                     }
                 } else {
                     if (validatePinEnter()) {
-                        if (sharedPreferencesManager.getPin() == pinText.text.toString())
-                        {
+                        if (sharedPreferencesManager.getPin() == pinText.text.toString()) {
                             login()
-                        }
-                        else
-                        {
+                        } else {
                             pinText.text.clear()
                             invokeGeneralErrorActivity(resources.getString(R.string.pinIncorrect))
                         }
                     }
                 }
-            }
-            else
-            {
+            } else {
                 invokeSignActivity()
             }
         }
     }
 
     private fun login() {
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                launch {
-                    val response = RetrofitClient.login(
-                        sharedPreferencesManager.getUsername()!!,
-                        sharedPreferencesManager.getUsername()!!
-                    )
-                    when (response.code()) {
-                        200 -> {
-                            sharedPreferencesManager.setToken(response.body()!!.data!!.access_token)
-                            sharedPreferencesManager.setIsPinSet(true)
-                            invokeMainActivity()
+        try {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    launch {
+                        val response = RetrofitClient.login(
+                            sharedPreferencesManager.getUsername()!!,
+                            sharedPreferencesManager.getUsername()!!
+                        )
+                        when (response.code()) {
+                            200 -> {
+                                sharedPreferencesManager.setToken(response.body()!!.data!!.access_token)
+                                sharedPreferencesManager.setIsPinSet(true)
+                                invokeMainActivity()
+                            }
+                            504, 503, 502, 501, 500 -> {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                            }
+                            401 -> {
+                                invokeSignActivity()
+                            }
+                            else -> {
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage
+                                        ?: resources.getString(R.string.unknownError)
+                                )
+                            }
                         }
-                        504, 503, 502, 501, 500 -> {
-                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
-                        }
-                        401 -> {
-                            invokeSignActivity()
-                        }
-                        else -> {
-                            invokeGeneralErrorActivity(
-                                response.body()?.firstMessage
-                                    ?: resources.getString(R.string.unknownError)
-                            )
-                        }
-                    }
 
+                    }
                 }
             }
+        } catch (ex: SocketTimeoutException) {
+            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+
         }
     }
 
     private fun validatePinFields(): Boolean {
+        val pin = pinText.text.toString()
+        val pinConfirm = pinConfirmText.text.toString()
+
         return if (!validatePinEnter()) {
             false
-        } else if (pinText.text == pinConfirmText.text) {
+        } else if (pin != pinConfirm) {
             pinText.setBackgroundResource(R.drawable.sign_rounded_edit_texts_error)
             pinText.error = resources.getString(R.string.pinNotMatch)
             pinConfirmText.setBackgroundResource(R.drawable.sign_rounded_edit_texts_error)
@@ -133,12 +145,11 @@ class PinActivity : AppCompatActivity() {
     }
 
     private fun validatePinEnter(): Boolean {
-        if (pinText.text.length != 4) {
+        return if (pinText.text.length != 4) {
             pinText.setBackgroundResource(R.drawable.sign_rounded_edit_texts_error)
             pinText.error = resources.getString(R.string.pinError)
-            return false
-        }
-        return true
+            false
+        } else true
     }
 
     private fun invokeMainActivity() {
