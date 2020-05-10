@@ -67,7 +67,7 @@ class ItemsFragment : Fragment() {
         super.onResume()
 
         itemsAddButton.setOnClickListener {
-            closeKeyboard(context!!,itemsAddButton)
+            closeKeyboard(context!!, itemsAddButton)
             savingItem()
         }
 
@@ -95,8 +95,7 @@ class ItemsFragment : Fragment() {
                         401 -> {
                             openPinActivity()
                         }
-                        504,503,502,501,500->
-                        {
+                        504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
@@ -119,7 +118,14 @@ class ItemsFragment : Fragment() {
                     launch {
                         val response = RetrofitClient.postItems(
                             sharedPreferences.getToken()!!,
-                            ItemElement(null, itemEditText.text.toString(), 0.0, 0, 0.0, null)
+                            ItemElement(
+                                null,
+                                itemEditText.text.toString(),
+                                null,
+                                null,
+                                null,
+                                null
+                            )
                         )
                         when (response.code()) {
                             200 -> {
@@ -131,8 +137,7 @@ class ItemsFragment : Fragment() {
                             401 -> {
                                 openPinActivity()
                             }
-                            504,503,502,501,500->
-                            {
+                            504, 503, 502, 501, 500 -> {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
@@ -168,8 +173,7 @@ class ItemsFragment : Fragment() {
                         401 -> {
                             openPinActivity()
                         }
-                        504,503,502,501,500->
-                        {
+                        504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
@@ -192,18 +196,17 @@ class ItemsFragment : Fragment() {
             Snackbar.LENGTH_LONG
         )
 
-        snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!,R.color.colorError))
+        snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorError))
         snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
         snackBar.show()
     }
 
-    private fun closeKeyboard(context:Context, view:View ) {
-         val imm =  context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    private fun closeKeyboard(context: Context, view: View) {
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    private fun openPinActivity()
-    {
+    private fun openPinActivity() {
         startActivity(Intent(context, PinActivity::class.java))
         activity!!.finish()
     }

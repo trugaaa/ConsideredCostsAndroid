@@ -11,8 +11,8 @@ data class Items(
 data class ItemElement(
     val Id: Int?,
     val Name: String,
-    val Percent: Double,
-    val AmountOfOutgoes: Int,
-    val AmountOfMoney: Double,
+    val Percent: Double?,
+    val AmountOfOutgoes: Int?,
+    val AmountOfMoney: Double?,
     val CurrencyId: Int?
 )
