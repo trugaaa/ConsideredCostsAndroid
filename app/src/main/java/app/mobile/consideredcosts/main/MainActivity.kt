@@ -88,15 +88,22 @@ class MainActivity : AppCompatActivity() {
                             504, 503, 502, 501, 500 -> {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
+                            401 -> {
+                                openPinActivity()
+                            }
                             else -> {
-                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage
+                                        ?: resources.getString(R.string.unknownError))
                             }
                         }
                     }
                 }
             }
         } catch (e: KotlinNullPointerException) {
-            Log.e("Crash caught:", e.localizedMessage)
+            e.message.let {
+                Log.e("Crash caught:", e.message!!)
+            }
         }
     }
 
@@ -113,8 +120,14 @@ class MainActivity : AppCompatActivity() {
                             504, 503, 502, 501, 500 -> {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
+                            401 -> {
+                                openPinActivity()
+                            }
                             else -> {
-                                invokeGeneralErrorActivity(response.body()!!.firstMessage!!)
+
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage
+                                        ?: resources.getString(R.string.unknownError))
                             }
                         }
 
@@ -122,7 +135,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } catch (e: KotlinNullPointerException) {
-            Log.e("Crash caught:", e.localizedMessage)
+            e.message.let {
+                Log.e("Crash caught:", e.message!!)
+            }
         }
     }
 
