@@ -199,7 +199,8 @@ class TransactionActivity : AppCompatActivity() {
                                         } catch (ex: Exception) {
                                             invokeGeneralErrorActivity(
                                                 response.body()?.firstMessage
-                                                    ?: resources.getString(R.string.unknownError))
+                                                    ?: resources.getString(R.string.unknownError)
+                                            )
                                         }
                                     }
                                     401 -> {

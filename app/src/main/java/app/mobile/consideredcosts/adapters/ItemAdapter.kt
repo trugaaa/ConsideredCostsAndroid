@@ -61,9 +61,10 @@ class ItemsAdapter(
                     holder.itemView.amountOfOutgoesValue.text = AmountOfOutgoes.toString()
                     holder.itemView.percentValue.text =
                         cont.getString(R.string.percentPattern, Percent.toString(), " %")
-                    holder.itemView.amountOfMoneyCurrencyValue.text = DataHolder.currencyList.find{
-                            currencyElement -> currencyElement.Id == CurrencyId
-                    }!!.Name
+                    holder.itemView.amountOfMoneyCurrencyValue.text =
+                        DataHolder.currencyList.find { currencyElement ->
+                            currencyElement.Id == CurrencyId
+                        }!!.Name
                 }
 
                 holder.itemView.itemDelete.setOnClickListener {

@@ -57,7 +57,7 @@ class LaunchActivity : AppCompatActivity(), PagerListener {
             Analytics::class.java, Crashes::class.java
         )
 
-        if(sharedPreferencesManager.getIsPinSet()!!) openPinActivity()
+        if (sharedPreferencesManager.getIsPinSet()!!) openPinActivity()
         else if (sharedPreferencesManager.isFirstOpened()) openSignActivity()
 
         setContentView(R.layout.activity_welcome)
@@ -145,9 +145,8 @@ class LaunchActivity : AppCompatActivity(), PagerListener {
         finish()
     }
 
-    private fun openPinActivity()
-    {
-            startActivity(Intent(this, PinActivity::class.java))
-            finish()
+    private fun openPinActivity() {
+        startActivity(Intent(this, PinActivity::class.java))
+        finish()
     }
 }

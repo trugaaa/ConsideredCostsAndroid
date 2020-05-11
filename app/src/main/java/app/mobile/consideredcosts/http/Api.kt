@@ -26,7 +26,10 @@ interface Api {
             Response<TransactionsRequestResponse>
 
     @POST("transactions")
-    suspend fun postTransactions(@Header("Authorization") token: String, @Body transactionParameters: TransactionElement):
+    suspend fun postTransactions(
+        @Header("Authorization") token: String,
+        @Body transactionParameters: TransactionElement
+    ):
             Response<TransactionsRequestResponse>
 
     @GET("items")

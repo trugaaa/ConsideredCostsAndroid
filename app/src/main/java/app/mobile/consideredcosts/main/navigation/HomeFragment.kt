@@ -23,8 +23,7 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    private fun openPinActivity()
-    {
+    private fun openPinActivity() {
         startActivity(Intent(context, PinActivity::class.java))
         activity!!.finish()
     }

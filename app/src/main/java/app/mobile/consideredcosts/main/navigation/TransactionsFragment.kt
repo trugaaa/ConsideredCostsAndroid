@@ -152,8 +152,7 @@ class TransactionsFragment : Fragment() {
         snackBar.show()
     }
 
-    private fun openPinActivity()
-    {
+    private fun openPinActivity() {
         startActivity(Intent(context, PinActivity::class.java))
         activity!!.finish()
     }

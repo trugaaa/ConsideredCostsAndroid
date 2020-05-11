@@ -23,8 +23,7 @@ class ProfileFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
-    private fun openPinActivity()
-    {
+    private fun openPinActivity() {
         startActivity(Intent(context, PinActivity::class.java))
         activity!!.finish()
     }

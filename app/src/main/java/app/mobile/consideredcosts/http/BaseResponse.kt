@@ -6,8 +6,8 @@ open class BaseResponse<out T>(
     @SerializedName("data")
     val data: T? = null,
     @SerializedName("messages")
-    val messages: List<ErrorResponse>? = null)
-{
+    val messages: List<ErrorResponse>? = null
+) {
     val firstMessage: String?
         get() {
             return messages!!.first().Text
