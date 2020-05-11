@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.mobile.consideredcosts.R
+import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.http.models.ItemElement
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -60,6 +61,10 @@ class ItemsAdapter(
                     holder.itemView.amountOfOutgoesValue.text = AmountOfOutgoes.toString()
                     holder.itemView.percentValue.text =
                         cont.getString(R.string.percentPattern, Percent.toString(), " %")
+                    holder.itemView.amountOfMoneyCurrencyValue.text =
+                        DataHolder.currencyList.find { currencyElement ->
+                            currencyElement.Id == CurrencyId
+                        }!!.Name
                 }
 
                 holder.itemView.itemDelete.setOnClickListener {
@@ -72,7 +77,9 @@ class ItemsAdapter(
     private fun setPieCharData(itemsChart: PieChart) {
         val listPie = mutableListOf<PieEntry>()
         itemList.forEach { itemElement ->
-            listPie.add(PieEntry(itemElement.Percent!!.toFloat(), itemElement.Name))
+            if (itemElement.Percent!! > 0.0) {
+                listPie.add(PieEntry(itemElement.Percent!!.toFloat(), itemElement.Name))
+            }
         }
         val pieDataSet = PieDataSet(listPie, "")
         pieDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)

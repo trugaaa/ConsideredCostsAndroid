@@ -19,7 +19,7 @@ class GoalAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var context: Context
-    private lateinit var formatter :DateFormatter
+    private lateinit var formatter: DateFormatter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.context
@@ -67,8 +67,8 @@ class GoalAdapter(
                 }
             }
 
-            holder.itemView.goalDelete.setOnClickListener{
-                click(goalsList,position)
+            holder.itemView.goalDelete.setOnClickListener {
+                click(goalsList, position)
                 gettingGoalsListRequest()
             }
         }
@@ -89,8 +89,7 @@ class GoalAdapter(
         }
     }
 
-    private fun gettingGoalsListRequest()
-    {
+    private fun gettingGoalsListRequest() {
         updateGoals(DataHolder.goalsList)
     }
 

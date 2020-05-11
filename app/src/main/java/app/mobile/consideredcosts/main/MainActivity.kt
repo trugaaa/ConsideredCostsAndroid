@@ -85,8 +85,7 @@ class MainActivity : AppCompatActivity() {
                             200 -> {
                                 DataHolder.currencyList = response.body()!!.data!!.list
                             }
-                            504,503,502,501,500->
-                            {
+                            504, 503, 502, 501, 500 -> {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
@@ -97,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } catch (e: KotlinNullPointerException) {
-            Log.e("Crash caught:",e.localizedMessage)
+            Log.e("Crash caught:", e.localizedMessage)
         }
     }
 
@@ -111,8 +110,7 @@ class MainActivity : AppCompatActivity() {
                             200 -> {
                                 DataHolder.itemsList = response.body()!!.data!!.list!!
                             }
-                            504,503,502,501,500->
-                            {
+                            504, 503, 502, 501, 500 -> {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                             }
                             else -> {
@@ -124,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } catch (e: KotlinNullPointerException) {
-            Log.e("Crash caught:",e.localizedMessage)
+            Log.e("Crash caught:", e.localizedMessage)
         }
     }
 
@@ -135,8 +133,18 @@ class MainActivity : AppCompatActivity() {
             Snackbar.LENGTH_LONG
         )
 
-        snackBar.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.colorError))
-        snackBar.setActionTextColor(ContextCompat.getColor(applicationContext,R.color.colorPrimaryText))
+        snackBar.view.setBackgroundColor(
+            ContextCompat.getColor(
+                applicationContext,
+                R.color.colorError
+            )
+        )
+        snackBar.setActionTextColor(
+            ContextCompat.getColor(
+                applicationContext,
+                R.color.colorPrimaryText
+            )
+        )
         snackBar.show()
     }
 
@@ -144,8 +152,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.mainContainer, fragment).commit()
     }
 
-    private fun openPinActivity()
-    {
+    private fun openPinActivity() {
         startActivity(Intent(this, PinActivity::class.java))
         finish()
     }

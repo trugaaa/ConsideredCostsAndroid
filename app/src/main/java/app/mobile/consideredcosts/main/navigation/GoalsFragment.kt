@@ -30,7 +30,7 @@ class GoalsFragment : Fragment() {
 
     private val adapter by lazy {
         GoalAdapter(mutableListOf()) { position, list ->
-            deletingGoal(position,list )
+            deletingGoal(position, list)
         }
     }
 
@@ -48,8 +48,8 @@ class GoalsFragment : Fragment() {
         goalsRecyclerView.adapter = adapter
         updateLayout(DataHolder.goalsList)
 
-        goalsAddButton.setOnClickListener{
-            startActivity(Intent(context,GoalActivity::class.java))
+        goalsAddButton.setOnClickListener {
+            startActivity(Intent(context, GoalActivity::class.java))
         }
     }
 
@@ -62,8 +62,7 @@ class GoalsFragment : Fragment() {
         if (list.isEmpty()) {
             goalsRecyclerView.visibility = View.GONE
             goalsEmptyListLayout.visibility = View.VISIBLE
-        }
-        else{
+        } else {
             goalsRecyclerView.visibility = View.VISIBLE
             goalsEmptyListLayout.visibility = View.GONE
             adapter.updateGoals(list)
@@ -77,8 +76,8 @@ class GoalsFragment : Fragment() {
             Snackbar.LENGTH_LONG
         )
 
-        snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!,R.color.colorError))
-        snackBar.setActionTextColor(ContextCompat.getColor(context!!,R.color.colorPrimaryText))
+        snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorError))
+        snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
         snackBar.show()
     }
 
@@ -102,8 +101,7 @@ class GoalsFragment : Fragment() {
                         401 -> {
                             openPinActivity()
                         }
-                        504,503,502,501,500->
-                        {
+                        504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
@@ -139,12 +137,10 @@ class GoalsFragment : Fragment() {
                         401 -> {
                             openPinActivity()
                         }
-                        504,503,502,501,500->
-                        {
+                        504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
-                        401->
-                        {
+                        401 -> {
 
                         }
                         else -> {
@@ -161,8 +157,7 @@ class GoalsFragment : Fragment() {
         updateLayout(DataHolder.goalsList)
     }
 
-    private fun openPinActivity()
-    {
+    private fun openPinActivity() {
         startActivity(Intent(context, PinActivity::class.java))
         activity!!.finish()
     }

@@ -13,7 +13,10 @@ import app.mobile.consideredcosts.http.models.TransactionElement
 import kotlinx.android.synthetic.main.item_transactions.view.*
 import java.lang.Exception
 
-class TransactionAdapter(private var transactionList: MutableList<TransactionElement>, val click: (Int, MutableList<TransactionElement>) -> Unit) :
+class TransactionAdapter(
+    private var transactionList: MutableList<TransactionElement>,
+    val click: (Int, MutableList<TransactionElement>) -> Unit
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var cont: Context
 
@@ -62,7 +65,16 @@ class TransactionAdapter(private var transactionList: MutableList<TransactionEle
                 }
 
                 ItemId?.let {
-                    holder.itemView.sourceText.text = cont.getString(R.string.item)
+                    try {
+                        holder.itemView.sourceText.text = cont.getString(R.string.item)
+                        holder.itemView.sourceValue.text =
+                            DataHolder.itemsList.find { itemElement ->
+                                itemElement.Id == ItemId
+                            }!!.Name
+                    } catch (ex: KotlinNullPointerException)
+                    {
+                        holder.itemView.sourceText.visibility = View.GONE
+                    }
                     holder.itemView.transactionMoney.text =
                         cont.getString(R.string.outgoPattern, Money.toString())
                     holder.itemView.transactionMoney.setTextColor(
@@ -79,26 +91,28 @@ class TransactionAdapter(private var transactionList: MutableList<TransactionEle
                     )
                 }
 
-                holder.itemView.transactionDateValue.text = DateFormatter(cont).dateFromString(Date).toString()
+                holder.itemView.transactionDateValue.text =
+                    DateFormatter(cont).dateFromString(Date).toString()
                 holder.itemView.transactionTypeValue.text = Type.name.toLowerCase().capitalize()
 
-                holder.itemView.transactionCurrency.text = DataHolder.currencyList.find{
-                    currencyElement -> currencyElement.Id == CurrencyId
-                }!!.Name
+                holder.itemView.transactionCurrency.text =
+                    DataHolder.currencyList.find { currencyElement ->
+                        currencyElement.Id == CurrencyId
+                    }!!.Name
 
                 holder.itemView.transactionDelete.setOnClickListener {
-                    click(position,transactionList)
+                    click(position, transactionList)
                 }
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-            return when {
-                position == transactionList.size -> TYPE_EMPTY
-                position < transactionList.size -> TYPE_TRANSACTION
-                else -> throw Exception()
-            }
+        return when {
+            position == transactionList.size -> TYPE_EMPTY
+            position < transactionList.size -> TYPE_TRANSACTION
+            else -> throw Exception()
+        }
     }
 
     companion object {

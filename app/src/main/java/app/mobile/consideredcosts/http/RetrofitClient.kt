@@ -25,20 +25,23 @@ object RetrofitClient {
     }
 
     suspend fun login(login: String, password: String) = api.login(LoginRequest(login, password))
-    suspend fun registration(username: String,email:String, password: String) = api.registration(
-        RegistrationRequest(username, email, password))
+    suspend fun registration(username: String, email: String, password: String) = api.registration(
+        RegistrationRequest(username, email, password)
+    )
 
     suspend fun getCurrencyList() = api.currencies()
 
-    suspend fun getTransactions(token:String) = api.getTransactions(token)
-    suspend fun postTransaction(token: String, transElement: TransactionElement) = api.postTransactions(token,transElement)
-    suspend fun deleteTransaction(token: String, id:Int) = api.deleteTransaction(token,id)
+    suspend fun getTransactions(token: String) = api.getTransactions(token)
+    suspend fun postTransaction(token: String, transElement: TransactionElement) =
+        api.postTransactions(token, transElement)
+
+    suspend fun deleteTransaction(token: String, id: Int) = api.deleteTransaction(token, id)
 
     suspend fun getItems(token: String) = api.getItems(token)
-    suspend fun deleteItem(token: String, id:Int) = api.deleteItem(token,id)
-    suspend fun postItems(token: String,item:ItemElement) = api.postItems(token, item)
+    suspend fun deleteItem(token: String, id: Int) = api.deleteItem(token, id)
+    suspend fun postItems(token: String, item: ItemElement) = api.postItems(token, item)
 
     suspend fun getGoals(token: String) = api.getGoals(token)
-    suspend fun deleteGoal(token: String, id:Int) = api.deleteGoal(token,id)
-    suspend fun postGoal(token: String,goal:GoalElement) = api.postGoal(token, goal)
+    suspend fun deleteGoal(token: String, id: Int) = api.deleteGoal(token, id)
+    suspend fun postGoal(token: String, goal: GoalElement) = api.postGoal(token, goal)
 }

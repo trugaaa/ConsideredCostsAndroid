@@ -140,10 +140,8 @@ class TransactionActivity : AppCompatActivity() {
         }
 
         transactionAddButton.setOnClickListener {
-
             if (itemsList.isNullOrEmpty()) {
                 isSentToItemsAdd = true
-                super.onBackPressed()
             }
 
             if (validateDate() and validateMoney()) {
@@ -156,13 +154,11 @@ class TransactionActivity : AppCompatActivity() {
                             transactionType(transactionType),
                             transactionDateForSend.fullFormat,
                             currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
-
                             transactionDescription.text.toString(),
                             incomeWorkType(incomeWorkType),
                             null
                         )
                     }
-
                     transactionRadioOutgo.isChecked -> {
                         if (!isSentToItemsAdd) {
                             TransactionElement(
@@ -170,11 +166,16 @@ class TransactionActivity : AppCompatActivity() {
                                 transactionMoney.text.toString().toDouble(),
                                 transactionType(transactionType),
                                 transactionDateForSend.fullFormat,
-                                currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
-
+                                currencyList.find { currencyElement ->
+                                    currencyElement.Name ==
+                                            transactionCurrency.selectedItem.toString()
+                                }!!.Id,
                                 transactionDescription.text.toString(),
                                 null,
-                                1
+                                itemsList.find { itemElement ->
+                                    itemElement.Name ==
+                                            outgoItemType.selectedItem.toString()
+                                }!!.Id
                             )
                         } else {
                             null
@@ -182,6 +183,7 @@ class TransactionActivity : AppCompatActivity() {
                     }
                     else -> throw Exception()
                 }
+
                 if (!isSentToItemsAdd) {
                     GlobalScope.launch {
                         withContext(Dispatchers.IO) {
@@ -192,8 +194,15 @@ class TransactionActivity : AppCompatActivity() {
                                 )
                                 when (response.code()) {
                                     200 -> {
-                                        withContext(Dispatchers.Main) {
-                                            super.onBackPressed()
+                                        try {
+                                            withContext(Dispatchers.Main) {
+                                                super.onBackPressed()
+                                            }
+                                        } catch (ex: Exception) {
+                                            invokeGeneralErrorActivity(
+                                                response.body()?.firstMessage
+                                                    ?: resources.getString(R.string.unknownError)
+                                            )
                                         }
                                     }
                                     401 -> {
@@ -214,7 +223,18 @@ class TransactionActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            if (isSentToItemsAdd) {
+                when {
+                    transactionRadioIncome.isChecked -> {
+                    }
+                    transactionRadioOutgo.isChecked -> {
+                        super.onBackPressed()
+                    }
+                }
+            }
         }
+
         transactionOpenBack.setOnClickListener()
         {
             super.onBackPressed()

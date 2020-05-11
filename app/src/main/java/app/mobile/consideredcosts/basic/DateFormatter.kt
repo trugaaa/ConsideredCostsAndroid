@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class DateFormatter(val context: Context){
+class DateFormatter(val context: Context) {
     private val formatter = SimpleDateFormat(FORMAT_DATE_SENT, Locale.getDefault())
 
     fun dateFromString(dateString: String): DateTrugaaa {
@@ -24,7 +24,7 @@ class DateFormatter(val context: Context){
     }
 
     fun dateGetFromCalendar(dayOfMonth: Int, monthNumber: Int, year: Int): DateTrugaaa {
-        return dateFromString("$year-${monthNumber+1}-$dayOfMonth")
+        return dateFromString("$year-${monthNumber + 1}-$dayOfMonth")
     }
 
     companion object {
@@ -43,7 +43,7 @@ data class DateTrugaaa(
 }
 
 class Months {
-        val list = listOf(
+    val list = listOf(
         R.string.month_1,
         R.string.month_2,
         R.string.month_3,
