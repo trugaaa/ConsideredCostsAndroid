@@ -68,7 +68,19 @@
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/amountOfMoney"
         app:layout_constraintTop_toBottomOf="@id/textProduct"
-        tools:text="1000 USD" />
+        tools:text="1000" />
+
+    <TextView
+        android:id="@+id/amountOfMoneyCurrencyValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/amountOfMoneyValue"
+        app:layout_constraintTop_toBottomOf="@id/textProduct"
+        tools:text="USD" />
 
     <TextView
         android:id="@+id/percentValue"
@@ -79,8 +91,8 @@
         android:textColor="@color/colorBlue"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/amountOfMoneyValue"
-        app:layout_constraintTop_toTopOf="@id/amountOfMoneyValue"
+        app:layout_constraintStart_toEndOf="@id/amountOfMoneyCurrencyValue"
+        app:layout_constraintTop_toTopOf="@id/amountOfMoneyCurrencyValue"
         tools:text="22 %" />
 
     <TextView

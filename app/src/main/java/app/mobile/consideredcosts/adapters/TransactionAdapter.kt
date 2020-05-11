@@ -63,6 +63,9 @@ class TransactionAdapter(private var transactionList: MutableList<TransactionEle
 
                 ItemId?.let {
                     holder.itemView.sourceText.text = cont.getString(R.string.item)
+                    holder.itemView.sourceValue.text = DataHolder.itemsList.find{
+                            itemElement -> itemElement.Id == ItemId
+                    }!!.Name
                     holder.itemView.transactionMoney.text =
                         cont.getString(R.string.outgoPattern, Money.toString())
                     holder.itemView.transactionMoney.setTextColor(

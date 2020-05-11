@@ -192,8 +192,14 @@ class TransactionActivity : AppCompatActivity() {
                                 )
                                 when (response.code()) {
                                     200 -> {
-                                        withContext(Dispatchers.Main) {
-                                            super.onBackPressed()
+                                        try {
+                                            withContext(Dispatchers.Main) {
+                                                super.onBackPressed()
+                                            }
+                                        } catch (ex: Exception) {
+                                            invokeGeneralErrorActivity(
+                                                response.body()?.firstMessage
+                                                    ?: resources.getString(R.string.unknownError))
                                         }
                                     }
                                     401 -> {
