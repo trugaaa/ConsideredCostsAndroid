@@ -156,7 +156,6 @@ class TransactionActivity : AppCompatActivity() {
                             transactionType(transactionType),
                             transactionDateForSend.fullFormat,
                             currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
-
                             transactionDescription.text.toString(),
                             incomeWorkType(incomeWorkType),
                             null
@@ -170,11 +169,16 @@ class TransactionActivity : AppCompatActivity() {
                                 transactionMoney.text.toString().toDouble(),
                                 transactionType(transactionType),
                                 transactionDateForSend.fullFormat,
-                                currencyList.find { currencyElement -> currencyElement.Name == transactionCurrency.selectedItem.toString() }!!.Id,
-
+                                currencyList.find { currencyElement ->
+                                    currencyElement.Name ==
+                                            transactionCurrency.selectedItem.toString()
+                                }!!.Id,
                                 transactionDescription.text.toString(),
                                 null,
-                                1
+                                itemsList.find { itemElement ->
+                                    itemElement.Name ==
+                                            outgoItemType.selectedItem.toString()
+                                }!!.Id
                             )
                         } else {
                             null

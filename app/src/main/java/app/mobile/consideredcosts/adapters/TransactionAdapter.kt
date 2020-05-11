@@ -65,10 +65,16 @@ class TransactionAdapter(
                 }
 
                 ItemId?.let {
-                    holder.itemView.sourceText.text = cont.getString(R.string.item)
-                    holder.itemView.sourceValue.text = DataHolder.itemsList.find { itemElement ->
-                        itemElement.Id == ItemId
-                    }!!.Name
+                    try {
+                        holder.itemView.sourceText.text = cont.getString(R.string.item)
+                        holder.itemView.sourceValue.text =
+                            DataHolder.itemsList.find { itemElement ->
+                                itemElement.Id == ItemId
+                            }!!.Name
+                    } catch (ex: KotlinNullPointerException)
+                    {
+                        holder.itemView.sourceText.visibility = View.GONE
+                    }
                     holder.itemView.transactionMoney.text =
                         cont.getString(R.string.outgoPattern, Money.toString())
                     holder.itemView.transactionMoney.setTextColor(
