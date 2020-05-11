@@ -140,10 +140,8 @@ class TransactionActivity : AppCompatActivity() {
         }
 
         transactionAddButton.setOnClickListener {
-
             if (itemsList.isNullOrEmpty()) {
                 isSentToItemsAdd = true
-                super.onBackPressed()
             }
 
             if (validateDate() and validateMoney()) {
@@ -161,7 +159,6 @@ class TransactionActivity : AppCompatActivity() {
                             null
                         )
                     }
-
                     transactionRadioOutgo.isChecked -> {
                         if (!isSentToItemsAdd) {
                             TransactionElement(
@@ -186,6 +183,7 @@ class TransactionActivity : AppCompatActivity() {
                     }
                     else -> throw Exception()
                 }
+
                 if (!isSentToItemsAdd) {
                     GlobalScope.launch {
                         withContext(Dispatchers.IO) {
@@ -225,106 +223,117 @@ class TransactionActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-        transactionOpenBack.setOnClickListener()
-        {
-            super.onBackPressed()
-        }
-    }
 
-    private fun transactionType(type: Spinner): TransactionsType {
-        return when (type.selectedItem.toString()) {
-            "Family" -> {
-                TransactionsType.FAMILY
+            if (isSentToItemsAdd) {
+                when {
+                    transactionRadioIncome.isChecked -> {
+                    }
+                    transactionRadioOutgo.isChecked -> {
+                        super.onBackPressed()
+                    }
+                }
             }
-            "Private" -> {
-                TransactionsType.PRIVATE
-            }
-            else -> throw NullPointerException()
-        }
-    }
-
-    private fun incomeWorkType(type: Spinner): IncomeWorkType {
-        return when (type.selectedItem.toString()) {
-            "Salary" -> {
-                IncomeWorkType.SALARY
-            }
-            "Business" -> {
-                IncomeWorkType.BUSINESS
-            }
-            "Temporary work" -> {
-                IncomeWorkType.TEMP_WORK
-            }
-            else -> throw NullPointerException()
         }
 
-    }
+            transactionOpenBack.setOnClickListener()
+            {
+                super.onBackPressed()
+            }
+        }
 
-    private fun invokeGeneralErrorActivity(errorText: String) {
-        val snackBar = Snackbar.make(
-            transactionActivityLayout,
-            errorText,
-            Snackbar.LENGTH_LONG
-        )
+        private fun transactionType(type: Spinner): TransactionsType {
+            return when (type.selectedItem.toString()) {
+                "Family" -> {
+                    TransactionsType.FAMILY
+                }
+                "Private" -> {
+                    TransactionsType.PRIVATE
+                }
+                else -> throw NullPointerException()
+            }
+        }
 
-        snackBar.view.setBackgroundColor(
-            ContextCompat.getColor(
-                applicationContext,
-                R.color.colorError
+        private fun incomeWorkType(type: Spinner): IncomeWorkType {
+            return when (type.selectedItem.toString()) {
+                "Salary" -> {
+                    IncomeWorkType.SALARY
+                }
+                "Business" -> {
+                    IncomeWorkType.BUSINESS
+                }
+                "Temporary work" -> {
+                    IncomeWorkType.TEMP_WORK
+                }
+                else -> throw NullPointerException()
+            }
+
+        }
+
+        private fun invokeGeneralErrorActivity(errorText: String) {
+            val snackBar = Snackbar.make(
+                transactionActivityLayout,
+                errorText,
+                Snackbar.LENGTH_LONG
             )
-        )
-        snackBar.setActionTextColor(
-            ContextCompat.getColor(
-                applicationContext,
-                R.color.colorPrimaryText
+
+            snackBar.view.setBackgroundColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.colorError
+                )
             )
-        )
-        snackBar.show()
-    }
+            snackBar.setActionTextColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.colorPrimaryText
+                )
+            )
+            snackBar.show()
+        }
 
-    private fun setThemeDefault(editText: TextView) {
-        editText.setBackgroundResource(R.drawable.transaction_combo_background)
-        editText.setTextColor(ContextCompat.getColor(this, R.color.colorBlue))
-    }
+        private fun setThemeDefault(editText: TextView) {
+            editText.setBackgroundResource(R.drawable.transaction_combo_background)
+            editText.setTextColor(ContextCompat.getColor(this, R.color.colorBlue))
+        }
 
-    private fun updateComboFields() {
-        transactionCurrency.adapter = currencyAdapter
-        transactionType.adapter = typeAdapter
+        private fun updateComboFields() {
+            transactionCurrency.adapter = currencyAdapter
+            transactionType.adapter = typeAdapter
 
-        incomeWorkType.adapter = workTypeAdapter
-        outgoItemType.adapter = itemTypeAdapter
-    }
+            incomeWorkType.adapter = workTypeAdapter
+            outgoItemType.adapter = itemTypeAdapter
+        }
 
 
-    private fun validateMoney(): Boolean {
-        return if (transactionMoney.text.toString() == "") {
-            transactionMoney.error = resources.getString(R.string.errorFieldIsRequired)
-            transactionMoney.setBackgroundResource(R.drawable.transaction_combo_background_error)
+        private fun validateMoney(): Boolean {
+            return if (transactionMoney.text.toString() == "") {
+                transactionMoney.error = resources.getString(R.string.errorFieldIsRequired)
+                transactionMoney.setBackgroundResource(R.drawable.transaction_combo_background_error)
 
-            false
-        } else true
-    }
+                false
+            } else true
+        }
 
-    private fun validateDate(): Boolean {
-        return if (transactionAddDate.text.toString() == "") {
-            transactionAddDate.error = resources.getString(R.string.errorFieldIsRequired)
-            transactionAddDate.setBackgroundResource(R.drawable.transaction_combo_background_error)
-            false
-        } else true
-    }
+        private fun validateDate(): Boolean {
+            return if (transactionAddDate.text.toString() == "") {
+                transactionAddDate.error = resources.getString(R.string.errorFieldIsRequired)
+                transactionAddDate.setBackgroundResource(R.drawable.transaction_combo_background_error)
+                false
+            } else true
+        }
 
-    private fun closeKeyboard() {
-        val view: View? = this.currentFocus
-        view.let {
-            val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view!!.windowToken, 0)
+        private fun closeKeyboard() {
+            val view: View? = this.currentFocus
+            view.let {
+                val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view!!.windowToken, 0)
+            }
+        }
+
+        private fun openPinActivity() {
+            startActivity(Intent(this, PinActivity::class.java))
+            finish()
         }
     }
-
-    private fun openPinActivity() {
-        startActivity(Intent(this, PinActivity::class.java))
-        finish()
-    }
-}
 
