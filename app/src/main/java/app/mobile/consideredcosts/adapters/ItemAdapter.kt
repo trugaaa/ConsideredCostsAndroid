@@ -77,7 +77,9 @@ class ItemsAdapter(
     private fun setPieCharData(itemsChart: PieChart) {
         val listPie = mutableListOf<PieEntry>()
         itemList.forEach { itemElement ->
-            listPie.add(PieEntry(itemElement.Percent!!.toFloat(), itemElement.Name))
+            if (itemElement.Percent!! > 0.0) {
+                listPie.add(PieEntry(itemElement.Percent!!.toFloat(), itemElement.Name))
+            }
         }
         val pieDataSet = PieDataSet(listPie, "")
         pieDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
