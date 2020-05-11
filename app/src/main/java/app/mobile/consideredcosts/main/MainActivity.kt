@@ -94,7 +94,8 @@ class MainActivity : AppCompatActivity() {
                             else -> {
                                 invokeGeneralErrorActivity(
                                     response.body()?.firstMessage
-                                        ?: resources.getString(R.string.unknownError))
+                                        ?: resources.getString(R.string.unknownError)
+                                )
                             }
                         }
                     }
@@ -127,7 +128,8 @@ class MainActivity : AppCompatActivity() {
 
                                 invokeGeneralErrorActivity(
                                     response.body()?.firstMessage
-                                        ?: resources.getString(R.string.unknownError))
+                                        ?: resources.getString(R.string.unknownError)
+                                )
                             }
                         }
 

@@ -28,7 +28,7 @@ class PinActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
-        if (sharedPreferencesManager.getUsername().isNullOrBlank() &&
+        if (sharedPreferencesManager.getUsername().isNullOrBlank() ||
             sharedPreferencesManager.getPassword().isNullOrBlank()
         ) {
             invokeSignActivity()
