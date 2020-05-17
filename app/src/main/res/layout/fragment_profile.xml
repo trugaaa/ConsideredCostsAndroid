@@ -1,14 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".main.navigation.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Profile" />
+    <ImageView
+        android:id="@+id/user_image_profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_account"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/user_firstName_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/colorBlue"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@id/user_image_profile"
+        app:layout_constraintStart_toEndOf="@id/user_image_profile"
+        app:layout_constraintTop_toTopOf="@id/user_image_profile"
+        tools:text="Andrey" />
+
+    <TextView
+        android:id="@+id/user_secondName_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/colorBlue"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@id/user_firstName_profile"
+        app:layout_constraintStart_toEndOf="@id/user_firstName_profile"
+        app:layout_constraintTop_toTopOf="@id/user_firstName_profile"
+        tools:text="Kolesnyk" />
+
+    <ImageView
+        android:id="@+id/edit_info_profile"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_edit_info"
+        app:layout_constraintBottom_toBottomOf="@id/user_secondName_profile"
+        app:layout_constraintStart_toEndOf="@id/user_secondName_profile"
+        app:layout_constraintTop_toTopOf="@id/user_secondName_profile" />
+
+    <Button
+        android:id="@+id/logout_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTransparent"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:text="@string/logout"
+        android:textColor="@color/colorBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/divider_profile"
+        />
+
+    <View
+        android:id="@+id/divider_profile"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_image_profile" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
