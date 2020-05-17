@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -130,7 +131,15 @@ class ItemsFragment : Fragment() {
                         when (response.code()) {
                             200 -> {
                                 withContext(Dispatchers.Main) {
-                                    itemEditText.text.clear()
+
+                                    try{
+                                        itemEditText.text.clear()
+                                    }catch (ex:IllegalStateException)
+                                    {
+                                        ex.message.let {
+                                            Log.e("Crash caught:", ex.message!!)
+                                        }
+                                    }
                                     gettingList()
                                 }
                             }
@@ -183,7 +192,6 @@ class ItemsFragment : Fragment() {
                             )
                         }
                     }
-
                 }
             }
         }

@@ -244,10 +244,10 @@ class TransactionActivity : AppCompatActivity() {
     private fun transactionType(type: Spinner): TransactionsType {
         return when (type.selectedItem.toString()) {
             "Family" -> {
-                TransactionsType.FAMILY
+                TransactionsType.Family
             }
             "Private" -> {
-                TransactionsType.PRIVATE
+                TransactionsType.Private
             }
             else -> throw NullPointerException()
         }
@@ -256,15 +256,15 @@ class TransactionActivity : AppCompatActivity() {
     private fun incomeWorkType(type: Spinner): IncomeWorkType {
         return when (type.selectedItem.toString()) {
             "Salary" -> {
-                IncomeWorkType.SALARY
+                IncomeWorkType.Salary
             }
             "Business" -> {
-                IncomeWorkType.BUSINESS
+                IncomeWorkType.Business
             }
             "Temporary work" -> {
-                IncomeWorkType.TEMP_WORK
+                IncomeWorkType.TempWork
             }
-            else -> throw NullPointerException()
+            else -> throw KotlinNullPointerException()
         }
 
     }

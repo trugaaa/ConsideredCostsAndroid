@@ -185,7 +185,7 @@ class PinActivity : AppCompatActivity() {
     }
 
     private fun setThemeDefault(editText: EditText) {
-        editText.setBackgroundResource(R.drawable.sign_rounded_edit_text_items)
+        editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts)
         editText.setTextColor(ContextCompat.getColor(this, R.color.colorBlue))
     }
 

@@ -16,10 +16,10 @@ data class TransactionElement(
 )
 
 
-enum class IncomeWorkType {
-    SALARY, BUSINESS, TEMP_WORK
+enum class IncomeWorkType{
+    Salary, Business, TempWork
 }
 
 enum class TransactionsType {
-    FAMILY, PRIVATE
+    Family, Private
 }

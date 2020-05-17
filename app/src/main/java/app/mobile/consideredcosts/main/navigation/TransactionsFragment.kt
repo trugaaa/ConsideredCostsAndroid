@@ -2,6 +2,7 @@ package app.mobile.consideredcosts.main.navigation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -48,7 +49,7 @@ class TransactionsFragment : Fragment() {
         transactionsViewList.adapter = adapter
         updateLayout(DataHolder.transactionsList)
 
-        transactionAddButton.setOnClickListener() {
+        transactionAddButton.setOnClickListener{
             startActivity(Intent(context, TransactionActivity::class.java))
         }
     }
@@ -59,13 +60,21 @@ class TransactionsFragment : Fragment() {
     }
 
     private fun updateLayout(list: MutableList<TransactionElement>) {
-        if (list.isEmpty()) {
-            transactionsEmptyListLayout.visibility = View.VISIBLE
-            transactionsViewList.visibility = View.GONE
-        } else {
-            transactionsEmptyListLayout.visibility = View.GONE
-            transactionsViewList.visibility = View.VISIBLE
-            adapter.updateTransactions(list)
+        try {
+            if (list.isEmpty()) {
+                transactionsEmptyListLayout.visibility = View.VISIBLE
+                transactionsViewList.visibility = View.GONE
+            } else {
+                transactionsEmptyListLayout.visibility = View.GONE
+                transactionsViewList.visibility = View.VISIBLE
+                adapter.updateTransactions(list)
+            }
+        }
+        catch (ex:IllegalStateException)
+        {
+            ex.message.let {
+                Log.e("Crash",ex.message!!)
+            }
         }
     }
 

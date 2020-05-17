@@ -177,7 +177,13 @@ class GoalActivity : AppCompatActivity() {
                     when (response.code()) {
                         200 -> {
                             withContext(Dispatchers.Main) {
-                                super.onBackPressed()
+                                try {
+                                    super.onBackPressed()
+                                } catch (ex: Exception) {
+                                    ex.message.let {
+                                        Log.e("Crash", ex.message!!)
+                                    }
+                                }
                             }
                         }
                         401 -> {
