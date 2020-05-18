@@ -49,7 +49,7 @@ class TransactionsFragment : Fragment() {
         transactionsViewList.adapter = adapter
         updateLayout(DataHolder.transactionsList)
 
-        transactionAddButton.setOnClickListener{
+        transactionAddButton.setOnClickListener {
             startActivity(Intent(context, TransactionActivity::class.java))
         }
     }
@@ -61,7 +61,7 @@ class TransactionsFragment : Fragment() {
 
     private fun updateLayout(list: MutableList<TransactionElement>) {
         try {
-            if (list.isEmpty()) {
+            if (list.size == 0) {
                 transactionsEmptyListLayout.visibility = View.VISIBLE
                 transactionsViewList.visibility = View.GONE
             } else {
@@ -69,11 +69,9 @@ class TransactionsFragment : Fragment() {
                 transactionsViewList.visibility = View.VISIBLE
                 adapter.updateTransactions(list)
             }
-        }
-        catch (ex:IllegalStateException)
-        {
+        } catch (ex: IllegalStateException) {
             ex.message.let {
-                Log.e("Crash",ex.message!!)
+                Log.e("Crash", ex.message!!)
             }
         }
     }
@@ -123,7 +121,7 @@ class TransactionsFragment : Fragment() {
                             withContext(Dispatchers.Main) {
                                 if (response.body()!!.data != null) {
                                     DataHolder.transactionsList =
-                                        response.body()!!.data!!.list
+                                        response.body()!!.data!!.list.filter { element -> element.Type != null } as MutableList<TransactionElement>
                                 } else {
                                     DataHolder.transactionsList.clear()
                                 }
