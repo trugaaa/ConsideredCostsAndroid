@@ -47,7 +47,7 @@
     <string name="edit">Edit</string>
     <string name="add">Add</string>
     <string name="enterDate">Enter transaction date</string>
-    <string name="money">Enter money amount</string>
+    <string name="enterMoney">Enter money amount</string>
     <string name="currency">Select currency</string>
     <string name="addDescription">Add description if necessary</string>
     <string name="noTransactionsAvailable">No transaction are set</string>
@@ -95,6 +95,25 @@
     <string name="submit">Submit</string>
     <string name="logout">Log out</string>
 
+    <!-- Family-->
+    <string name="create">Create</string>
+    <string name="createOrJoinFamily">You are not a family member. Please join a family or create a new one.</string>
+    <string name="enterFamilyName">Enter family name</string>
+    <string name="familyNamePattern">Family "%s"</string>
+    <string name="invitations">Invitations</string>
+    <string name="leave">Leave</string>
+    <string name="familyFounder">Family founder:</string>
+    <string name="familyMoney">Family money:</string>
+    <string name="invite">Invite</string>
+    <string name="inviteFamilyMember">Invite family member by entering his name</string>
+    <string name="enterNickname">Enter user`s nickname</string>
+    <string name="userNamePattern">%1$s %2$s</string>
+
+    <!-- Family member -->
+    <string name="nickName">Nickname: </string>
+    <string name="realName">Name: </string>
+    <string name="money">Money</string>
+
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
     <string name="errorEmailField">Email is invalid.\nPls check your email</string>
@@ -108,6 +127,7 @@
     <string name="pinError">PIN is incorrect, PIN need to be 4-digit</string>
     <string name="pinNotMatch">PIN and confirm PIN are not equal</string>
     <string name="pinIncorrect">PIN is incorrect</string>
-
-
+    <string name="errorApplication">Application error, pls try again later</string>
+    <string name="noUserFound">No user with this nickname found</string>
+    <string name="sorryDeveloping">Sorry, this screen is currently in developing phase</string>
 </resources>

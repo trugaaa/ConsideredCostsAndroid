@@ -101,7 +101,7 @@ class ItemsFragment : Fragment() {
                         }
                         else -> {
                             invokeGeneralErrorActivity(
-                                response.body()?.firstMessage
+                                response.body()?.firstMessage()
                                     ?: resources.getString(R.string.unknownError)
                             )
                         }
@@ -131,7 +131,6 @@ class ItemsFragment : Fragment() {
                         when (response.code()) {
                             200 -> {
                                 withContext(Dispatchers.Main) {
-
                                     try{
                                         itemEditText.text.clear()
                                     }catch (ex:IllegalStateException)
@@ -151,7 +150,7 @@ class ItemsFragment : Fragment() {
                             }
                             else -> {
                                 invokeGeneralErrorActivity(
-                                    response.body()?.firstMessage
+                                    response.body()?.firstMessage()
                                         ?: resources.getString(R.string.unknownError)
                                 )
                             }
@@ -187,7 +186,7 @@ class ItemsFragment : Fragment() {
                         }
                         else -> {
                             invokeGeneralErrorActivity(
-                                response.body()?.firstMessage
+                                response.body()?.firstMessage()
                                     ?: resources.getString(R.string.unknownError)
                             )
                         }

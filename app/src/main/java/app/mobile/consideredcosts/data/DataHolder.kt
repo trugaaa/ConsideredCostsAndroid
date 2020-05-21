@@ -8,4 +8,7 @@ object DataHolder {
     var currencyList = mutableListOf<CurrencyElement>()
     var goalsList = mutableListOf<GoalElement>()
     var isSentToItemsAdd = false
+    var family: Family? = null
+    var hasFamily = false
+    var userInfo: User? = null
 }

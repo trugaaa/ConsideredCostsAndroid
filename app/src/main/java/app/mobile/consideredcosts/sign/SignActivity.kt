@@ -191,7 +191,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                                 }
                                 else -> {
                                     invokeGeneralErrorActivity(
-                                        response.body()?.firstMessage
+                                        response.body()?.firstMessage()
                                             ?: resources.getString(R.string.unknownError)
                                     )
                                 }
@@ -225,7 +225,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                                 }
                                 else -> {
                                     invokeGeneralErrorActivity(
-                                        response.body()?.firstMessage
+                                        response.body()?.firstMessage()
                                             ?: resources.getString(R.string.unknownError)
                                     )
                                 }

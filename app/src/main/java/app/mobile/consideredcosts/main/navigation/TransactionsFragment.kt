@@ -99,7 +99,7 @@ class TransactionsFragment : Fragment() {
                         }
                         else -> {
                             invokeGeneralErrorActivity(
-                                response.body()?.firstMessage
+                                response.body()?.firstMessage()
                                     ?: resources.getString(R.string.unknownError)
                             )
                         }
@@ -136,7 +136,7 @@ class TransactionsFragment : Fragment() {
                         }
                         else -> {
                             invokeGeneralErrorActivity(
-                                response.body()?.firstMessage
+                                response.body()?.firstMessage()
                                     ?: resources.getString(R.string.unknownError)
                             )
                         }

@@ -200,7 +200,7 @@ class TransactionActivity : AppCompatActivity() {
                                             }
                                         } catch (ex: Exception) {
                                             invokeGeneralErrorActivity(
-                                                response.body()?.firstMessage
+                                                response.body()?.firstMessage()
                                                     ?: resources.getString(R.string.unknownError)
                                             )
                                         }
@@ -213,7 +213,7 @@ class TransactionActivity : AppCompatActivity() {
                                     }
                                     else -> {
                                         invokeGeneralErrorActivity(
-                                            response.body()?.firstMessage
+                                            response.body()?.firstMessage()
                                                 ?: resources.getString(R.string.unknownError)
                                         )
                                     }

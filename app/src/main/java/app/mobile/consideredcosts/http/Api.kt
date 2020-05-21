@@ -55,4 +55,33 @@ interface Api {
     @DELETE("goals")
     suspend fun deleteGoal(@Header("Authorization") token: String, @Header("Id") id: Int):
             Response<GoalsRequestResponse>
+
+    @GET("accounts")
+    suspend fun getUserInfo(@Header("Authorization") token: String):
+            Response<UserRequestResponse>
+
+    /**
+     * Family Requests
+     */
+    @GET("family")
+    suspend fun getFamily(@Header("Authorization") token: String):
+            Response<FamilyBaseResponse>
+
+    @POST("family")
+    suspend fun createFamily(@Header("Authorization") token: String, @Body family: FamilyCreate):
+            Response<FamilyCreateBaseResponse>
+
+    @POST("family/invite")
+    suspend fun inviteUserToFamily(
+        @Header("Authorization") token: String,
+        @Header("username") username: String
+    ): Response<FamilyInviteBaseResponse>
+
+    @DELETE("family/leave")
+    suspend fun leaveFamily(@Header("Authorization") token: String):
+            Response<FamilyCreateBaseResponse>
+
+    @DELETE("family/kick")
+    suspend fun kickUser(@Header("Authorization") token: String, @Header("Id") id: Long):
+            Response<FamilyCreateBaseResponse>
 }

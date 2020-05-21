@@ -106,7 +106,7 @@ class GoalsFragment : Fragment() {
                         }
                         else -> {
                             invokeGeneralErrorActivity(
-                                response.body()?.firstMessage
+                                response.body()?.firstMessage()
                                     ?: resources.getString(R.string.unknownError)
                             )
                         }
@@ -145,7 +145,7 @@ class GoalsFragment : Fragment() {
                         }
                         else -> {
                             invokeGeneralErrorActivity(
-                                response.body()?.firstMessage
+                                response.body()?.firstMessage()
                                     ?: resources.getString(R.string.unknownError)
                             )
                         }

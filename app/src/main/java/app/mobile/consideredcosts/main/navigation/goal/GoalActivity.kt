@@ -194,7 +194,7 @@ class GoalActivity : AppCompatActivity() {
                         }
                         else -> {
                             invokeGeneralErrorActivity(
-                                response.body()?.firstMessage
+                                response.body()?.firstMessage()
                                     ?: resources.getString(R.string.unknownError)
                             )
                         }

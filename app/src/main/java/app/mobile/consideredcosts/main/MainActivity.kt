@@ -60,14 +60,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        super.onResume()
         if (DataHolder.isSentToItemsAdd) {
             mainNavBar.selectedItemId = R.id.navBarItemsMenuItem
             openFragment(ItemsFragment())
             DataHolder.isSentToItemsAdd = false
         }
-
+        getUserInfo()
         refreshLists()
-        super.onResume()
     }
 
     private fun refreshLists() {
@@ -93,7 +93,40 @@ class MainActivity : AppCompatActivity() {
                             }
                             else -> {
                                 invokeGeneralErrorActivity(
-                                    response.body()?.firstMessage
+                                    response.body()?.firstMessage()
+                                        ?: resources.getString(R.string.unknownError)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: KotlinNullPointerException) {
+            e.message.let {
+                Log.e("Crash caught:", e.message!!)
+            }
+        }
+    }
+
+    private fun getUserInfo() {
+        try {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    launch {
+                        val response = RetrofitClient.getUserInfo(sharedPreferences.getToken()!!)
+                        when (response.code()) {
+                            200 -> {
+                                DataHolder.userInfo = response.body()!!.data
+                            }
+                            504, 503, 502, 501, 500 -> {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                            }
+                            401 -> {
+                                openPinActivity()
+                            }
+                            else -> {
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage()
                                         ?: resources.getString(R.string.unknownError)
                                 )
                             }
@@ -127,7 +160,7 @@ class MainActivity : AppCompatActivity() {
                             else -> {
 
                                 invokeGeneralErrorActivity(
-                                    response.body()?.firstMessage
+                                    response.body()?.firstMessage()
                                         ?: resources.getString(R.string.unknownError)
                                 )
                             }
