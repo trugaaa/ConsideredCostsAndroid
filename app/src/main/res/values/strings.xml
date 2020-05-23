@@ -107,7 +107,7 @@
     <string name="invite">Invite</string>
     <string name="inviteFamilyMember">Invite family member by entering his name</string>
     <string name="enterNickname">Enter user`s nickname</string>
-    <string name="userNamePattern">%1$s %2$s</string>
+    <string name="userNamePattern">%1$s%2$s</string>
     <string name="deleteFamily">Delete Family</string>
 
     <!-- Family member -->
