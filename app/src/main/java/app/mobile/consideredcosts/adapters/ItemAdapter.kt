@@ -2,6 +2,7 @@ package app.mobile.consideredcosts.adapters
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,21 +55,27 @@ class ItemsAdapter(
                 }
             }
             is ItemsViewHolder -> {
-                with(itemList[position - 1])
-                {
-                    holder.itemView.textProductValue.text = Name
-                    holder.itemView.amountOfMoneyValue.text = AmountOfMoney.toString()
-                    holder.itemView.amountOfOutgoesValue.text = AmountOfOutgoes.toString()
-                    holder.itemView.percentValue.text =
-                        cont.getString(R.string.percentPattern, Percent.toString(), " %")
-                    holder.itemView.amountOfMoneyCurrencyValue.text =
-                        DataHolder.currencyList.find { currencyElement ->
-                            currencyElement.Id == CurrencyId
-                        }!!.Name
-                }
+                try {
+                    with(itemList[position - 1])
+                    {
+                        holder.itemView.textProductValue.text = Name
+                        holder.itemView.amountOfMoneyValue.text = AmountOfMoney.toString()
+                        holder.itemView.amountOfOutgoesValue.text = AmountOfOutgoes.toString()
+                        holder.itemView.percentValue.text =
+                            cont.getString(R.string.percentPattern, Percent.toString(), " %")
+                        holder.itemView.amountOfMoneyCurrencyValue.text =
+                            DataHolder.currencyList.find { currencyElement ->
+                                currencyElement.Id == CurrencyId
+                            }!!.Name
+                    }
 
-                holder.itemView.itemDelete.setOnClickListener {
-                    click(position - 1, itemList)
+                    holder.itemView.itemDelete.setOnClickListener {
+                        click(position - 1, itemList)
+                    }
+                } catch (ex: KotlinNullPointerException) {
+                    ex.message.let {
+                        Log.e("Crash",ex.message!!)
+                    }
                 }
             }
         }
@@ -78,7 +85,7 @@ class ItemsAdapter(
         val listPie = mutableListOf<PieEntry>()
         itemList.forEach { itemElement ->
             if (itemElement.Percent!! > 0.0) {
-                listPie.add(PieEntry(itemElement.Percent!!.toFloat(), itemElement.Name))
+                listPie.add(PieEntry(itemElement.Percent.toFloat(), itemElement.Name))
             }
         }
         val pieDataSet = PieDataSet(listPie, "")
@@ -108,7 +115,7 @@ class ItemsAdapter(
 
     private fun elementsNotEmpty(list: MutableList<ItemElement>): Boolean {
         list.forEach {
-            if (it.Percent != 0.0) return true
+            if (it.Percent!! > 0.0) return true
         }
         return false
     }

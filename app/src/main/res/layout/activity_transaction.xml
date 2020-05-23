@@ -86,9 +86,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="42dp"
-            android:autofillHints="@string/money"
+            android:autofillHints="@string/enterMoney"
             android:background="@drawable/transaction_combo_background"
-            android:hint="@string/money"
+            android:hint="@string/enterMoney"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
             android:padding="12dp"
@@ -179,7 +179,6 @@
             app:layout_constraintTop_toBottomOf="@id/incomeWorkType" />
 
         <EditText
-
             android:id="@+id/transactionDescription"
             android:layout_width="match_parent"
             android:layout_height="100dp"

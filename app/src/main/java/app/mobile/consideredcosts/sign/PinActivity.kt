@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -19,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import java.net.SocketTimeoutException
 
 class PinActivity : AppCompatActivity() {
@@ -28,9 +30,7 @@ class PinActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
-        if (sharedPreferencesManager.getUsername().isNullOrBlank() &&
-            sharedPreferencesManager.getPassword().isNullOrBlank()
-        ) {
+        if (!sharedPreferencesManager.isPinDataActual()) {
             invokeSignActivity()
         }
 
@@ -63,11 +63,11 @@ class PinActivity : AppCompatActivity() {
         submitPinButton.setOnClickListener {
             try {
                 closeKeyboard()
-            } finally {
+            } catch (ex: Exception) {
+                ex.message.let { Log.e("Crash", ex.message!!) }
             }
-            if (!sharedPreferencesManager.getPassword().isNullOrBlank() &&
-                !sharedPreferencesManager.getPassword().isNullOrBlank()
-            ) {
+
+            if (sharedPreferencesManager.isPinDataActual()) {
                 if (currentState == PinScreenState.SETUP) {
                     if (validatePinFields()) {
                         sharedPreferencesManager.setPin(pinConfirmText.text.toString())
@@ -96,7 +96,7 @@ class PinActivity : AppCompatActivity() {
                     launch {
                         val response = RetrofitClient.login(
                             sharedPreferencesManager.getUsername()!!,
-                            sharedPreferencesManager.getUsername()!!
+                            sharedPreferencesManager.getPassword()!!
                         )
                         when (response.code()) {
                             200 -> {
@@ -112,7 +112,7 @@ class PinActivity : AppCompatActivity() {
                             }
                             else -> {
                                 invokeGeneralErrorActivity(
-                                    response.body()?.firstMessage
+                                    response.body()?.firstMessage()
                                         ?: resources.getString(R.string.unknownError)
                                 )
                             }
@@ -185,7 +185,7 @@ class PinActivity : AppCompatActivity() {
     }
 
     private fun setThemeDefault(editText: EditText) {
-        editText.setBackgroundResource(R.drawable.sign_rounded_edit_text_items)
+        editText.setBackgroundResource(R.drawable.sign_rounded_edit_texts)
         editText.setTextColor(ContextCompat.getColor(this, R.color.colorBlue))
     }
 

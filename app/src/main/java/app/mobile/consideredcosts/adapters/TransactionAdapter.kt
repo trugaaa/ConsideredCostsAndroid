@@ -1,6 +1,7 @@
 package app.mobile.consideredcosts.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,65 +44,72 @@ class TransactionAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is TransactionViewHolder) {
-            with(transactionList[position])
-            {
-                WorkType?.let {
-                    holder.itemView.sourceValue.text = WorkType.name.toLowerCase().capitalize()
-                    holder.itemView.transactionMoney.text =
-                        cont.getString(R.string.incomePattern, Money.toString())
-                    holder.itemView.sourceText.text = cont.getString(R.string.source)
-                    holder.itemView.transactionMoney.setTextColor(
-                        ContextCompat.getColor(
-                            cont,
-                            R.color.colorSuccess
+            try {
+                with(transactionList[position])
+                {
+                    WorkType?.let {
+                        holder.itemView.sourceValue.text = WorkType.name.toLowerCase().capitalize()
+                        holder.itemView.transactionMoney.text =
+                            cont.getString(R.string.incomePattern, Money.toString())
+                        holder.itemView.sourceText.text = cont.getString(R.string.source)
+                        holder.itemView.transactionMoney.setTextColor(
+                            ContextCompat.getColor(
+                                cont,
+                                R.color.colorSuccess
+                            )
                         )
-                    )
-                    holder.itemView.transactionCurrency.setTextColor(
-                        ContextCompat.getColor(
-                            cont,
-                            R.color.colorSuccess
+                        holder.itemView.transactionCurrency.setTextColor(
+                            ContextCompat.getColor(
+                                cont,
+                                R.color.colorSuccess
+                            )
                         )
-                    )
-                }
-
-                ItemId?.let {
-                    try {
-                        holder.itemView.sourceText.text = cont.getString(R.string.item)
-                        holder.itemView.sourceValue.text =
-                            DataHolder.itemsList.find { itemElement ->
-                                itemElement.Id == ItemId
-                            }!!.Name
-                    } catch (ex: KotlinNullPointerException)
-                    {
-                        holder.itemView.sourceText.visibility = View.GONE
                     }
-                    holder.itemView.transactionMoney.text =
-                        cont.getString(R.string.outgoPattern, Money.toString())
-                    holder.itemView.transactionMoney.setTextColor(
-                        ContextCompat.getColor(
-                            cont,
-                            R.color.colorError
+                    ItemId?.let {
+                        try {
+                            holder.itemView.sourceText.text = cont.getString(R.string.item)
+                            holder.itemView.sourceValue.text =
+                                DataHolder.itemsList.find { itemElement ->
+                                    itemElement.Id == ItemId
+                                }!!.Name
+                        } catch (ex: KotlinNullPointerException) {
+                            holder.itemView.sourceText.visibility = View.GONE
+                        }
+                        holder.itemView.transactionMoney.text =
+                            cont.getString(R.string.outgoPattern, Money.toString())
+                        holder.itemView.transactionMoney.setTextColor(
+                            ContextCompat.getColor(
+                                cont,
+                                R.color.colorError
+                            )
                         )
-                    )
-                    holder.itemView.transactionCurrency.setTextColor(
-                        ContextCompat.getColor(
-                            cont,
-                            R.color.colorError
+                        holder.itemView.transactionCurrency.setTextColor(
+                            ContextCompat.getColor(
+                                cont,
+                                R.color.colorError
+                            )
                         )
-                    )
+                    }
+                    holder.itemView.transactionDateValue.text =
+                        DateFormatter(cont).dateFromString(Date).toString()
+                    holder.itemView.transactionTypeValue.text = Type.name.toLowerCase().capitalize()
+                    holder.itemView.transactionCurrency.text =
+                        DataHolder.currencyList.find { currencyElement ->
+                            currencyElement.Id == CurrencyId
+                        }!!.Name
+                    holder.itemView.transactionDelete.setOnClickListener {
+                        click(position, transactionList)
+                    }
                 }
-
-                holder.itemView.transactionDateValue.text =
-                    DateFormatter(cont).dateFromString(Date).toString()
-                holder.itemView.transactionTypeValue.text = Type.name.toLowerCase().capitalize()
-
-                holder.itemView.transactionCurrency.text =
-                    DataHolder.currencyList.find { currencyElement ->
-                        currencyElement.Id == CurrencyId
-                    }!!.Name
-
-                holder.itemView.transactionDelete.setOnClickListener {
-                    click(position, transactionList)
+            } catch (e: KotlinNullPointerException) {
+                e.message.let {
+                    holder.itemView.visibility = View.GONE
+                    Log.e("Crash caught:", e.message!!)
+                }
+            } catch (e: NullPointerException) {
+                e.message.let {
+                    holder.itemView.visibility = View.GONE
+                    Log.e("Crash caught:", e.message!!)
                 }
             }
         }

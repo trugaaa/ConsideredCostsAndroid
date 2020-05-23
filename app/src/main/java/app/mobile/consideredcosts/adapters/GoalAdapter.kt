@@ -41,7 +41,7 @@ class GoalAdapter(
             with(goalsList[position])
             {
                 holder.itemView.goalValue.text = Money.toString()
-                holder.itemView.goalCurrency.text = DataHolder.currencyList[CurrencyId].Name
+                holder.itemView.goalCurrency.text = DataHolder.currencyList.find { it.Id == CurrencyId }!!.Name
                 holder.itemView.startDateValue.text = formatter.dateFromString(DateStart).toString()
                 holder.itemView.endDateValue.text = formatter.dateFromString(DateFinish).toString()
                 holder.itemView.statusValue.text = Status

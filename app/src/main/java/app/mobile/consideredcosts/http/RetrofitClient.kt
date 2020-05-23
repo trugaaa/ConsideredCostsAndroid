@@ -44,4 +44,23 @@ object RetrofitClient {
     suspend fun getGoals(token: String) = api.getGoals(token)
     suspend fun deleteGoal(token: String, id: Int) = api.deleteGoal(token, id)
     suspend fun postGoal(token: String, goal: GoalElement) = api.postGoal(token, goal)
+
+    suspend fun getUserInfo(token: String) = api.getUserInfo(token)
+
+    /**
+     * Family
+     */
+    suspend fun createFamily(token: String, body: FamilyCreate) = api.createFamily(token, body)
+    suspend fun getFamily(token: String) = api.getFamily(token)
+    suspend fun deleteFamily(token: String) = api.deleteFamily(token)
+
+    suspend fun inviteUser(token: String, username: String) =
+        api.inviteUserToFamily(token, username)
+
+    suspend fun leaveFamily(token: String) = api.leaveFamily(token)
+    suspend fun kickUser(token: String, id: Long) = api.kickUser(token, id)
+
+    suspend fun getInvitations(token: String) = api.getInvitations(token)
+    suspend fun cancelInvitation(token: String, id: Long) = api.cancelInvitation(token, id)
+    suspend fun acceptInvitation(token: String, id: Long) = api.acceptInvitation(token, id)
 }

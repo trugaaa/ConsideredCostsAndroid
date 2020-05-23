@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/transaction_background">
+
+    <TextView
+        android:id="@+id/invitation_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/nickName"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/invitation_nickname_value" />
+
+    <TextView
+        android:id="@+id/invitation_nickname_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/invitation_nickname"
+        app:layout_constraintTop_toTopOf="@id/invitation_nickname"
+        app:layout_constraintBottom_toBottomOf="@id/invitation_nickname"
+        tools:text="trugaaa" />
+
+    <ImageView
+        android:id="@+id/member_kick"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_x_cross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/invitation_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/realName"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/invitation_nickname" />
+
+    <TextView
+        android:id="@+id/invitation_date_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        tools:text="Andrey Kolesnyk"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/invitation_date"
+        app:layout_constraintTop_toBottomOf="@id/invitation_nickname" />
+
+    <TextView
+        android:id="@+id/member_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/money"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/invitation_date" />
+
+    <TextView
+        android:id="@+id/member_money_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        tools:text="111"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/member_money"
+        app:layout_constraintTop_toBottomOf="@id/invitation_date" />
+
+    <TextView
+        android:id="@+id/member_currency_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        tools:text="USD"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/member_money_value"
+        app:layout_constraintTop_toBottomOf="@id/invitation_date" />
+
+    <TextView
+        android:id="@+id/member_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/email"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/member_money"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/member_email_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        tools:text="adsdasdasdassda@fgda.cad"
+        android:textColor="@color/colorBlue"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/member_email"
+        app:layout_constraintTop_toBottomOf="@id/member_money"
+        app:layout_constraintBottom_toBottomOf="@id/member_email"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
