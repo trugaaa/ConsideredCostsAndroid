@@ -70,6 +70,9 @@ interface Api {
     @POST("family")
     suspend fun createFamily(@Header("Authorization") token: String, @Body family: FamilyCreate):
             Response<FamilyCreateBaseResponse>
+    @DELETE("family")
+    suspend fun deleteFamily(@Header("Authorization") token: String):
+            Response<FamilyCreateBaseResponse>
 
     @POST("family/invite")
     suspend fun inviteUserToFamily(

@@ -73,7 +73,10 @@ class ProfileFragment : Fragment() {
         updateUserInfo()
         getFamily()
         getUserInvitations()
+    }
 
+    override fun onResume() {
+        super.onResume()
         edit_info_profile.setOnClickListener {
             userActivityInvoke()
         }
@@ -90,7 +93,12 @@ class ProfileFragment : Fragment() {
             inviteToFamily()
         }
 
+        leave_family_button.setOnClickListener {
+            leaveFamily()
+        }
+
         tryAgainProfileButton.setOnClickListener {
+            Log.e("Button_Click","Try again button is tapped")
             when {
                 DataHolder.currencyList.isNullOrEmpty() -> getCurrencyList()
                 DataHolder.userInfo == null -> getUserInfo()
@@ -98,8 +106,8 @@ class ProfileFragment : Fragment() {
             getFamily()
         }
 
-        leave_family_button.setOnClickListener {
-            leaveFamily()
+        deleteFamilyButton.setOnClickListener{
+            deleteFamily()
         }
     }
 
@@ -162,14 +170,15 @@ class ProfileFragment : Fragment() {
     }
 
     private suspend fun updateLayout() {
-        DataHolder.userInfo = null
         withContext(Dispatchers.Main) {
             when (DataHolder.currencyList.isNullOrEmpty() || DataHolder.userInfo == null) {
                 true -> {
+                    profile_scroll_layout.visibility = View.GONE
                     error_profile_fragment.visibility = View.VISIBLE
                     success_profile_fragment.visibility = View.GONE
                 }
                 false -> {
+                    profile_scroll_layout.visibility = View.VISIBLE
                     error_profile_fragment.visibility = View.GONE
                     success_profile_fragment.visibility = View.VISIBLE
 
@@ -196,10 +205,9 @@ class ProfileFragment : Fragment() {
                         }
                         false -> {
                             family_create_layout.visibility = View.VISIBLE
-
+                            invitationsAdapter.updateInvitations(DataHolder.invitationList)
                             if (!DataHolder.invitationList.isNullOrEmpty()) {
-                                family_invitations_layout.visibility = View.VISIBLE
-
+                                family_invitations_layout.visibility = View.GONE
                             }
                             user_has_family_layout.visibility = View.GONE
                             invite_member_profile_layout.visibility = View.GONE
@@ -595,6 +603,39 @@ class ProfileFragment : Fragment() {
                             200 -> {
                                 DataHolder.invitationList = response.body()!!.data!!.list!!
                                 updateLayout()
+                            }
+                            504, 503, 502, 501, 500 -> {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                            }
+                            401 -> {
+                                logout()
+                            }
+                            else -> {
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage()
+                                        ?: resources.getString(R.string.unknownError)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: KotlinNullPointerException) {
+            e.message.let {
+                Log.e("Crash caught:", e.message!!)
+            }
+        }
+    }
+
+    private fun deleteFamily() {
+        try {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    launch {
+                        val response = RetrofitClient.deleteFamily(sharedPreferences.getToken()!!)
+                        when (response.code()) {
+                            200 -> {
+                                getFamily()
                             }
                             504, 503, 502, 501, 500 -> {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))

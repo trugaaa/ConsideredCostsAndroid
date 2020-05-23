@@ -14,13 +14,18 @@ import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.basic.FieldValidator
 import app.mobile.consideredcosts.data.SharedPreferencesManager
+import app.mobile.consideredcosts.http.BaseResponse
 import app.mobile.consideredcosts.http.RetrofitClient
+import app.mobile.consideredcosts.http.models.LoginRequestResponse
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_sign.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Response
+import java.io.IOException
 import java.net.SocketTimeoutException
 
 class SignActivity : AppCompatActivity(), ActivityChanger {
@@ -225,8 +230,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                                 }
                                 else -> {
                                     invokeGeneralErrorActivity(
-                                        response.body()?.firstMessage()
-                                            ?: resources.getString(R.string.unknownError)
+                                        errorMessageParsing(response) ?: resources.getString(R.string.unknownError)
                                     )
                                 }
                             }
@@ -376,6 +380,24 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view!!.windowToken, 0)
         }
+    }
+
+    private fun errorMessageParsing(response: Response<LoginRequestResponse>):String?
+    {
+        val gson = Gson()
+        val adapter = gson.getAdapter(BaseResponse::class.java)
+        var result: String? = null
+        try {
+            if (response.errorBody() != null)
+                result = adapter.fromJson(
+                    response.errorBody()!!.string()
+                ).firstMessage()
+
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return result
     }
 }
 

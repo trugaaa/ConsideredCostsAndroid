@@ -47,7 +47,7 @@ data class FamilyInvitationResponse(val list: MutableList<FamilyInvitation>?)
 data class FamilyInvitation(
     val Id: Long,
     val FamilyId: Long,
-    val Username: String,
+    val UserName: String,
     val Date: String
 )
 

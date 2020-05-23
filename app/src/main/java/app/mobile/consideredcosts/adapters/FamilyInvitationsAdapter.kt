@@ -49,7 +49,7 @@ class FamilyInvitationsAdapter(
 
             try {
                 with(invitationList[position]) {
-                    holder.itemView.invitation_nickname_value.text = Username
+                    holder.itemView.invitation_nickname_value.text = UserName
                     holder.itemView.invitation_date_value.text = DateFormatter(cont).dateFromString(Date).toString()
                 }
             }
