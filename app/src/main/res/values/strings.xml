@@ -114,6 +114,7 @@
     <string name="realName">Name: </string>
     <string name="money">Money</string>
 
+    <string name="try_again">Try again</string>
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
     <string name="errorEmailField">Email is invalid.\nPls check your email</string>

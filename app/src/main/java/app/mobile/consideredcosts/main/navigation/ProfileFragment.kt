@@ -13,11 +13,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.mobile.consideredcosts.R
+import app.mobile.consideredcosts.adapters.FamilyInvitationsAdapter
 import app.mobile.consideredcosts.adapters.FamilyMemberAdapter
 import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.FamilyCreate
+import app.mobile.consideredcosts.http.models.FamilyInvitation
 import app.mobile.consideredcosts.http.models.FamilyMember
 import app.mobile.consideredcosts.main.navigation.profile.UserActivity
 import app.mobile.consideredcosts.sign.PinActivity
@@ -41,6 +43,18 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private val invitationsAdapter by lazy {
+        FamilyInvitationsAdapter(mutableListOf(),
+            { position, list ->
+                acceptInvitation(position.toLong(), list)
+                getUserInvitations()
+            },
+            { position, list ->
+                cancelInvitation(position.toLong(), list)
+                getUserInvitations()
+            })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,9 +67,12 @@ class ProfileFragment : Fragment() {
 
         familyMembersRecyclerView.layoutManager = LinearLayoutManager(context!!)
         familyMembersRecyclerView.adapter = familyAdapter
+        familyInvitationsRecyclerView.layoutManager = LinearLayoutManager(context!!)
+        familyInvitationsRecyclerView.adapter = invitationsAdapter
 
         updateUserInfo()
         getFamily()
+        getUserInvitations()
 
         edit_info_profile.setOnClickListener {
             userActivityInvoke()
@@ -74,7 +91,11 @@ class ProfileFragment : Fragment() {
         }
 
         tryAgainProfileButton.setOnClickListener {
-            getCurrencyList()
+            when {
+                DataHolder.currencyList.isNullOrEmpty() -> getCurrencyList()
+                DataHolder.userInfo == null -> getUserInfo()
+            }
+            getFamily()
         }
 
         leave_family_button.setOnClickListener {
@@ -141,8 +162,9 @@ class ProfileFragment : Fragment() {
     }
 
     private suspend fun updateLayout() {
+        DataHolder.userInfo = null
         withContext(Dispatchers.Main) {
-            when (DataHolder.currencyList.isNullOrEmpty()) {
+            when (DataHolder.currencyList.isNullOrEmpty() || DataHolder.userInfo == null) {
                 true -> {
                     error_profile_fragment.visibility = View.VISIBLE
                     success_profile_fragment.visibility = View.GONE
@@ -155,7 +177,7 @@ class ProfileFragment : Fragment() {
                         true -> {
                             familyAdapter.updateFamilyMembers(DataHolder.family!!.members)
 
-                            create_family_members_layout.visibility = View.VISIBLE
+                            user_has_family_layout.visibility = View.VISIBLE
                             invite_member_profile_layout.visibility = View.VISIBLE
                             family_name.text =
                                 context!!.getString(
@@ -169,14 +191,17 @@ class ProfileFragment : Fragment() {
                                     currencyElement.Id == DataHolder.userInfo!!.CurrencyId.toInt()
                                 }!!.Name
 
-                            create_family_invitations_layout.visibility = View.GONE
+                            family_invitations_layout.visibility = View.GONE
                             family_create_layout.visibility = View.GONE
                         }
                         false -> {
                             family_create_layout.visibility = View.VISIBLE
-                            create_family_invitations_layout.visibility = View.VISIBLE
 
-                            create_family_members_layout.visibility = View.GONE
+                            if (!DataHolder.invitationList.isNullOrEmpty()) {
+                                family_invitations_layout.visibility = View.VISIBLE
+
+                            }
+                            user_has_family_layout.visibility = View.GONE
                             invite_member_profile_layout.visibility = View.GONE
                         }
                     }
@@ -435,6 +460,161 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun cancelInvitation(id: Long, list: MutableList<FamilyInvitation>) {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                launch {
+                    val response =
+                        RetrofitClient.cancelInvitation(
+                            sharedPreferences.getToken()!!,
+                            list[id.toInt()].Id
+                        )
+                    when (response.code()) {
+                        200 -> {
+                            try {
+                                getFamily()
+                            } catch (ex: Exception) {
+                                ex.message.let {
+                                    Log.e(
+                                        "Crash",
+                                        "Crash on family from http response to family object parsing\n" + ex.message
+                                    )
+                                }
+                            }
+                        }
+                        404 -> {
+                            DataHolder.hasFamily = false
+                            updateLayout()
+                        }
+                        401 -> {
+                            logout()
+                        }
+                        504, 503, 502, 501, 500 -> {
+                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                        }
+                        else -> {
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage()
+                                    ?: resources.getString(R.string.unknownError)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun acceptInvitation(id: Long, list: MutableList<FamilyInvitation>) {
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                launch {
+                    val response =
+                        RetrofitClient.acceptInvitation(
+                            sharedPreferences.getToken()!!,
+                            list[id.toInt()].Id
+                        )
+                    when (response.code()) {
+                        200 -> {
+                            try {
+                                getFamily()
+                            } catch (ex: Exception) {
+                                ex.message.let {
+                                    Log.e(
+                                        "Crash",
+                                        "Crash on family from http response to family object parsing\n" + ex.message
+                                    )
+                                }
+                            }
+                        }
+                        404 -> {
+                            DataHolder.hasFamily = false
+                            updateLayout()
+                        }
+                        401 -> {
+                            logout()
+                        }
+                        504, 503, 502, 501, 500 -> {
+                            invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                        }
+                        else -> {
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage()
+                                    ?: resources.getString(R.string.unknownError)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getUserInfo() {
+        try {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    launch {
+                        val response = RetrofitClient.getUserInfo(sharedPreferences.getToken()!!)
+                        when (response.code()) {
+                            200 -> {
+                                DataHolder.userInfo = response.body()!!.data
+                            }
+                            504, 503, 502, 501, 500 -> {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                            }
+                            401 -> {
+                                logout()
+                            }
+                            else -> {
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage()
+                                        ?: resources.getString(R.string.unknownError)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: KotlinNullPointerException) {
+            e.message.let {
+                Log.e("Crash caught:", e.message!!)
+            }
+        }
+    }
+
+    private fun getUserInvitations() {
+        try {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    launch {
+                        val response = RetrofitClient.getInvitations(sharedPreferences.getToken()!!)
+                        when (response.code()) {
+                            200 -> {
+                                DataHolder.invitationList = response.body()!!.data!!.list!!
+                                updateLayout()
+                            }
+                            504, 503, 502, 501, 500 -> {
+                                invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
+                            }
+                            401 -> {
+                                logout()
+                            }
+                            else -> {
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage()
+                                        ?: resources.getString(R.string.unknownError)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: KotlinNullPointerException) {
+            e.message.let {
+                Log.e("Crash caught:", e.message!!)
             }
         }
     }

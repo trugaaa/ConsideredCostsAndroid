@@ -40,7 +40,9 @@ data class FamilyInviteResponse(
 /**
  * Family invitations structure
  */
-data class FamilyInvitations(val list: MutableList<FamilyInvitations>?)
+class  FamilyInvitationsBaseResponse :  BaseResponse<FamilyInvitationResponse>()
+
+data class FamilyInvitationResponse(val list: MutableList<FamilyInvitation>?)
 
 data class FamilyInvitation(
     val Id: Long,

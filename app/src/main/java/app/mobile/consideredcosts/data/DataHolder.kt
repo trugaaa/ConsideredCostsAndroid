@@ -11,4 +11,5 @@ object DataHolder {
     var family: Family? = null
     var hasFamily = false
     var userInfo: User? = null
+    var invitationList = mutableListOf<FamilyInvitation>()
 }

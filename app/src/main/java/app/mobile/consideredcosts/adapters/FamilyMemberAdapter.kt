@@ -46,14 +46,14 @@ class FamilyMemberAdapter(
 
             try {
                 with(membersList[position]) {
-                    holder.itemView.member_nickname_value.text = Nickname
+                    holder.itemView.invitation_nickname_value.text = Nickname
                     holder.itemView.member_money_value.text = Money.toString()
                     userInfo.let {
                         holder.itemView.member_currency_value.text =
                             DataHolder.currencyList[userInfo!!.CurrencyId.toInt()].Name
                     }
                     holder.itemView.member_email_value.text = Email
-                    holder.itemView.member_name_value.text =
+                    holder.itemView.invitation_date_value.text =
                         cont.getString(R.string.userNamePattern, FirstName, SecondName)
                 }
             } catch (e: KotlinNullPointerException) {

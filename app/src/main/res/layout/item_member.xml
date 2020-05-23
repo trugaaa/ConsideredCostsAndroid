@@ -8,7 +8,7 @@
     android:background="@drawable/transaction_background">
 
     <TextView
-        android:id="@+id/member_nickname"
+        android:id="@+id/invitation_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -19,18 +19,18 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/member_nickname_value" />
+        app:layout_constraintEnd_toStartOf="@id/invitation_nickname_value" />
 
     <TextView
-        android:id="@+id/member_nickname_value"
+        android:id="@+id/invitation_nickname_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:textColor="@color/colorBlue"
         android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/member_nickname"
-        app:layout_constraintTop_toTopOf="@id/member_nickname"
-        app:layout_constraintBottom_toBottomOf="@id/member_nickname"
+        app:layout_constraintStart_toEndOf="@id/invitation_nickname"
+        app:layout_constraintTop_toTopOf="@id/invitation_nickname"
+        app:layout_constraintBottom_toBottomOf="@id/invitation_nickname"
         tools:text="trugaaa" />
 
     <ImageView
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/member_name"
+        android:id="@+id/invitation_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -53,10 +53,10 @@
         android:textColor="@color/colorBlue"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/member_nickname" />
+        app:layout_constraintTop_toBottomOf="@id/invitation_nickname" />
 
     <TextView
-        android:id="@+id/member_name_value"
+        android:id="@+id/invitation_date_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -64,8 +64,8 @@
         tools:text="Andrey Kolesnyk"
         android:textColor="@color/colorBlue"
         android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/member_name"
-        app:layout_constraintTop_toBottomOf="@id/member_nickname" />
+        app:layout_constraintStart_toEndOf="@id/invitation_date"
+        app:layout_constraintTop_toBottomOf="@id/invitation_nickname" />
 
     <TextView
         android:id="@+id/member_money"
@@ -78,7 +78,7 @@
         android:textColor="@color/colorBlue"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/member_name" />
+        app:layout_constraintTop_toBottomOf="@id/invitation_date" />
 
     <TextView
         android:id="@+id/member_money_value"
@@ -90,7 +90,7 @@
         android:textColor="@color/colorBlue"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/member_money"
-        app:layout_constraintTop_toBottomOf="@id/member_name" />
+        app:layout_constraintTop_toBottomOf="@id/invitation_date" />
 
     <TextView
         android:id="@+id/member_currency_value"
@@ -102,7 +102,7 @@
         android:textColor="@color/colorBlue"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/member_money_value"
-        app:layout_constraintTop_toBottomOf="@id/member_name" />
+        app:layout_constraintTop_toBottomOf="@id/invitation_date" />
 
     <TextView
         android:id="@+id/member_email"

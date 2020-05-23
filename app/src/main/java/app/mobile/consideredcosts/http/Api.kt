@@ -83,5 +83,17 @@ interface Api {
 
     @DELETE("family/kick")
     suspend fun kickUser(@Header("Authorization") token: String, @Header("Id") id: Long):
-            Response<FamilyCreateBaseResponse>
+            Response<FamilyInvitationsBaseResponse>
+
+    @GET("family/invitations")
+    suspend fun getInvitations(@Header("Authorization") token: String):
+            Response<FamilyInvitationsBaseResponse>
+
+    @DELETE("family/invitations/cancel")
+    suspend fun cancelInvitation(@Header("Authorization") token: String, @Header("Id") id: Long):
+            Response<FamilyInvitationsBaseResponse>
+
+    @POST("family/invitations/accept")
+    suspend fun acceptInvitation(@Header("Authorization") token: String, @Header("Id") id: Long):
+            Response<FamilyInvitationsBaseResponse>
 }

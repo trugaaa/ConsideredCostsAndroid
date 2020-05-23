@@ -57,4 +57,7 @@ object RetrofitClient {
     suspend fun leaveFamily(token: String) = api.leaveFamily(token)
     suspend fun kickUser(token: String, id: Long) = api.kickUser(token, id)
 
+    suspend fun getInvitations(token: String) = api.getInvitations(token)
+    suspend fun cancelInvitation(token: String, id: Long) = api.cancelInvitation(token,id)
+    suspend fun acceptInvitation(token: String, id: Long) = api.acceptInvitation(token,id)
 }
