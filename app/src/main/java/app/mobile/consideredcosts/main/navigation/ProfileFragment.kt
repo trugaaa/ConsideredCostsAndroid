@@ -98,7 +98,7 @@ class ProfileFragment : Fragment() {
         }
 
         tryAgainProfileButton.setOnClickListener {
-            Log.e("Button_Click","Try again button is tapped")
+            Log.e("Button_Click", "Try again button is tapped")
             when {
                 DataHolder.currencyList.isNullOrEmpty() -> getCurrencyList()
                 DataHolder.userInfo == null -> getUserInfo()
@@ -106,15 +106,19 @@ class ProfileFragment : Fragment() {
             getFamily()
         }
 
-        deleteFamilyButton.setOnClickListener{
+        deleteFamilyButton.setOnClickListener {
             deleteFamily()
         }
     }
 
     private fun updateUserInfo() {
         try {
-            user_firstName_profile.text = sharedPreferences.getUsername()
-            user_secondName_profile.text = sharedPreferences.getUsername()
+            if (DataHolder.userInfo!!.FirstName != null && DataHolder.userInfo!!.SecondName != null) {
+                user_firstName_profile.text = DataHolder.userInfo!!.FirstName
+                user_secondName_profile.text = DataHolder.userInfo!!.SecondName
+            } else {
+                user_firstName_profile.text = sharedPreferences.getUsername()
+            }
         } catch (ex: Exception) {
             ex.message.let {
                 Log.e("Crash", ex.message!!)
