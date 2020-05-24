@@ -119,8 +119,9 @@ class ProfileFragment : Fragment() {
                 user_firstName_profile.text = sharedPreferences.getUsername()
             }
         } catch (ex: Exception) {
+            user_firstName_profile.text = sharedPreferences.getUsername()
             ex.message.let {
-                Log.e("Crash", ex.message!!)
+                Log.e("Crash", "UserInfo KotlinNullPointerException on Header name set")
             }
         }
     }

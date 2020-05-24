@@ -6,7 +6,6 @@ import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -16,18 +15,13 @@ import androidx.core.content.ContextCompat
 import app.mobile.consideredcosts.R
 import app.mobile.consideredcosts.basic.FieldValidator
 import app.mobile.consideredcosts.data.SharedPreferencesManager
-import app.mobile.consideredcosts.http.BaseResponse
 import app.mobile.consideredcosts.http.RetrofitClient
-import app.mobile.consideredcosts.http.models.LoginRequestResponse
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_sign.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Response
-import java.io.IOException
 import java.net.SocketTimeoutException
 
 class SignActivity : AppCompatActivity(), ActivityChanger {
