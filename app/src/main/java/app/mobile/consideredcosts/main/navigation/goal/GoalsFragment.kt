@@ -1,4 +1,4 @@
-package app.mobile.consideredcosts.main.navigation
+package app.mobile.consideredcosts.main.navigation.goal
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +14,6 @@ import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.GoalElement
-import app.mobile.consideredcosts.main.navigation.goal.GoalActivity
 import app.mobile.consideredcosts.sign.PinActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_goals.*

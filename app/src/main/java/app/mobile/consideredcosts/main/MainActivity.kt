@@ -12,6 +12,8 @@ import app.mobile.consideredcosts.data.DataHolder
 import app.mobile.consideredcosts.data.SharedPreferencesManager
 import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.main.navigation.*
+import app.mobile.consideredcosts.main.navigation.goal.GoalsFragment
+import app.mobile.consideredcosts.main.navigation.profile.ProfileFragment
 import app.mobile.consideredcosts.sign.PinActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*

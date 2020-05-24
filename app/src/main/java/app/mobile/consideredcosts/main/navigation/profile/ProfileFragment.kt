@@ -1,4 +1,4 @@
-package app.mobile.consideredcosts.main.navigation
+package app.mobile.consideredcosts.main.navigation.profile
 
 import android.app.Activity
 import android.content.Context
@@ -21,7 +21,6 @@ import app.mobile.consideredcosts.http.RetrofitClient
 import app.mobile.consideredcosts.http.models.FamilyCreate
 import app.mobile.consideredcosts.http.models.FamilyInvitation
 import app.mobile.consideredcosts.http.models.FamilyMember
-import app.mobile.consideredcosts.main.navigation.profile.UserActivity
 import app.mobile.consideredcosts.sign.PinActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -175,7 +174,10 @@ class ProfileFragment : Fragment() {
 
     private suspend fun updateLayout() {
         withContext(Dispatchers.Main) {
-            when (DataHolder.currencyList.isNullOrEmpty() || DataHolder.userInfo == null) {
+            when (DataHolder.currencyList.isNullOrEmpty() ||
+                    DataHolder.userInfo == null ||
+                    DataHolder.userInfo!!.CurrencyId == 0.toLong() ||
+                    DataHolder.userInfo!!.CurrencyId == null) {
                 true -> {
                     profile_scroll_layout.visibility = View.GONE
                     error_profile_fragment.visibility = View.VISIBLE
@@ -201,7 +203,7 @@ class ProfileFragment : Fragment() {
                             family_founder_value.text = DataHolder.family!!.Creator
                             family_money_value.text = DataHolder.family!!.Money.toString()
                             family_money_currency.text =
-                                    DataHolder.currencyList.find { currencyElement ->
+                                DataHolder.currencyList.find { currencyElement ->
                                     currencyElement.Id == DataHolder.userInfo!!.CurrencyId.toInt()
                                 }!!.Name
                         }
@@ -213,8 +215,7 @@ class ProfileFragment : Fragment() {
                             invitationsAdapter.updateInvitations(DataHolder.invitationList)
                             if (DataHolder.invitationList.isNullOrEmpty()) {
                                 family_invitations_layout.visibility = View.GONE
-                            }
-                            else{
+                            } else {
                                 family_invitations_layout.visibility = View.VISIBLE
                             }
                         }
