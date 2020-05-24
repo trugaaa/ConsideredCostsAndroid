@@ -174,55 +174,59 @@ class ProfileFragment : Fragment() {
     }
 
     private suspend fun updateLayout() {
-        withContext(Dispatchers.Main) {
-            when (DataHolder.currencyList.isNullOrEmpty() ||
-                    DataHolder.userInfo == null ||
-                    DataHolder.userInfo!!.CurrencyId == 0.toLong() ||
-                    DataHolder.userInfo!!.CurrencyId == null) {
-                true -> {
-                    profile_scroll_layout.visibility = View.GONE
-                    error_profile_fragment.visibility = View.VISIBLE
-                }
-                false -> {
-                    profile_scroll_layout.visibility = View.VISIBLE
-                    error_profile_fragment.visibility = View.GONE
+        try {
+            withContext(Dispatchers.Main) {
+                when (DataHolder.currencyList.isNullOrEmpty() ||
+                        DataHolder.userInfo == null ||
+                        DataHolder.userInfo!!.CurrencyId == 0.toLong() ||
+                        DataHolder.userInfo!!.CurrencyId == null) {
+                    true -> {
+                        profile_scroll_layout.visibility = View.GONE
+                        error_profile_fragment.visibility = View.VISIBLE
+                    }
+                    false -> {
+                        profile_scroll_layout.visibility = View.VISIBLE
+                        error_profile_fragment.visibility = View.GONE
 
-                    when (DataHolder.hasFamily) {
-                        true -> {
-                            familyAdapter.updateFamilyMembers(DataHolder.family!!.members)
+                        when (DataHolder.hasFamily) {
+                            true -> {
+                                familyAdapter.updateFamilyMembers(DataHolder.family!!.members)
 
-                            user_has_family_layout.visibility = View.VISIBLE
-                            invite_member_profile_layout.visibility = View.VISIBLE
-                            family_invitations_layout.visibility = View.GONE
-                            family_create_layout.visibility = View.GONE
-
-                            family_name.text =
-                                context!!.getString(
-                                    R.string.familyNamePattern,
-                                    DataHolder.family!!.Name
-                                )
-                            family_founder_value.text = DataHolder.family!!.Creator
-                            family_money_value.text = DataHolder.family!!.Money.toString()
-                            family_money_currency.text =
-                                DataHolder.currencyList.find { currencyElement ->
-                                    currencyElement.Id == DataHolder.userInfo!!.CurrencyId.toInt()
-                                }!!.Name
-                        }
-                        false -> {
-                            family_create_layout.visibility = View.VISIBLE
-                            user_has_family_layout.visibility = View.GONE
-                            invite_member_profile_layout.visibility = View.GONE
-
-                            invitationsAdapter.updateInvitations(DataHolder.invitationList)
-                            if (DataHolder.invitationList.isNullOrEmpty()) {
+                                user_has_family_layout.visibility = View.VISIBLE
+                                invite_member_profile_layout.visibility = View.VISIBLE
                                 family_invitations_layout.visibility = View.GONE
-                            } else {
-                                family_invitations_layout.visibility = View.VISIBLE
+                                family_create_layout.visibility = View.GONE
+
+                                family_name.text =
+                                    context!!.getString(
+                                        R.string.familyNamePattern,
+                                        DataHolder.family!!.Name
+                                    )
+                                family_founder_value.text = DataHolder.family!!.Creator
+                                family_money_value.text = DataHolder.family!!.Money.toString()
+                                family_money_currency.text =
+                                    DataHolder.currencyList.find { currencyElement ->
+                                        currencyElement.Id == DataHolder.userInfo!!.CurrencyId.toInt()
+                                    }!!.Name
+                            }
+                            false -> {
+                                family_create_layout.visibility = View.VISIBLE
+                                user_has_family_layout.visibility = View.GONE
+                                invite_member_profile_layout.visibility = View.GONE
+
+                                invitationsAdapter.updateInvitations(DataHolder.invitationList)
+                                if (DataHolder.invitationList.isNullOrEmpty()) {
+                                    family_invitations_layout.visibility = View.GONE
+                                } else {
+                                    family_invitations_layout.visibility = View.VISIBLE
+                                }
                             }
                         }
                     }
                 }
             }
+        } catch (ex: java.lang.IllegalStateException) {
+            Log.e("Crash", "Trying to update profile screen elements, when no items screen present")
         }
     }
 

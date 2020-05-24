@@ -51,13 +51,19 @@ class ItemsFragment : Fragment() {
     }
 
     private fun updateState(list: MutableList<ItemElement>) {
-        if (list.isEmpty()) {
-            itemsRecyclerView.visibility = View.GONE
-            itemsEmptyListLayout.visibility = View.VISIBLE
-        } else {
-            itemsRecyclerView.visibility = View.VISIBLE
-            itemsEmptyListLayout.visibility = View.GONE
-            itemsAdapter.listUpdate(list)
+
+        try {
+            if (list.isEmpty()) {
+                itemsRecyclerView.visibility = View.GONE
+                itemsEmptyListLayout.visibility = View.VISIBLE
+            } else {
+                itemsRecyclerView.visibility = View.VISIBLE
+                itemsEmptyListLayout.visibility = View.GONE
+                itemsAdapter.listUpdate(list)
+            }
+        }catch (ex:java.lang.IllegalStateException)
+        {
+            Log.e("Crash","Trying to update items screen elements, when no items screen present")
         }
     }
 

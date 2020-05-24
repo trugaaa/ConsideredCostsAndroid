@@ -2,6 +2,7 @@ package app.mobile.consideredcosts.main.navigation.goal
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -58,13 +59,17 @@ class GoalsFragment : Fragment() {
     }
 
     private fun updateLayout(list: MutableList<GoalElement>) {
-        if (list.isEmpty()) {
-            goalsRecyclerView.visibility = View.GONE
-            goalsEmptyListLayout.visibility = View.VISIBLE
-        } else {
-            goalsRecyclerView.visibility = View.VISIBLE
-            goalsEmptyListLayout.visibility = View.GONE
-            adapter.updateGoals(list)
+        try {
+            if (list.isEmpty()) {
+                goalsRecyclerView.visibility = View.GONE
+                goalsEmptyListLayout.visibility = View.VISIBLE
+            } else {
+                goalsRecyclerView.visibility = View.VISIBLE
+                goalsEmptyListLayout.visibility = View.GONE
+                adapter.updateGoals(list)
+            }
+        } catch (ex: java.lang.IllegalStateException) {
+            Log.e("Crash", "Trying to update goals screen elements, when no items screen present")
         }
     }
 

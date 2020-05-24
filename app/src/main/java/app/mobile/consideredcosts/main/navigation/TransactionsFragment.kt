@@ -69,10 +69,9 @@ class TransactionsFragment : Fragment() {
                 transactionsViewList.visibility = View.VISIBLE
                 adapter.updateTransactions(list)
             }
-        } catch (ex: IllegalStateException) {
-            ex.message.let {
-                Log.e("Crash", ex.message!!)
-            }
+        }catch (ex:java.lang.IllegalStateException)
+        {
+            Log.e("Crash","Trying to update transaction screen elements, when no items screen present")
         }
     }
 
