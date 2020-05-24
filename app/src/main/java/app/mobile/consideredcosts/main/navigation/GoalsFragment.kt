@@ -93,7 +93,6 @@ class GoalsFragment : Fragment() {
                                 if (response.body()!!.data != null) {
                                     DataHolder.goalsList =
                                         response.body()!!.data!!.list!!
-                                    updateLayout(DataHolder.goalsList)
                                 } else {
                                     DataHolder.goalsList.clear()
                                 }
@@ -112,7 +111,6 @@ class GoalsFragment : Fragment() {
                             )
                         }
                     }
-
                 }
             }
         }

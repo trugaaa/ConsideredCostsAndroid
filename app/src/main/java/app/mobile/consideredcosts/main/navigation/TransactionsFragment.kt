@@ -121,11 +121,10 @@ class TransactionsFragment : Fragment() {
                             withContext(Dispatchers.Main) {
                                 if (response.body()!!.data != null) {
                                     DataHolder.transactionsList =
-                                        response.body()!!.data!!.list.filter { element -> element.Type != null } as MutableList<TransactionElement>
+                                        response.body()!!.data!!.list.filter { true } as MutableList<TransactionElement>
                                 } else {
                                     DataHolder.transactionsList.clear()
                                 }
-                                updateLayout(DataHolder.transactionsList)
                             }
                         }
                         401 -> {
@@ -135,16 +134,20 @@ class TransactionsFragment : Fragment() {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
+                            try {
                             invokeGeneralErrorActivity(
-                                response.body()?.firstMessage()
-                                    ?: resources.getString(R.string.unknownError)
-                            )
+
+                                    response.body()?.firstMessage()
+                                        ?: resources.getString(R.string.unknownError))
+                                } catch (ex: IllegalStateException){
+                                    Log.e("Crash", "Operation on TransactionFragment when screen is gone")
+                                }
                         }
                     }
-
                 }
             }
         }
+        updateLayout(DataHolder.transactionsList)
     }
 
     private fun invokeGeneralErrorActivity(errorText: String) {

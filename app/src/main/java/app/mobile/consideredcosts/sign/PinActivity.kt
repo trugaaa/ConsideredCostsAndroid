@@ -64,7 +64,7 @@ class PinActivity : AppCompatActivity() {
             try {
                 closeKeyboard()
             } catch (ex: Exception) {
-                ex.message.let { Log.e("Crash", ex.message!!) }
+                ex.message.let { Log.e("Crash", "Keyboard is already hidden") }
             }
 
             if (sharedPreferencesManager.isPinDataActual()) {

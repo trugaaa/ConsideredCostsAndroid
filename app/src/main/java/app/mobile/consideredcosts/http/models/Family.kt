@@ -19,9 +19,9 @@ data class FamilyMember(
     val Id: Long,
     val role: String,
     val Money: Double,
-    val Nickname: String?,
+    val Nickname: String,
     val FirstName: String?,
-    val SecondName: String,
+    val SecondName: String?,
     val Email: String
 )
 

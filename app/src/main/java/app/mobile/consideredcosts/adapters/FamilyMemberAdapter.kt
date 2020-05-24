@@ -46,15 +46,20 @@ class FamilyMemberAdapter(
 
             try {
                 with(membersList[position]) {
-                    holder.itemView.invitation_nickname_value.text = Nickname
+                    holder.itemView.member_nickname.text = Nickname
                     holder.itemView.member_money_value.text = Money.toString()
                     userInfo.let {
                         holder.itemView.member_currency_value.text =
                             DataHolder.currencyList[userInfo!!.CurrencyId.toInt()].Name
                     }
                     holder.itemView.member_email_value.text = Email
-                    holder.itemView.invitation_date_value.text =
-                        cont.getString(R.string.userNamePattern, FirstName, SecondName)
+                    if (FirstName == null || SecondName == null) {
+                        holder.itemView.member_name.visibility = View.GONE
+                        holder.itemView.member_name_value.visibility = View.GONE
+                    } else {
+                        holder.itemView.member_name_value.text =
+                            cont.getString(R.string.userNamePattern, FirstName, SecondName)
+                    }
                 }
             } catch (e: KotlinNullPointerException) {
                 e.message.let {

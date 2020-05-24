@@ -179,12 +179,10 @@ class ProfileFragment : Fragment() {
                 true -> {
                     profile_scroll_layout.visibility = View.GONE
                     error_profile_fragment.visibility = View.VISIBLE
-                    success_profile_fragment.visibility = View.GONE
                 }
                 false -> {
                     profile_scroll_layout.visibility = View.VISIBLE
                     error_profile_fragment.visibility = View.GONE
-                    success_profile_fragment.visibility = View.VISIBLE
 
                     when (DataHolder.hasFamily) {
                         true -> {
@@ -192,6 +190,9 @@ class ProfileFragment : Fragment() {
 
                             user_has_family_layout.visibility = View.VISIBLE
                             invite_member_profile_layout.visibility = View.VISIBLE
+                            family_invitations_layout.visibility = View.GONE
+                            family_create_layout.visibility = View.GONE
+
                             family_name.text =
                                 context!!.getString(
                                     R.string.familyNamePattern,
@@ -200,21 +201,22 @@ class ProfileFragment : Fragment() {
                             family_founder_value.text = DataHolder.family!!.Creator
                             family_money_value.text = DataHolder.family!!.Money.toString()
                             family_money_currency.text =
-                                DataHolder.currencyList.find { currencyElement ->
+                                    DataHolder.currencyList.find { currencyElement ->
                                     currencyElement.Id == DataHolder.userInfo!!.CurrencyId.toInt()
                                 }!!.Name
-
-                            family_invitations_layout.visibility = View.GONE
-                            family_create_layout.visibility = View.GONE
                         }
                         false -> {
                             family_create_layout.visibility = View.VISIBLE
+                            user_has_family_layout.visibility = View.GONE
+                            invite_member_profile_layout.visibility = View.GONE
+
                             invitationsAdapter.updateInvitations(DataHolder.invitationList)
                             if (!DataHolder.invitationList.isNullOrEmpty()) {
                                 family_invitations_layout.visibility = View.GONE
                             }
-                            user_has_family_layout.visibility = View.GONE
-                            invite_member_profile_layout.visibility = View.GONE
+                            else{
+                                family_invitations_layout.visibility = View.VISIBLE
+                            }
                         }
                     }
                 }

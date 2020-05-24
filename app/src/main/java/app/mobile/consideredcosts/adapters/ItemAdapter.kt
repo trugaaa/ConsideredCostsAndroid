@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.item_product.view.*
 
 class ItemsAdapter(
     private var itemList: MutableList<ItemElement>,
-    val click: (Int, MutableList<ItemElement>) -> Unit
+    val deleteItem: (Int, MutableList<ItemElement>) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var cont: Context
@@ -55,6 +55,10 @@ class ItemsAdapter(
                 }
             }
             is ItemsViewHolder -> {
+                holder.itemView.itemDelete.setOnClickListener {
+                    deleteItem(position - 1, itemList)
+                }
+
                 try {
                     with(itemList[position - 1])
                     {
@@ -68,13 +72,9 @@ class ItemsAdapter(
                                 currencyElement.Id == CurrencyId
                             }!!.Name
                     }
-
-                    holder.itemView.itemDelete.setOnClickListener {
-                        click(position - 1, itemList)
-                    }
                 } catch (ex: KotlinNullPointerException) {
                     ex.message.let {
-                        Log.e("Crash",ex.message!!)
+                        Log.e("Crash","KotlinNullPointerException")
                     }
                 }
             }

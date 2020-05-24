@@ -26,11 +26,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class ItemsFragment : Fragment() {
-    private val sharedPreferences by lazy {
-        SharedPreferencesManager(context!!)
-    }
+    private lateinit var sharedPreferences: SharedPreferencesManager
 
     private val itemsAdapter by lazy {
         ItemsAdapter(mutableListOf()) { position, list ->
@@ -66,6 +63,7 @@ class ItemsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        sharedPreferences = SharedPreferencesManager(context!!)
 
         itemsAddButton.setOnClickListener {
             closeKeyboard(context!!, itemsAddButton)
@@ -84,9 +82,9 @@ class ItemsFragment : Fragment() {
                     when (response.code()) {
                         200 -> {
                             withContext(Dispatchers.Main) {
-                                if (response.body()!!.data != null) {
+                                if (response.body()!!.data!!.list!!.isNotEmpty()) {
                                     DataHolder.itemsList =
-                                        response.body()!!.data!!.list!!
+                                        response.body()!!.data!!.list!!.toMutableList()
                                 } else {
                                     DataHolder.itemsList.clear()
                                 }
@@ -106,7 +104,6 @@ class ItemsFragment : Fragment() {
                             )
                         }
                     }
-
                 }
             }
         }
@@ -131,10 +128,9 @@ class ItemsFragment : Fragment() {
                         when (response.code()) {
                             200 -> {
                                 withContext(Dispatchers.Main) {
-                                    try{
+                                    try {
                                         itemEditText.text.clear()
-                                    }catch (ex:IllegalStateException)
-                                    {
+                                    } catch (ex: IllegalStateException) {
                                         ex.message.let {
                                             Log.e("Crash caught:", ex.message!!)
                                         }
