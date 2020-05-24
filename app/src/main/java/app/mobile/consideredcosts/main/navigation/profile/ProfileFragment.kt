@@ -581,6 +581,7 @@ class ProfileFragment : Fragment() {
                         when (response.code()) {
                             200 -> {
                                 DataHolder.userInfo = response.body()!!.data
+                                updateLayout()
                             }
                             504, 503, 502, 501, 500 -> {
                                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))

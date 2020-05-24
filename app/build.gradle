@@ -4,12 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "app.mobile.consideredcosts"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 8
+        versionCode 10
         versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
