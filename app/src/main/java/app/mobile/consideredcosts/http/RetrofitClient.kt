@@ -25,8 +25,8 @@ object RetrofitClient {
     }
 
     suspend fun login(login: String, password: String) = api.login(LoginRequest(login, password))
-    suspend fun registration(username: String, email: String, password: String) = api.registration(
-        RegistrationRequest(username, email, password)
+    suspend fun registration(username: String, email: String, password: String, currencyId: Int) = api.registration(
+        RegistrationRequest(username, email, password,currencyId)
     )
 
     suspend fun getCurrencyList() = api.currencies()

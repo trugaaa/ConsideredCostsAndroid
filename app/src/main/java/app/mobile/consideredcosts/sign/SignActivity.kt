@@ -6,6 +6,7 @@ import android.graphics.Point
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
@@ -37,7 +38,6 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign)
-        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         val size = Point()
         windowManager.defaultDisplay.getSize(size)
@@ -107,6 +107,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
         when (state) {
             SignOption.LOGIN -> {
                 resetFields(SignOption.LOGIN)
+                usernameField.imeOptions = EditorInfo.IME_ACTION_NEXT
                 bottomSignLink.setOnClickListener {
                     currentScreenState = SignOption.REGISTRATION
                     screenState(currentScreenState)
@@ -119,6 +120,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
             }
 
             SignOption.REGISTRATION -> {
+                usernameField.imeOptions = EditorInfo.IME_ACTION_DONE
                 resetFields(SignOption.REGISTRATION)
                 bottomSignLink.setOnClickListener {
                     currentScreenState = SignOption.LOGIN
@@ -186,7 +188,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
                         launch {
-                            val response = RetrofitClient.registration(username, email, password)
+                            val response = RetrofitClient.registration(username, email, password,36)
                             when (response.code()) {
                                 200 -> {
                                     login(username, password)

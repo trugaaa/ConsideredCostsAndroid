@@ -6,4 +6,4 @@ class RegistrationRequestResponse: BaseResponse<RegistrationResponse>()
 
 data class RegistrationResponse(val id:String,val username:String,val email: String)
 
-data class  RegistrationRequest(val username: String,val email:String, val password:String)
+data class  RegistrationRequest(val username: String,val email:String, val password:String, val currencyId:Int?)

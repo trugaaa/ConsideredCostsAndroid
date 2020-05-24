@@ -211,7 +211,7 @@ class ProfileFragment : Fragment() {
                             invite_member_profile_layout.visibility = View.GONE
 
                             invitationsAdapter.updateInvitations(DataHolder.invitationList)
-                            if (!DataHolder.invitationList.isNullOrEmpty()) {
+                            if (DataHolder.invitationList.isNullOrEmpty()) {
                                 family_invitations_layout.visibility = View.GONE
                             }
                             else{
