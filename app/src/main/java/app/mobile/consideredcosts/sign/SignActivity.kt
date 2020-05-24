@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
@@ -188,7 +189,8 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
                         launch {
-                            val response = RetrofitClient.registration(username, email, password,36)
+                            val response =
+                                RetrofitClient.registration(username, email, password, 36)
                             when (response.code()) {
                                 200 -> {
                                     login(username, password)
@@ -231,9 +233,7 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                                     invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                                 }
                                 else -> {
-                                    invokeGeneralErrorActivity(
-                                        errorMessageParsing(response) ?: resources.getString(R.string.unknownError)
-                                    )
+                                    invokeGeneralErrorActivity(resources.getString(R.string.incorrectLogin))
                                 }
                             }
 
@@ -242,7 +242,6 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
                 }
             } catch (ex: SocketTimeoutException) {
                 invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
-
             }
         }
     }
@@ -376,33 +375,19 @@ class SignActivity : AppCompatActivity(), ActivityChanger {
     }
 
     private fun closeKeyboard() {
-        val view: View? = this.currentFocus
-        view.let {
-            val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view!!.windowToken, 0)
-        }
-    }
-
-    private fun errorMessageParsing(response: Response<LoginRequestResponse>):String?
-    {
-        val gson = Gson()
-        val adapter = gson.getAdapter(BaseResponse::class.java)
-        var result: String? = null
         try {
-            if (response.errorBody() != null)
-                result = adapter.fromJson(
-                    response.errorBody()!!.string()
-                ).firstMessage()
-
-
-        } catch (e: IOException) {
-            e.printStackTrace()
+            val view: View? = this.currentFocus
+            view.let {
+                val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view!!.windowToken, 0)
+            }
+        }catch (ex:KotlinNullPointerException)
+        {
+            Log.e("Crash","Keyboard is already hidden crash")
         }
-        return result
     }
 }
-
 
 enum class SignOption {
     LOGIN,
