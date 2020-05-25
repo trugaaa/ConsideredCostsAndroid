@@ -29,6 +29,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+import java.lang.IllegalStateException
 
 class ProfileFragment : Fragment() {
     private val sharedPreferences by lazy {
@@ -68,14 +69,14 @@ class ProfileFragment : Fragment() {
         familyMembersRecyclerView.adapter = familyAdapter
         familyInvitationsRecyclerView.layoutManager = LinearLayoutManager(context!!)
         familyInvitationsRecyclerView.adapter = invitationsAdapter
-
-        updateUserInfo()
-        getFamily()
-        getUserInvitations()
     }
 
     override fun onResume() {
         super.onResume()
+        updateUserInfo()
+        getFamily()
+        getUserInvitations()
+
         edit_info_profile.setOnClickListener {
             userActivityInvoke()
         }
@@ -148,6 +149,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun invokeGeneralErrorActivity(errorText: String) {
+        try{
         val snackBar = Snackbar.make(
             fragment_profile_layout,
             errorText,
@@ -156,7 +158,9 @@ class ProfileFragment : Fragment() {
 
         snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorError))
         snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
-        snackBar.show()
+        snackBar.show()}catch (ex:IllegalStateException){
+            Log.e("Crash","IllegalStateException")
+        }
     }
 
     private fun closeKeyboard(context: Context, view: View) {
