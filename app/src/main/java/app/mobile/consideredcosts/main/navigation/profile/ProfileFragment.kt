@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.lang.IllegalStateException
+import kotlin.reflect.KParameter
 
 class ProfileFragment : Fragment() {
     private val sharedPreferences by lazy {
@@ -98,7 +99,7 @@ class ProfileFragment : Fragment() {
         }
 
         tryAgainProfileButton.setOnClickListener {
-            Log.e("Button_Click", "Try again button is tapped")
+            Log.i("Button_Click", "Try again button is tapped")
             when {
                 DataHolder.currencyList.isNullOrEmpty() -> getCurrencyList()
                 DataHolder.userInfo == null -> getUserInfo()
@@ -149,17 +150,18 @@ class ProfileFragment : Fragment() {
     }
 
     private fun invokeGeneralErrorActivity(errorText: String) {
-        try{
-        val snackBar = Snackbar.make(
-            fragment_profile_layout,
-            errorText,
-            Snackbar.LENGTH_LONG
-        )
+        try {
+            val snackBar = Snackbar.make(
+                fragment_profile_layout,
+                errorText,
+                Snackbar.LENGTH_LONG
+            )
 
-        snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorError))
-        snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
-        snackBar.show()}catch (ex:IllegalStateException){
-            Log.e("Crash","IllegalStateException")
+            snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorError))
+            snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
+            snackBar.show()
+        } catch (ex: IllegalStateException) {
+            Log.e("Crash", "IllegalStateException")
         }
     }
 
@@ -181,6 +183,7 @@ class ProfileFragment : Fragment() {
         try {
             withContext(Dispatchers.Main) {
                 when (DataHolder.currencyList.isNullOrEmpty() ||
+                        DataHolder.familyGetError == true ||
                         DataHolder.userInfo == null ||
                         DataHolder.userInfo!!.CurrencyId == 0.toLong() ||
                         DataHolder.userInfo!!.CurrencyId == null) {
@@ -229,6 +232,8 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
+        } catch (exNull: KotlinNullPointerException) {
+            Log.e("Crash", "KotlinNullPointerException")
         } catch (ex: java.lang.IllegalStateException) {
             Log.e("Crash", "Trying to update profile screen elements, when no items screen present")
         }
@@ -244,6 +249,7 @@ class ProfileFragment : Fragment() {
                         200 -> {
                             try {
                                 DataHolder.family = response.body()!!.data
+                                DataHolder.familyGetError = false
                                 DataHolder.hasFamily = true
                                 withContext(Dispatchers.Main) {
                                     updateLayout()
@@ -257,9 +263,15 @@ class ProfileFragment : Fragment() {
                                 }
                             }
                         }
-                        404, 400 -> {
+                        404 -> {
                             DataHolder.family = null
                             DataHolder.hasFamily = false
+                            withContext(Dispatchers.Main) {
+                                updateLayout()
+                            }
+                        }
+                        400->{
+                            DataHolder.familyGetError = true
                             withContext(Dispatchers.Main) {
                                 updateLayout()
                             }
@@ -271,7 +283,6 @@ class ProfileFragment : Fragment() {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
                         }
                         else -> {
-
                             invokeGeneralErrorActivity(
                                 response.body()?.firstMessage()
                                     ?: resources.getString(R.string.unknownError)

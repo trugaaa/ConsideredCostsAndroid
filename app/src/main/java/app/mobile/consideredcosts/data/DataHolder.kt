@@ -10,6 +10,7 @@ object DataHolder {
     var isSentToItemsAdd = false
     var family: Family? = null
     var hasFamily = false
+    var familyGetError = false
     var userInfo: User? = null
     var invitationList = mutableListOf<FamilyInvitation>()
 }
