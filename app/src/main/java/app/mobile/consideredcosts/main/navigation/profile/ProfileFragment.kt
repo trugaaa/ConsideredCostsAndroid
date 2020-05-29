@@ -648,7 +648,11 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
-        } catch (e: KotlinNullPointerException) {
+        }  catch (e: IllegalStateException) {
+            e.message.let {
+                Log.e("Crash caught:", e.message!!)
+            }
+        }catch (e: KotlinNullPointerException) {
             e.message.let {
                 Log.e("Crash caught:", e.message!!)
             }
