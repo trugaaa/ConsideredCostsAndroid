@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+
     defaultConfig {
         applicationId "app.mobile.consideredcosts"
         minSdkVersion 21
@@ -55,4 +56,6 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'androidx.test:runner:1.2.0'
     testImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    androidTestImplementation 'junit:junit:4.12'
 }
