@@ -648,7 +648,7 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
-        }  catch (e: IllegalStateException) {
+        }catch (e: IllegalStateException) {
             e.message.let {
                 Log.e("Crash caught:", e.message!!)
             }
