@@ -1,4 +1,4 @@
-package app.mobile.consideredcosts.launch
+package app.mobile.consideredcosts.functionalTests.launch
 
 import android.content.Intent
 import android.graphics.Color
