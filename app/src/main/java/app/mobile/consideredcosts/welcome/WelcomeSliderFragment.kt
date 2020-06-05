@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import app.mobile.consideredcosts.R
-import app.mobile.consideredcosts.launch.PagerListener
+import app.mobile.consideredcosts.functionalTests.launch.PagerListener
 import kotlinx.android.synthetic.main.fragment_welcome_slider.*
 import kotlinx.android.synthetic.main.fragment_welcome_slider.view.*
 
