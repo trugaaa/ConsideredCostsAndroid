@@ -30,7 +30,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.lang.IllegalStateException
-import kotlin.reflect.KParameter
 
 class ProfileFragment : Fragment() {
     private val sharedPreferences by lazy {
@@ -158,6 +157,22 @@ class ProfileFragment : Fragment() {
             )
 
             snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorError))
+            snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
+            snackBar.show()
+        } catch (ex: IllegalStateException) {
+            Log.e("Crash", "IllegalStateException")
+        }
+    }
+
+    private fun invokeGeneralSuccess(errorText: String) {
+        try {
+            val snackBar = Snackbar.make(
+                fragment_profile_layout,
+                errorText,
+                Snackbar.LENGTH_LONG
+            )
+
+            snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorSuccess))
             snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
             snackBar.show()
         } catch (ex: IllegalStateException) {
@@ -353,6 +368,7 @@ class ProfileFragment : Fragment() {
                     when (response.code()) {
                         200 -> {
                             try {
+                                invokeGeneralSuccess(resources.getString(R.string.userInvited))
                                 closeKeyboard(context!!, invite_member_button)
                                 getFamily()
                             } catch (ex: Exception) {
@@ -366,6 +382,12 @@ class ProfileFragment : Fragment() {
                         }
                         401 -> {
                             logout()
+                        }
+                        403->{
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage()
+                                    ?: resources.getString(R.string.youArentFamilyLeader)
+                            )
                         }
                         404 -> {
                             invokeGeneralErrorActivity(

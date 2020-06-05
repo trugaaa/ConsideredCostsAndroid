@@ -114,7 +114,7 @@
     <string name="nickName">Nickname: </string>
     <string name="realName">Name: </string>
     <string name="money">Money</string>
-
+    <string name="userInvited">User was successfully invited</string>
     <string name="try_again">Try again</string>
     <!-- Generic errors -->
     <string name="errorUsernameField">Username is invalid.\nIt can contain only characters, digits and "- . _" symbols</string>
@@ -132,4 +132,5 @@
     <string name="errorApplication">Application error, pls try again later</string>
     <string name="noUserFound">No user with this nickname found</string>
     <string name="sorryDeveloping">Sorry, this screen is currently in developing phase</string>
+    <string name="youArentFamilyLeader">You are not family leader to do that</string>
 </resources>
