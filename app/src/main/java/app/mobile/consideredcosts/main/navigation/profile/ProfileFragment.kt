@@ -172,7 +172,12 @@ class ProfileFragment : Fragment() {
                 Snackbar.LENGTH_LONG
             )
 
-            snackBar.view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorSuccess))
+            snackBar.view.setBackgroundColor(
+                ContextCompat.getColor(
+                    context!!,
+                    R.color.colorSuccess
+                )
+            )
             snackBar.setActionTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryText))
             snackBar.show()
         } catch (ex: IllegalStateException) {
@@ -285,7 +290,7 @@ class ProfileFragment : Fragment() {
                                 updateLayout()
                             }
                         }
-                        400->{
+                        400 -> {
                             DataHolder.familyGetError = true
                             withContext(Dispatchers.Main) {
                                 updateLayout()
@@ -383,7 +388,7 @@ class ProfileFragment : Fragment() {
                         401 -> {
                             logout()
                         }
-                        403->{
+                        403 -> {
                             invokeGeneralErrorActivity(
                                 response.body()?.firstMessage()
                                     ?: resources.getString(R.string.youArentFamilyLeader)
@@ -505,6 +510,12 @@ class ProfileFragment : Fragment() {
                         }
                         401 -> {
                             logout()
+                        }
+                        403 -> {
+                            invokeGeneralErrorActivity(
+                                response.body()?.firstMessage()
+                                    ?: resources.getString(R.string.youArentFamilyLeader)
+                            )
                         }
                         504, 503, 502, 501, 500 -> {
                             invokeGeneralErrorActivity(resources.getString(R.string.serverNotAvailable))
@@ -670,11 +681,11 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
-        }catch (e: IllegalStateException) {
+        } catch (e: IllegalStateException) {
             e.message.let {
                 Log.e("Crash caught:", e.message!!)
             }
-        }catch (e: KotlinNullPointerException) {
+        } catch (e: KotlinNullPointerException) {
             e.message.let {
                 Log.e("Crash caught:", e.message!!)
             }
@@ -696,6 +707,12 @@ class ProfileFragment : Fragment() {
                             }
                             401 -> {
                                 logout()
+                            }
+                            403 -> {
+                                invokeGeneralErrorActivity(
+                                    response.body()?.firstMessage()
+                                        ?: resources.getString(R.string.youArentFamilyLeader)
+                                )
                             }
                             else -> {
                                 invokeGeneralErrorActivity(
