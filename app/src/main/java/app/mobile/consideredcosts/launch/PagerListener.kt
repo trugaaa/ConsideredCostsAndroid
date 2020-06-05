@@ -1,4 +1,4 @@
-package app.mobile.consideredcosts.functionalTests.launch
+package app.mobile.consideredcosts.launch
 
 interface PagerListener {
     fun openNextFragment()
