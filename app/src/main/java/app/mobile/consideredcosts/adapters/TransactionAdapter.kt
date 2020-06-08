@@ -1,6 +1,7 @@
 package app.mobile.consideredcosts.adapters
 
 import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -48,7 +49,7 @@ class TransactionAdapter(
                 with(transactionList[position])
                 {
                     WorkType?.let {
-                        holder.itemView.sourceValue.text = WorkType.name.toLowerCase().capitalize()
+                        holder.itemView.sourceValue.setText(getWorkType(WorkType.name))
                         holder.itemView.transactionMoney.text =
                             cont.getString(R.string.incomePattern, Money.toString())
                         holder.itemView.sourceText.text = cont.getString(R.string.source)
@@ -92,7 +93,7 @@ class TransactionAdapter(
                     }
                     holder.itemView.transactionDateValue.text =
                         DateFormatter(cont).dateFromString(Date).toString()
-                    holder.itemView.transactionTypeValue.text = Type.name.toLowerCase().capitalize()
+                    holder.itemView.transactionTypeValue.setText(getType(Type.name))
                     holder.itemView.transactionCurrency.text =
                         DataHolder.currencyList.find { currencyElement ->
                             currencyElement.Id == CurrencyId
@@ -126,6 +127,21 @@ class TransactionAdapter(
     companion object {
         private const val TYPE_EMPTY = 0
         private const val TYPE_TRANSACTION = 1
+
+        fun getWorkType(type: String): Int {
+            return when (type) {
+                "Business" -> R.string.business
+                "Salary" -> R.string.salary
+                else -> R.string.tempWork
+            }
+        }
+
+        fun getType(type: String): Int {
+            return when (type) {
+                "Family" -> R.string.family
+                else -> R.string.pprivate
+            }
+        }
     }
 }
 

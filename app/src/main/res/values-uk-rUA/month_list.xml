@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="month_1">Січня</string>
+    <string name="month_2">Лютого</string>
+    <string name="month_3">Березеня</string>
+    <string name="month_4">Квітня</string>
+    <string name="month_5">Травня</string>
+    <string name="month_6">Червня</string>
+    <string name="month_7">Липня</string>
+    <string name="month_8">Серпня</string>
+    <string name="month_9">Вересня</string>
+    <string name="month_10">Жовтня</string>
+    <string name="month_11">Листопада</string>
+    <string name="month_12">Грудня</string>
+</resources>

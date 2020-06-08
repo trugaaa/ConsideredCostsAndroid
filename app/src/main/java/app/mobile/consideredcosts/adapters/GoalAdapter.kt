@@ -41,10 +41,11 @@ class GoalAdapter(
             with(goalsList[position])
             {
                 holder.itemView.goalValue.text = Money.toString()
-                holder.itemView.goalCurrency.text = DataHolder.currencyList.find { it.Id == CurrencyId }!!.Name
+                holder.itemView.goalCurrency.text =
+                    DataHolder.currencyList.find { it.Id == CurrencyId }!!.Name
                 holder.itemView.startDateValue.text = formatter.dateFromString(DateStart).toString()
                 holder.itemView.endDateValue.text = formatter.dateFromString(DateFinish).toString()
-                holder.itemView.statusValue.text = Status
+                holder.itemView.statusValue.setText(getStatus(Status!!))
                 when (Status) {
                     "Success" -> holder.itemView.statusValue.setTextColor(
                         ContextCompat.getColor(
@@ -96,6 +97,14 @@ class GoalAdapter(
     companion object {
         private const val TYPE_EMPTY = 0
         private const val TYPE_GOALS = 1
+
+        fun getStatus(text: String): Int {
+            return when (text) {
+                "Success" -> R.string.success
+                "Active" -> R.string.active
+                else -> R.string.failed
+            }
+        }
     }
 }
 

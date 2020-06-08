@@ -49,15 +49,15 @@ class TransactionActivity : AppCompatActivity() {
         })
     }
     private val typeAdapter by lazy {
-        typeList.add("Family")
-        typeList.add("Private")
+        typeList.add(resources.getString(R.string.family))
+        typeList.add(resources.getString(R.string.pprivate))
         ArrayAdapter(this, R.layout.item_spinner, typeList)
     }
 
     private val workTypeAdapter by lazy {
-        workTypeList.add("Salary")
-        workTypeList.add("Business")
-        workTypeList.add("Temporary work")
+        workTypeList.add(resources.getString(R.string.salary))
+        workTypeList.add(resources.getString(R.string.business))
+        workTypeList.add(resources.getString(R.string.tempWork))
         ArrayAdapter(this, R.layout.item_spinner, workTypeList)
     }
     private val itemTypeAdapter by lazy {
@@ -243,10 +243,10 @@ class TransactionActivity : AppCompatActivity() {
 
     private fun transactionType(type: Spinner): TransactionsType {
         return when (type.selectedItem.toString()) {
-            "Family" -> {
+            resources.getString(R.string.family) -> {
                 TransactionsType.Family
             }
-            "Private" -> {
+            resources.getString(R.string.pprivate) -> {
                 TransactionsType.Private
             }
             else -> throw NullPointerException()
@@ -255,13 +255,13 @@ class TransactionActivity : AppCompatActivity() {
 
     private fun incomeWorkType(type: Spinner): IncomeWorkType {
         return when (type.selectedItem.toString()) {
-            "Salary" -> {
+            resources.getString(R.string.salary) -> {
                 IncomeWorkType.Salary
             }
-            "Business" -> {
+            resources.getString(R.string.business) -> {
                 IncomeWorkType.Business
             }
-            "Temporary work" -> {
+            resources.getString(R.string.tempWork) -> {
                 IncomeWorkType.TempWork
             }
             else -> throw KotlinNullPointerException()

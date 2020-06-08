@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Considered Costs</string>
+
+    <!-- Welcome informational screens -->
+    <string name="welcomeImageDescription">"Welcome image"</string>
+    <string name="welcome1Title">ОТРИМАЙТЕ ОГЛЯД</string>
+    <string name="welcome1Text">ВАШИХ НАДХОДЖЕНЬ ТА ВИТРАТ</string>
+    <string name="welcome2Title">ВСТАНОВЛЮЙТЕ ФІНАНСОВІ ЦІЛІ</string>
+    <string name="welcome2Text">ТА ДОСЯГАЙТЕ НИХ</string>
+    <string name="welcome3Title">ПОПІКЛУЙТЕСЬ</string>
+    <string name="welcome3Text">ПРО ВАШ ДОХІД</string>
+    <string name="skipLinkText">ПРОПУСТИТИ</string>
+    <string name="nextLinkText">ДАЛІ</string>
+    <string name="doneLinkText">ГОТОВО</string>
+    <string name="startLinkText">ПОЧАТИ</string>
+    <!-- SignUp screen -->
+    <string name="signAlreadyHave">Вже маєте обліковий запис?</string>
+    <string name="signUpButtonText">Зареєструватись</string>
+
+    <!-- SignIn screen -->
+    <string name="username">Ім\'я користувача</string>
+    <string name="plsUsername">Будь-ласка введіть ім\'я користувача</string>
+    <string name="email">Електронна адреса</string>
+    <string name="plsEmail">Будь-ласка введіть електронну адресу</string>
+    <string name="password">Пароль</string>
+    <string name="plsPassword">Будь-ласка введіть пароль</string>
+    <string name="confPassword">Повторити пароль</string>
+    <string name="plsConfPassword">Будь-ласка введіть підтвердження паролю</string>
+    <string name="signInButtonText">Ввійти</string>
+    <string name="signDoNotHaveAccount">Не маєте облікового запису?</string>
+    <string name="considered_costs_logo">Considered Costs logo</string>
+
+    <!-- Nav bat -->
+    <string name="navBarHome">Головна</string>
+    <string name="navBarTransactions">Операції</string>
+    <string name="navBarItems">Категорії</string>
+    <string name="navBarGoals">Цілі</string>
+    <string name="navBarElse">Ще</string>
+
+    <!-- Transactions -->
+    <string name="date">Дата:</string>
+    <string name="type">Тип:</string>
+    <string name="description">Опис:</string>
+    <string name="addTransactionTitle">Додати операцію</string>
+    <string name="edit">Редагувати</string>
+    <string name="add">Додати</string>
+    <string name="enterDate">Ввести дату операції</string>
+    <string name="enterMoney">Ввести гроші</string>
+    <string name="currency">Вибрати валюту</string>
+    <string name="addDescription">Додати опис (необов\'язково)</string>
+    <string name="noTransactionsAvailable">Операцій нема</string>
+    <string name="plsAddTransactions">Будь-ласка, додайте операції для повноцінного користування додатком</string>
+    <string name="datePattern">%1$s.%2$s.%3$s</string>
+    <string name="tempWork">Тимчасова робота</string>
+    <string name="salary">Заробітня плата</string>
+    <string name="business">Бізнес</string>
+    <string name="family">Сімейна</string>
+    <string name="pprivate">Особиста</string>
+
+    <!-- Incomes -->
+    <string name="incomePattern">+ %s</string>
+    <string name="source">Джерело:</string>
+    <string name="income">Надходження</string>
+
+    <!-- Outgoes -->
+    <string name="outgoPattern">- %s</string>
+    <string name="outgo">Витрата</string>
+    <string name="item">Категорія:</string>
+
+    <!-- Items -->
+    <string name="product">Продукт: </string>
+    <string name="amountOfOutgoes">Витрати:  </string>
+    <string name="amountOfMoney">Грошій витрачено: </string>
+    <string name="amountOfMoneyPattern">%1$s %2$s</string>
+    <string name="percentPattern">%1$s %2$s</string>
+    <string name="noItemsAvailable">Категорій нема</string>
+    <string name="addItems">Додайте категорії</string>
+    <string name="plsAddItems">Будь-ласка, додайте категорії для повноцінного користування додатком</string>
+    <string name="addItem">Додати ім\'я категорії</string>
+
+    <!-- Goals -->
+    <string name="goal">Ціль:</string>
+    <string name="from">З:</string>
+    <string name="to">До:</string>
+    <string name="status">Стан:</string>
+    <string name="goalValuePattern">%1$s %2$s</string>
+    <string name="noGoalsAvailable">Цілі не встановлені</string>
+    <string name="plsAddGoals">Будь-ласка, додайте цілі для повноцінного користування додаткомy</string>
+    <string name="addGoal">Додати ціль</string>
+    <string name="enterStartDate">Ввести дату початку цілі</string>
+    <string name="enterEndDate">Додати кінцеву дату цілі</string>
+    <string name="success">Успіх</string>
+    <string name="active">Активна</string>
+    <string name="failed">Невдала</string>
+    <!-- PIN screen-->
+    <string name="enterPin">Ввести PIN-код</string>
+    <string name="setupPin">Встановити PIN-код</string>
+    <string name="enterConfirmPin">Підтвердіть ваш PIN</string>
+    <string name="enterYourPin">Введіть ваш PIN</string>
+    <string name="submit">Підтвердити</string>
+    <string name="logout">Вийти</string>
+
+    <!-- Family-->
+    <string name="create">Створити</string>
+    <string name="createOrJoinFamily">Ви не член сім\'ї. Приєднуйтесь до сім’ї або створіть нову.</string>
+    <string name="enterFamilyName">Введіть назву сім\'ї</string>
+    <string name="familyNamePattern">Сім\'я "%s"</string>
+    <string name="invitations">Запрошення</string>
+    <string name="leave">Покинути</string>
+    <string name="familyFounder">Засновник сім\'ї:</string>
+    <string name="familyMoney">Гроші сім\'ї:</string>
+    <string name="invite">Запросити</string>
+    <string name="inviteFamilyMember">Запросіть члена родини, ввівши його ім\'я</string>
+    <string name="enterNickname">Enter user`s nickname</string>
+    <string name="userNamePattern">%1$s%2$s</string>
+    <string name="deleteFamily">Видалити сім\'ю</string>
+
+    <!-- Family member -->
+    <string name="nickName">Псевдонім: </string>
+    <string name="realName">Ім\'я: </string>
+    <string name="money">Гроші</string>
+    <string name="userInvited">Користувач був успішно запрошений</string>
+    <string name="try_again">Спробуйте ще раз</string>
+    <!-- Generic errors -->
+    <string name="errorUsernameField">Ім\'я користувача недійсне.\nДозволені лише букви латиниці, цифри та символи "-. _"</string>
+    <string name="errorEmailField">Електронна пошта недійсна. \nПеревірте свою електронну пошту</string>
+    <string name="errorPasswordField">Пароль недійсний.\nВін має бути більше 8 символів і містити: малі літери, малі літери та цифри</string>
+    <string name="errorPassesDoNotMatch">Паролі мають сходитись</string>
+    <string name="errorGeneral">Щось пішло не так… Спробуйте пізніше…</string>
+    <string name="errorFieldIsRequired">Поле обов\'язкове</string>
+    <string name="serverNotAvailable">Сервер недоступний</string>
+    <string name="incorrectLogin">Некоректне ім\'я облікового запису чи пароль</string>
+    <string name="unknownError">Невідома помилка</string>
+    <string name="pinError">PIN-код некоректний, він має містити 4 цифри</string>
+    <string name="pinNotMatch">Паролі мають сходитись</string>
+    <string name="pinIncorrect">PIN-код некоректний</string>
+    <string name="errorApplication">Помилка застосунку… Спробуйте пізніше…</string>
+    <string name="noUserFound">Користувача з такім ім\'ям не знайдено</string>
+    <string name="sorryDeveloping">Вибачте, цей екран ще не розроблено</string>
+    <string name="youArentFamilyLeader">Ви не лідер родини, щоб це зробити</string>
+</resources>

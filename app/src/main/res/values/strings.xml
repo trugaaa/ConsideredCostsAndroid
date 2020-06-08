@@ -14,7 +14,6 @@
     <string name="nextLinkText">NEXT</string>
     <string name="doneLinkText">DONE</string>
     <string name="startLinkText">START</string>
-
     <!-- SignUp screen -->
     <string name="signAlreadyHave">Already have an account?</string>
     <string name="signUpButtonText">Sign Up</string>
@@ -53,7 +52,11 @@
     <string name="noTransactionsAvailable">No transaction are set</string>
     <string name="plsAddTransactions">Please, add some transactions to start using all application`s functionality</string>
     <string name="datePattern">%1$s.%2$s.%3$s</string>
-
+    <string name="tempWork">Temporary work</string>
+    <string name="salary">Salary</string>
+    <string name="business">Business</string>
+    <string name="family">Family</string>
+    <string name="pprivate">Private</string>
     <!-- Incomes -->
     <string name="incomePattern">+ %s</string>
     <string name="source">Source:</string>
@@ -86,6 +89,9 @@
     <string name="addGoal">Add Goal</string>
     <string name="enterStartDate">Enter Goal start date</string>
     <string name="enterEndDate">Enter Goal end date</string>
+    <string name="success">Success</string>
+    <string name="active">Active</string>
+    <string name="failed">Failed</string>
 
     <!-- PIN screen-->
     <string name="enterPin">Enter PIN</string>
